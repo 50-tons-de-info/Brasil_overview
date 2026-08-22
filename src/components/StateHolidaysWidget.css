@@ -29,6 +29,8 @@
   justify-content: space-between;
   border-bottom: 1px solid var(--border, #e5e4e7);
   padding-bottom: 12px;
+  gap: 12px;
+  flex-wrap: wrap;
 }
 
 .holidays-header-left {
@@ -52,9 +54,44 @@
   border-radius: 12px;
 }
 
-.holidays-source-badge {
-  font-size: 11px;
-  color: var(--text, #888);
+.holidays-city-search-wrap {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.holidays-city-label {
+  font-size: 12px;
+  color: var(--text, #6b6375);
+  font-weight: 500;
+}
+
+.holidays-city-input {
+  background: var(--bg, #ffffff);
+  border: 1px solid var(--border, #e5e4e7);
+  border-radius: 8px;
+  padding: 5px 12px;
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--text-h, #08060d);
+  outline: none;
+  width: 170px;
+  transition: all 0.15s ease;
+  font-family: inherit;
+}
+
+.holidays-city-input:focus,
+.holidays-city-input:hover {
+  border-color: var(--text-h, #08060d);
+}
+
+.holidays-active-city-indicator {
+  font-size: 12px;
+  color: var(--text, #6b6375);
+}
+
+.holidays-active-city-indicator strong {
+  color: var(--text-h, #08060d);
 }
 
 /* Destaque Próximo Feriado */
@@ -129,7 +166,15 @@
   color: var(--text-h, #08060d);
 }
 
-/* Filtros */
+/* Linha de Controles (Filtros + Cidade) */
+.holidays-controls-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
 .holidays-filters {
   display: flex;
   gap: 6px;
@@ -159,6 +204,29 @@
 .holidays-filter-pill.active {
   background: var(--text-h, #08060d);
   color: var(--bg, #fff);
+  border-color: var(--text-h, #08060d);
+}
+
+.holidays-city-filter {
+  display: flex;
+  align-items: center;
+}
+
+.holidays-city-select {
+  background: var(--bg, #fff);
+  border: 1px solid var(--border, #e5e4e7);
+  border-radius: 8px;
+  padding: 4px 10px;
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--text-h, #08060d);
+  outline: none;
+  cursor: pointer;
+  transition: border-color 0.15s;
+}
+
+.holidays-city-select:hover,
+.holidays-city-select:focus {
   border-color: var(--text-h, #08060d);
 }
 

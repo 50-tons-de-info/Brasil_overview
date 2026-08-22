@@ -1,4 +1,5 @@
 import { STATE_HOLIDAYS } from "../data/regionalHolidays.js";
+import { states } from "../data/states.js";
 
 const WEEKDAYS = [
   "domingo",
@@ -25,6 +26,36 @@ const MONTHS = [
   "Dezembro",
 ];
 
+// Cache em memória para os municípios do IBGE
+const municipalitiesCache = {};
+
+/**
+ * Busca todos os municípios de uma UF via API oficial do IBGE
+ */
+export async function fetchStateMunicipalities(uf) {
+  const ufUpper = (uf || "").toUpperCase();
+  if (municipalitiesCache[ufUpper]) {
+    return municipalitiesCache[ufUpper];
+  }
+
+  try {
+    const res = await fetch(
+      `https://servicodados.ibge.gov.br/api/v1/localidades/estados/${ufUpper}/municipios`,
+      { headers: { "User-Agent": "BrasilOverviewApp/1.0" } }
+    );
+    if (res.ok) {
+      const data = await res.json();
+      const names = data.map((m) => m.nome).sort((a, b) => a.localeCompare(b, "pt-BR"));
+      municipalitiesCache[ufUpper] = names;
+      return names;
+    }
+  } catch (error) {
+    console.warn(`Falha ao buscar municípios do IBGE para ${ufUpper}:`, error);
+  }
+
+  return [];
+}
+
 /**
  * Retorna o dia da semana para uma data no formato YYYY-MM-DD
  */
@@ -45,8 +76,7 @@ function calculateDaysRemaining(dateString) {
   today.setHours(0, 0, 0, 0);
 
   const diffTime = holidayDate.getTime() - today.getTime();
-  const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-  return diffDays;
+  return Math.ceil(diffTime / (1000 * 60 * 60 * 24));
 }
 
 /**
@@ -63,6 +93,11 @@ function formatDisplayDate(dateString) {
 export async function fetchStateHolidays(stateCode, customYear) {
   const year = customYear || new Date().getFullYear();
   const code = (stateCode || "").toLowerCase();
+  const stateMeta = states[code];
+  const uf = stateMeta?.uf || code.toUpperCase();
+
+  // Define a cidade padrão: Rio Grande para RS, capital para os demais
+  const defaultCity = code === "rs" ? "Rio Grande" : stateMeta?.capital || "Capital";
 
   let nationalHolidays = [];
 
@@ -76,7 +111,6 @@ export async function fetchStateHolidays(stateCode, customYear) {
     }
   } catch (error) {
     console.warn("Falha ao buscar feriados nacionais na BrasilAPI, usando fallback...", error);
-    // Fallback de feriados fixos nacionais
     nationalHolidays = [
       { date: `${year}-01-01`, name: "Confraternização Universal", type: "national" },
       { date: `${year}-04-21`, name: "Tiradentes", type: "national" },
@@ -102,6 +136,7 @@ export async function fetchStateHolidays(stateCode, customYear) {
       name: h.name,
       type: "national",
       typeLabel: "Nacional",
+      city: null,
       weekday: h.weekday || getWeekdayName(h.date),
       daysRemaining,
       isToday: daysRemaining === 0,
@@ -137,14 +172,34 @@ export async function fetchStateHolidays(stateCode, customYear) {
   const allHolidays = [...treatedNationals, ...treatedRegionals];
   allHolidays.sort((a, b) => a.date.localeCompare(b.date));
 
-  // 4. Identifica o próximo feriado iminente
-  const upcomingHolidays = allHolidays.filter((h) => h.daysRemaining >= 0);
-  const nextHoliday = upcomingHolidays.length > 0 ? upcomingHolidays[0] : null;
+  // 4. Busca todos os municípios do estado via IBGE
+  const ibgeMunicipalities = await fetchStateMunicipalities(uf);
+
+  // 5. Cidades com feriados específicos cadastrados
+  const registeredCitiesSet = new Set();
+  regionalList.forEach((r) => {
+    if (r.type === "municipal" && r.city) {
+      r.city.split("/").forEach((c) => {
+        const trimmed = c.trim();
+        if (trimmed) registeredCitiesSet.add(trimmed);
+      });
+    }
+  });
+
+  // Garante que a defaultCity e a capital estejam na lista se não vier do IBGE
+  if (defaultCity) registeredCitiesSet.add(defaultCity);
+  if (stateMeta?.capital) registeredCitiesSet.add(stateMeta.capital);
+
+  // Lista combinada de cidades (todas as do IBGE + registradas)
+  const allCities = Array.from(
+    new Set([...Array.from(registeredCitiesSet), ...ibgeMunicipalities])
+  ).sort((a, b) => a.localeCompare(b, "pt-BR"));
 
   return {
     year,
     holidays: allHolidays,
-    nextHoliday,
+    defaultCity,
+    allCities,
     totalCount: allHolidays.length,
     nationalCount: treatedNationals.length,
     regionalCount: treatedRegionals.length,

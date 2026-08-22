@@ -1,10 +1,11 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { fetchStateHolidays } from "../services/holidaysApi";
 import "./StateHolidaysWidget.css";
 
 export default function StateHolidaysWidget({ stateCode, stateName }) {
   const [data, setData] = useState(null);
-  const [filter, setFilter] = useState("all"); // "all" | "national" | "state" | "municipal" | "upcoming"
+  const [filter, setFilter] = useState("all"); // "all" | "upcoming" | "national" | "state" | "municipal"
+  const [selectedCity, setSelectedCity] = useState("");
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
@@ -15,6 +16,7 @@ export default function StateHolidaysWidget({ stateCode, stateName }) {
       .then((res) => {
         if (isMounted) {
           setData(res);
+          setSelectedCity(res.defaultCity || "");
           setIsLoading(false);
         }
       })
@@ -28,6 +30,45 @@ export default function StateHolidaysWidget({ stateCode, stateName }) {
     };
   }, [stateCode]);
 
+  // Feriados aplicáveis à cidade selecionada
+  const cityHolidays = useMemo(() => {
+    if (!data) return [];
+    const { holidays } = data;
+    const currentCity = selectedCity.trim().toLowerCase();
+
+    return holidays.filter((h) => {
+      if (h.type === "national" || h.type === "state") {
+        return true;
+      }
+      if (h.type === "municipal") {
+        if (!currentCity) return true;
+        const holidayCities = (h.city || "")
+          .toLowerCase()
+          .split("/")
+          .map((c) => c.trim());
+        return holidayCities.some((c) => currentCity.includes(c) || c.includes(currentCity));
+      }
+      return true;
+    });
+  }, [data, selectedCity]);
+
+  // Próximo feriado da cidade selecionada
+  const nextHoliday = useMemo(() => {
+    const upcoming = cityHolidays.filter((h) => h.daysRemaining >= 0);
+    return upcoming.length > 0 ? upcoming[0] : null;
+  }, [cityHolidays]);
+
+  // Feriados filtrados pela categoria selecionada
+  const displayedHolidays = useMemo(() => {
+    return cityHolidays.filter((h) => {
+      if (filter === "upcoming") return !h.isPast;
+      if (filter === "national") return h.type === "national";
+      if (filter === "state") return h.type === "state";
+      if (filter === "municipal") return h.type === "municipal";
+      return true;
+    });
+  }, [cityHolidays, filter]);
+
   if (isLoading) {
     return (
       <div className="holidays-widget-skeleton">
@@ -40,15 +81,7 @@ export default function StateHolidaysWidget({ stateCode, stateName }) {
     return null;
   }
 
-  const { holidays, nextHoliday, year } = data;
-
-  const filteredHolidays = holidays.filter((h) => {
-    if (filter === "upcoming") return !h.isPast;
-    if (filter === "national") return h.type === "national";
-    if (filter === "state") return h.type === "state";
-    if (filter === "municipal") return h.type === "municipal";
-    return true;
-  });
+  const { allCities, year } = data;
 
   const getCountdownLabel = (h) => {
     if (h.isToday) return "É hoje!";
@@ -64,10 +97,30 @@ export default function StateHolidaysWidget({ stateCode, stateName }) {
           <span className="holidays-title">Feriados e Datas Comemorativas</span>
           <span className="holidays-year-tag">{year}</span>
         </div>
-        <span className="holidays-source-badge">BrasilAPI + Legislação Estadual</span>
+
+        {/* Seletor / Busca de Cidade */}
+        <div className="holidays-city-search-wrap">
+          <label htmlFor="city-input" className="holidays-city-label">
+            Município:
+          </label>
+          <input
+            id="city-input"
+            list="cities-datalist"
+            className="holidays-city-input"
+            value={selectedCity}
+            onChange={(e) => setSelectedCity(e.target.value)}
+            placeholder="Pesquisar cidade..."
+            aria-label="Selecionar município"
+          />
+          <datalist id="cities-datalist">
+            {allCities.map((city) => (
+              <option key={city} value={city} />
+            ))}
+          </datalist>
+        </div>
       </div>
 
-      {/* Destaque do Próximo Feriado */}
+      {/* Destaque do Próximo Feriado para a Cidade */}
       {nextHoliday && (
         <div className="next-holiday-banner">
           <div className="next-holiday-date-col">
@@ -91,51 +144,61 @@ export default function StateHolidaysWidget({ stateCode, stateName }) {
         </div>
       )}
 
-      {/* Filtros em Cápsula */}
-      <div className="holidays-filters">
-        <button
-          type="button"
-          className={`holidays-filter-pill ${filter === "all" ? "active" : ""}`}
-          onClick={() => setFilter("all")}
-        >
-          Todos ({holidays.length})
-        </button>
-        <button
-          type="button"
-          className={`holidays-filter-pill ${filter === "upcoming" ? "active" : ""}`}
-          onClick={() => setFilter("upcoming")}
-        >
-          Próximos
-        </button>
-        <button
-          type="button"
-          className={`holidays-filter-pill ${filter === "national" ? "active" : ""}`}
-          onClick={() => setFilter("national")}
-        >
-          Nacionais
-        </button>
-        <button
-          type="button"
-          className={`holidays-filter-pill ${filter === "state" ? "active" : ""}`}
-          onClick={() => setFilter("state")}
-        >
-          Estaduais
-        </button>
-        <button
-          type="button"
-          className={`holidays-filter-pill ${filter === "municipal" ? "active" : ""}`}
-          onClick={() => setFilter("municipal")}
-        >
-          Municipais
-        </button>
+      {/* Barra de Filtros em Cápsula */}
+      <div className="holidays-controls-row">
+        <div className="holidays-filters">
+          <button
+            type="button"
+            className={`holidays-filter-pill ${filter === "all" ? "active" : ""}`}
+            onClick={() => setFilter("all")}
+          >
+            Todos ({cityHolidays.length})
+          </button>
+          <button
+            type="button"
+            className={`holidays-filter-pill ${filter === "upcoming" ? "active" : ""}`}
+            onClick={() => setFilter("upcoming")}
+          >
+            Próximos
+          </button>
+          <button
+            type="button"
+            className={`holidays-filter-pill ${filter === "national" ? "active" : ""}`}
+            onClick={() => setFilter("national")}
+          >
+            Nacionais
+          </button>
+          <button
+            type="button"
+            className={`holidays-filter-pill ${filter === "state" ? "active" : ""}`}
+            onClick={() => setFilter("state")}
+          >
+            Estaduais
+          </button>
+          <button
+            type="button"
+            className={`holidays-filter-pill ${filter === "municipal" ? "active" : ""}`}
+            onClick={() => setFilter("municipal")}
+          >
+            Municipais
+          </button>
+        </div>
+
+        <span className="holidays-active-city-indicator">
+          Exibindo para: <strong>{selectedCity || stateName}</strong>
+        </span>
       </div>
 
       {/* Lista Minimalista de Feriados */}
       <div className="holidays-list">
-        {filteredHolidays.length === 0 ? (
-          <div className="holidays-empty">Nenhum feriado encontrado neste filtro.</div>
+        {displayedHolidays.length === 0 ? (
+          <div className="holidays-empty">
+            {filter === "municipal"
+              ? `Nenhum feriado municipal específico cadastrado para "${selectedCity}".`
+              : "Nenhum feriado encontrado para este filtro."}
+          </div>
         ) : (
-          filteredHolidays.map((item) => (
+          displayedHolidays.map((item) => (
             <div
               key={item.id}
               className={`holiday-item-row ${item.isToday ? "today" : ""} ${
