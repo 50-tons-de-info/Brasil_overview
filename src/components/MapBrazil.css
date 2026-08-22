@@ -6,15 +6,18 @@
   margin: 0 auto;
 }
 
-.state {
-  fill: #4caf50;
+.brazil-map-svg .state {
+  fill: #0094d9;
   stroke: #ffffff;
-  stroke-width: 1.5;
-  stroke-linejoin: round;
+  stroke-width: 1;
   cursor: pointer;
-  transition: fill 0.2s ease, transform 0.2s ease;
+  transition: fill 0.2s ease;
 }
 
-.state:hover {
-  fill: #2e7d32;
+.brazil-map-svg .state:hover {
+  fill: #003399;
+}
+
+.brazil-map-svg .state:focus {
+  outline: 2px solid #ffcc00;
 }

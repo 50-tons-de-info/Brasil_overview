@@ -5,7 +5,7 @@ export const states = {
   am: { name: "Amazonas" },
   ba: { name: "Bahia" },
   ce: { name: "Ceará" },
-  df: { name: "Federal District" },
+  df: { name: "Distrito Federal (Brasil)" },
   es: { name: "Espírito Santo" },
   go: { name: "Goiás" },
   ma: { name: "Maranhão" },

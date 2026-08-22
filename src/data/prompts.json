@@ -1,0 +1,20 @@
+{
+  "state": "{state}",
+  "questions": [
+    {
+      "id": 1,
+      "name": "history",
+      "prompt": "Conte a história do estado {state}, destacando sua origem, principais acontecimentos históricos e fatos que contribuíram para sua formação. A resposta deve ter aproximadamente 100 palavras, ser escrita em um único parágrafo contínuo e não conter quebras de linha."
+    },
+    {
+      "id": 2,
+      "name": "culture",
+      "prompt": "Descreva a cultura do estado {state}, destacando suas principais tradições, costumes, festas, manifestações culturais, culinária e características que representam sua identidade. A resposta deve ter aproximadamente 100 palavras, ser escrita em um único parágrafo contínuo e não conter quebras de linha."
+    },
+    {
+      "id": 3,
+      "name": "tourist_attractions",
+      "prompt": "Apresente os principais pontos turísticos do estado {state}, destacando os locais mais importantes, suas características e o que torna cada um deles relevante para os visitantes. A resposta deve ter aproximadamente 100 palavras, ser escrita em um único parágrafo contínuo e não conter quebras de linha."
+    }
+  ]
+}
