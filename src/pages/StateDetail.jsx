@@ -2,6 +2,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import { states } from "../data/states";
 import StateResume from "../components/StateResume";
 import StateRadioPlayer from "../components/StateRadioPlayer";
+import StateHolidaysWidget from "../components/StateHolidaysWidget";
 
 function StateDetail() {
   const { code } = useParams();
@@ -61,6 +62,9 @@ function StateDetail() {
 
       {/* Rádios ao Vivo */}
       <StateRadioPlayer stateCode={code} stateName={state.name} />
+
+      {/* Calendário & Feriados */}
+      <StateHolidaysWidget stateCode={code} stateName={state.name} />
     </div>
   );
 }
