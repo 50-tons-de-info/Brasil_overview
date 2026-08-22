@@ -5,7 +5,8 @@ import "./StateHolidaysWidget.css";
 export default function StateHolidaysWidget({ stateCode, stateName }) {
   const [data, setData] = useState(null);
   const [filter, setFilter] = useState("all"); // "all" | "upcoming" | "national" | "state" | "municipal"
-  const [selectedCity, setSelectedCity] = useState("");
+  const [activeCity, setActiveCity] = useState("");
+  const [inputCity, setInputCity] = useState("");
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
@@ -16,7 +17,9 @@ export default function StateHolidaysWidget({ stateCode, stateName }) {
       .then((res) => {
         if (isMounted) {
           setData(res);
-          setSelectedCity(res.defaultCity || "");
+          const defCity = res.defaultCity || "";
+          setActiveCity(defCity);
+          setInputCity(defCity);
           setIsLoading(false);
         }
       })
@@ -30,11 +33,11 @@ export default function StateHolidaysWidget({ stateCode, stateName }) {
     };
   }, [stateCode]);
 
-  // Feriados aplicáveis à cidade selecionada
+  // Feriados aplicáveis à cidade ativa confirmada
   const cityHolidays = useMemo(() => {
     if (!data) return [];
     const { holidays } = data;
-    const currentCity = selectedCity.trim().toLowerCase();
+    const currentCity = activeCity.trim().toLowerCase();
 
     return holidays.filter((h) => {
       if (h.type === "national" || h.type === "state") {
@@ -50,7 +53,7 @@ export default function StateHolidaysWidget({ stateCode, stateName }) {
       }
       return true;
     });
-  }, [data, selectedCity]);
+  }, [data, activeCity]);
 
   // Próximo feriado da cidade selecionada
   const nextHoliday = useMemo(() => {
@@ -83,6 +86,24 @@ export default function StateHolidaysWidget({ stateCode, stateName }) {
 
   const { allCities, year } = data;
 
+  const handleInputChange = (e) => {
+    const val = e.target.value;
+    setInputCity(val);
+
+    const match = allCities.find((c) => c.toLowerCase() === val.trim().toLowerCase());
+    if (match && match.toLowerCase() !== activeCity.toLowerCase()) {
+      setActiveCity(match);
+    }
+  };
+
+  const handleSearchSubmit = (e) => {
+    if (e) e.preventDefault();
+    const trimmed = inputCity.trim();
+    if (trimmed && trimmed.toLowerCase() !== activeCity.toLowerCase()) {
+      setActiveCity(trimmed);
+    }
+  };
+
   const getCountdownLabel = (h) => {
     if (h.isToday) return "É hoje!";
     if (h.daysRemaining === 1) return "Amanhã";
@@ -98,25 +119,30 @@ export default function StateHolidaysWidget({ stateCode, stateName }) {
           <span className="holidays-year-tag">{year}</span>
         </div>
 
-        {/* Seletor / Busca de Cidade */}
+        {/* Seletor / Busca de Cidade com confirmação */}
         <div className="holidays-city-search-wrap">
           <label htmlFor="city-input" className="holidays-city-label">
             Município:
           </label>
-          <input
-            id="city-input"
-            list="cities-datalist"
-            className="holidays-city-input"
-            value={selectedCity}
-            onChange={(e) => setSelectedCity(e.target.value)}
-            placeholder="Pesquisar cidade..."
-            aria-label="Selecionar município"
-          />
-          <datalist id="cities-datalist">
-            {allCities.map((city) => (
-              <option key={city} value={city} />
-            ))}
-          </datalist>
+          <form onSubmit={handleSearchSubmit} className="holidays-city-form">
+            <input
+              id="city-input"
+              list="cities-datalist"
+              className="holidays-city-input"
+              value={inputCity}
+              onChange={handleInputChange}
+              placeholder="Pesquisar cidade..."
+              aria-label="Selecionar município"
+            />
+            <datalist id="cities-datalist">
+              {allCities.map((city) => (
+                <option key={city} value={city} />
+              ))}
+            </datalist>
+            <button type="submit" className="holidays-city-btn" title="Buscar cidade" aria-label="Buscar cidade">
+              🔍
+            </button>
+          </form>
         </div>
       </div>
 
@@ -185,7 +211,7 @@ export default function StateHolidaysWidget({ stateCode, stateName }) {
         </div>
 
         <span className="holidays-active-city-indicator">
-          Exibindo para: <strong>{selectedCity || stateName}</strong>
+          Exibindo para: <strong>{activeCity || stateName}</strong>
         </span>
       </div>
 
@@ -194,7 +220,7 @@ export default function StateHolidaysWidget({ stateCode, stateName }) {
         {displayedHolidays.length === 0 ? (
           <div className="holidays-empty">
             {filter === "municipal"
-              ? `Nenhum feriado municipal específico cadastrado para "${selectedCity}".`
+              ? `Nenhum feriado municipal específico cadastrado para "${activeCity}".`
               : "Nenhum feriado encontrado para este filtro."}
           </div>
         ) : (

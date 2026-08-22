@@ -27,15 +27,17 @@ export function getCachedData(key, ttlMs) {
 
   // 2. Checa localStorage (persiste entre F5 e sessões)
   try {
-    const raw = localStorage.getItem(fullKey);
-    if (raw) {
-      const parsed = JSON.parse(raw);
-      if (now - parsed.timestamp < ttlMs) {
-        // Atualiza na memória para acessos subsequentes rápidos
-        memoryCache.set(fullKey, parsed);
-        return parsed.data;
+    if (typeof window !== "undefined" && window.localStorage) {
+      const raw = window.localStorage.getItem(fullKey);
+      if (raw) {
+        const parsed = JSON.parse(raw);
+        if (now - parsed.timestamp < ttlMs) {
+          // Atualiza na memória para acessos subsequentes rápidos
+          memoryCache.set(fullKey, parsed);
+          return parsed.data;
+        }
+        window.localStorage.removeItem(fullKey);
       }
-      localStorage.removeItem(fullKey);
     }
   } catch (error) {
     console.warn(`Erro ao ler cache do localStorage para ${key}:`, error);
@@ -61,7 +63,9 @@ export function setCachedData(key, data) {
 
   // Salva no localStorage
   try {
-    localStorage.setItem(fullKey, JSON.stringify(item));
+    if (typeof window !== "undefined" && window.localStorage) {
+      window.localStorage.setItem(fullKey, JSON.stringify(item));
+    }
   } catch (error) {
     console.warn(`Erro ao gravar cache no localStorage para ${key}:`, error);
   }
@@ -73,11 +77,13 @@ export function setCachedData(key, data) {
 export function clearAllCache() {
   memoryCache.clear();
   try {
-    Object.keys(localStorage).forEach((key) => {
-      if (key.startsWith(CACHE_PREFIX)) {
-        localStorage.removeItem(key);
-      }
-    });
+    if (typeof window !== "undefined" && window.localStorage) {
+      Object.keys(window.localStorage).forEach((key) => {
+        if (key.startsWith(CACHE_PREFIX)) {
+          window.localStorage.removeItem(key);
+        }
+      });
+    }
   } catch (error) {
     console.warn("Erro ao limpar cache:", error);
   }

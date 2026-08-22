@@ -111,7 +111,6 @@ function WeatherIcon({ name, isDay = true, size = 24 }) {
 
 export default function StateWeatherWidget({ stateCode, stateName }) {
   const [weatherData, setWeatherData] = useState(null);
-  const [selectedCity, setSelectedCity] = useState("");
   const [allCities, setAllCities] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -119,6 +118,17 @@ export default function StateWeatherWidget({ stateCode, stateName }) {
   const code = (stateCode || "").toLowerCase();
   const stateMeta = states[code];
   const defaultCityName = code === "rs" ? "Rio Grande" : stateMeta?.capital || "Porto Alegre";
+
+  // activeCity é a cidade confirmada cujo clima é exibido
+  // inputCity é o valor digitado no campo de busca
+  const [activeCity, setActiveCity] = useState(defaultCityName);
+  const [inputCity, setInputCity] = useState(defaultCityName);
+
+  // Redefine a cidade padrão quando o estado muda
+  useEffect(() => {
+    setActiveCity(defaultCityName);
+    setInputCity(defaultCityName);
+  }, [stateCode, defaultCityName]);
 
   // Carrega municípios da UF via IBGE
   useEffect(() => {
@@ -132,21 +142,16 @@ export default function StateWeatherWidget({ stateCode, stateName }) {
     });
   }, [code, defaultCityName, stateMeta]);
 
-  // Carrega o clima ao alterar estado ou cidade
+  // Carrega o clima APENAS quando activeCity mudar
   useEffect(() => {
     let isMounted = true;
     setIsLoading(true);
     setError(null);
 
-    const cityToFetch = selectedCity || defaultCityName;
-
-    fetchStateWeather(stateCode, cityToFetch)
+    fetchStateWeather(stateCode, activeCity)
       .then((res) => {
         if (!isMounted) return;
         setWeatherData(res);
-        if (!selectedCity) {
-          setSelectedCity(res.cityName);
-        }
         setIsLoading(false);
       })
       .catch((err) => {
@@ -159,16 +164,33 @@ export default function StateWeatherWidget({ stateCode, stateName }) {
     return () => {
       isMounted = false;
     };
-  }, [stateCode, selectedCity, defaultCityName]);
+  }, [stateCode, activeCity]);
 
-  const handleCityChange = (e) => {
-    setSelectedCity(e.target.value);
+  // Ao digitar: atualiza apenas inputCity
+  // Se corresponder exatamente a um município do datalist, confirma automaticamente
+  const handleInputChange = (e) => {
+    const val = e.target.value;
+    setInputCity(val);
+
+    const match = allCities.find((c) => c.toLowerCase() === val.trim().toLowerCase());
+    if (match && match.toLowerCase() !== activeCity.toLowerCase()) {
+      setActiveCity(match);
+    }
+  };
+
+  // Ao submeter form (Enter ou clique na lupa): confirma a cidade digitada
+  const handleSearchSubmit = (e) => {
+    if (e) e.preventDefault();
+    const trimmed = inputCity.trim();
+    if (trimmed && trimmed.toLowerCase() !== activeCity.toLowerCase()) {
+      setActiveCity(trimmed);
+    }
   };
 
   if (isLoading && !weatherData) {
     return (
       <div className="weather-widget-skeleton">
-        <span>Carregando dados meteorológicos de {selectedCity || defaultCityName}, {stateName}...</span>
+        <span>Carregando dados meteorológicos de {activeCity}, {stateName}...</span>
       </div>
     );
   }
@@ -188,25 +210,30 @@ export default function StateWeatherWidget({ stateCode, stateName }) {
           <span className="weather-source-tag">Open-Meteo</span>
         </div>
 
-        {/* Busca / Seletor de Município */}
+        {/* Busca / Seletor de Município com confirmação */}
         <div className="weather-city-search-wrap">
           <label htmlFor="weather-city-input" className="weather-city-label">
             Município:
           </label>
-          <input
-            id="weather-city-input"
-            list="weather-cities-datalist"
-            className="weather-city-input"
-            value={selectedCity}
-            onChange={handleCityChange}
-            placeholder="Pesquisar cidade..."
-            aria-label="Pesquisar município para clima"
-          />
-          <datalist id="weather-cities-datalist">
-            {allCities.map((c) => (
-              <option key={c} value={c} />
-            ))}
-          </datalist>
+          <form onSubmit={handleSearchSubmit} className="weather-city-form">
+            <input
+              id="weather-city-input"
+              list="weather-cities-datalist"
+              className="weather-city-input"
+              value={inputCity}
+              onChange={handleInputChange}
+              placeholder="Pesquisar cidade..."
+              aria-label="Pesquisar município para clima"
+            />
+            <datalist id="weather-cities-datalist">
+              {allCities.map((c) => (
+                <option key={c} value={c} />
+              ))}
+            </datalist>
+            <button type="submit" className="weather-city-btn" title="Buscar cidade" aria-label="Buscar cidade">
+              🔍
+            </button>
+          </form>
         </div>
       </div>
 

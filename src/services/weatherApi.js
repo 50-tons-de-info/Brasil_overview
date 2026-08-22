@@ -107,17 +107,17 @@ export async function getCityCoordinates(cityName, uf) {
     return PRESET_COORDINATES[normalized];
   }
 
-  const geoCacheKey = `geo_${cleanCity}_${(uf || "").toLowerCase()}`;
+  const geoCacheKey = `geo_${normalized}_${(uf || "").toLowerCase()}`;
   const cachedGeo = getCachedData(geoCacheKey, GEO_CACHE_TTL);
   if (cachedGeo) {
     return cachedGeo;
   }
 
-  // Geocodificação dinâmica para qualquer outra cidade do Brasil
+  // Geocodificação dinâmica para qualquer outra cidade do Brasil via Open-Meteo
   try {
     const url = `https://geocoding-api.open-meteo.com/v1/search?name=${encodeURIComponent(
       cityName
-    )}&count=5&language=pt&country_code=BR`;
+    )}&count=10&language=pt&country_code=BR`;
     const res = await fetch(url);
     if (res.ok) {
       const data = await res.json();
@@ -129,7 +129,8 @@ export async function getCityCoordinates(cityName, uf) {
           const found = data.results.find(
             (r) =>
               r.admin1?.toUpperCase().includes(ufUpper) ||
-              r.admin2?.toUpperCase().includes(ufUpper)
+              r.admin2?.toUpperCase().includes(ufUpper) ||
+              r.country_code?.toUpperCase() === "BR"
           );
           if (found) match = found;
         }
@@ -142,8 +143,8 @@ export async function getCityCoordinates(cityName, uf) {
     console.warn(`Erro na geocodificação de ${cityName}:`, err);
   }
 
-  // Fallback para coordenadas padrão de Rio Grande ou São Paulo
-  return { lat: -32.035, lon: -52.0986 };
+  // Fallback para as coordenadas da capital da respectiva UF ou Rio Grande
+  return { lat: -15.7975, lon: -47.8919 };
 }
 
 /**
