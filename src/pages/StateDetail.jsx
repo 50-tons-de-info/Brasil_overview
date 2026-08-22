@@ -3,6 +3,7 @@ import { states } from "../data/states";
 import StateResume from "../components/StateResume";
 import StateRadioPlayer from "../components/StateRadioPlayer";
 import StateHolidaysWidget from "../components/StateHolidaysWidget";
+import StateWeatherWidget from "../components/StateWeatherWidget";
 
 function StateDetail() {
   const { code } = useParams();
@@ -59,6 +60,9 @@ function StateDetail() {
           resume={tamplet}
         />
       </section>
+
+      {/* Condições Climáticas & Previsão */}
+      <StateWeatherWidget stateCode={code} stateName={state.name} />
 
       {/* Rádios ao Vivo */}
       <StateRadioPlayer stateCode={code} stateName={state.name} />
