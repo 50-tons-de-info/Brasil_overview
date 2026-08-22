@@ -1,19 +1,19 @@
 .indicators-widget-minimal {
-  margin: 28px 0;
+  margin: 0;
   background: var(--code-bg, #f7f7f8);
   border: 1px solid var(--border, #e5e4e7);
   border-radius: 12px;
-  padding: 20px;
+  padding: 18px 20px;
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 14px;
   text-align: left;
   box-sizing: border-box;
 }
 
 .indicators-widget-skeleton {
-  margin: 28px 0;
-  padding: 20px;
+  margin: 0;
+  padding: 18px 20px;
   background: var(--code-bg, #f7f7f8);
   border: 1px solid var(--border, #e5e4e7);
   border-radius: 12px;
@@ -28,8 +28,8 @@
   align-items: center;
   justify-content: space-between;
   border-bottom: 1px solid var(--border, #e5e4e7);
-  padding-bottom: 12px;
-  gap: 12px;
+  padding-bottom: 10px;
+  gap: 10px;
   flex-wrap: wrap;
 }
 
@@ -40,13 +40,13 @@
 }
 
 .indicators-title {
-  font-size: 15px;
+  font-size: 14px;
   font-weight: 600;
   color: var(--text-h, #08060d);
 }
 
 .indicators-badge {
-  font-size: 11px;
+  font-size: 10px;
   font-weight: 600;
   padding: 2px 7px;
   background: var(--border, #e5e4e7);
@@ -66,8 +66,8 @@
   background: var(--bg, #ffffff);
   border: 1px solid var(--border, #e5e4e7);
   border-radius: 20px;
-  padding: 5px 14px;
-  font-size: 12px;
+  padding: 4px 12px;
+  font-size: 11.5px;
   font-weight: 500;
   color: var(--text, #6b6375);
   cursor: pointer;
@@ -77,28 +77,28 @@
 }
 
 .indicators-tab-btn:hover {
-  border-color: var(--text-h, #111);
-  color: var(--text-h, #111);
+  border-color: var(--state-primary, #111);
+  color: var(--state-primary, #111);
 }
 
 .indicators-tab-btn.active {
-  background: var(--text-h, #08060d);
-  color: var(--bg, #fff);
-  border-color: var(--text-h, #08060d);
+  background: var(--state-primary, #08060d);
+  color: #fff;
+  border-color: var(--state-primary, #08060d);
 }
 
 /* Painel de Conteúdo das Abas */
 .indicators-tab-pane {
   display: flex;
   flex-direction: column;
-  gap: 14px;
+  gap: 12px;
 }
 
 /* Grid de Cards Estatísticos */
 .indicators-grid-numeric {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 10px;
+  gap: 8px;
 }
 
 .indicators-grid-numeric.four-cols {
@@ -108,11 +108,11 @@
 .indicator-card {
   background: var(--bg, #ffffff);
   border: 1px solid var(--border, #e5e4e7);
-  border-radius: 10px;
-  padding: 12px 14px;
+  border-radius: 9px;
+  padding: 10px 12px;
   display: flex;
   flex-direction: column;
-  gap: 3px;
+  gap: 2px;
   transition: border-color 0.15s;
 }
 
@@ -127,7 +127,7 @@
 }
 
 .indicator-label {
-  font-size: 10px;
+  font-size: 9.5px;
   color: var(--text, #888);
   text-transform: uppercase;
   letter-spacing: 0.5px;
@@ -135,16 +135,16 @@
 }
 
 .indicator-rank-badge {
-  font-size: 10px;
+  font-size: 9.5px;
   font-weight: 600;
-  color: #2563eb;
-  background: rgba(37, 99, 235, 0.08);
-  padding: 1px 6px;
+  color: var(--state-primary, #2563eb);
+  background: var(--state-badge-bg, rgba(37, 99, 235, 0.08));
+  padding: 1px 5px;
   border-radius: 4px;
 }
 
 .indicator-value {
-  font-size: 16px;
+  font-size: 15px;
   font-weight: 700;
   color: var(--text-h, #08060d);
   letter-spacing: -0.3px;
@@ -152,7 +152,7 @@
 }
 
 .indicator-sub {
-  font-size: 11px;
+  font-size: 10.5px;
   color: var(--text, #6b6375);
   white-space: nowrap;
   overflow: hidden;
@@ -163,18 +163,18 @@
 .indicators-dual-col-layout {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  gap: 12px;
+  gap: 10px;
 }
 
 /* Subpainéis */
 .indicators-subpanel {
   background: var(--bg, #ffffff);
   border: 1px solid var(--border, #e5e4e7);
-  border-radius: 10px;
-  padding: 16px;
+  border-radius: 9px;
+  padding: 12px 14px;
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 10px;
 }
 
 .subpanel-header {
@@ -184,7 +184,7 @@
 }
 
 .subpanel-title {
-  font-size: 11px;
+  font-size: 10.5px;
   font-weight: 600;
   color: var(--text-h, #08060d);
   text-transform: uppercase;
@@ -192,11 +192,11 @@
 }
 
 .subpanel-tag {
-  font-size: 10px;
+  font-size: 9.5px;
   font-weight: 600;
   color: var(--text, #888);
   background: var(--code-bg, #f1f5f9);
-  padding: 2px 6px;
+  padding: 1px 5px;
   border-radius: 4px;
 }
 
@@ -204,21 +204,21 @@
 .extremes-list-compact {
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 6px;
 }
 
 .extreme-row {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 8px;
   background: var(--code-bg, #f8f9fa);
   border: 1px solid var(--border, #e5e4e7);
-  border-radius: 8px;
-  padding: 8px 12px;
+  border-radius: 6px;
+  padding: 6px 10px;
 }
 
 .extreme-row-icon {
-  font-size: 16px;
+  font-size: 14px;
   line-height: 1;
 }
 
@@ -230,14 +230,14 @@
 }
 
 .extreme-row-label {
-  font-size: 10px;
+  font-size: 9.5px;
   color: var(--text, #888);
   font-weight: 600;
   text-transform: uppercase;
 }
 
 .extreme-row-val {
-  font-size: 12px;
+  font-size: 11.5px;
   font-weight: 600;
   color: var(--text-h, #08060d);
   white-space: nowrap;
@@ -249,18 +249,18 @@
 .sectors-content-wrap {
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 10px;
 }
 
 .sectors-legend-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 8px;
+  gap: 6px;
 }
 
 .sector-legend-box {
   border-radius: 6px;
-  padding: 8px 10px;
+  padding: 6px 8px;
   display: flex;
   flex-direction: column;
   gap: 2px;
@@ -283,20 +283,20 @@
 }
 
 .sector-legend-name {
-  font-size: 10px;
+  font-size: 9.5px;
   font-weight: 600;
   text-transform: uppercase;
 }
 
 .sector-legend-pct {
-  font-size: 15px;
+  font-size: 14px;
   font-weight: 700;
 }
 
 .sectors-bar-large {
   display: flex;
-  height: 10px;
-  border-radius: 5px;
+  height: 8px;
+  border-radius: 4px;
   overflow: hidden;
   background: var(--code-bg, #e5e7eb);
 }
@@ -317,12 +317,12 @@
 .indicators-feature-card {
   background: var(--bg, #ffffff);
   border: 1px solid var(--border, #e5e4e7);
-  border-left: 4px solid #10b981;
-  border-radius: 10px;
-  padding: 14px 16px;
+  border-left: 4px solid var(--state-primary, #10b981);
+  border-radius: 9px;
+  padding: 12px 14px;
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap: 4px;
 }
 
 .feature-header {
@@ -332,21 +332,21 @@
 }
 
 .feature-tag {
-  font-size: 11px;
+  font-size: 10.5px;
   font-weight: 700;
-  color: #10b981;
+  color: var(--state-primary, #10b981);
   text-transform: uppercase;
   letter-spacing: 0.5px;
 }
 
 .feature-source {
-  font-size: 10px;
+  font-size: 9.5px;
   color: var(--text, #888);
 }
 
 .feature-text {
   margin: 0;
-  font-size: 14px;
+  font-size: 13px;
   font-weight: 600;
   color: var(--text-h, #08060d);
   line-height: 1.4;
@@ -356,15 +356,15 @@
 .products-chips-wrap {
   display: flex;
   flex-wrap: wrap;
-  gap: 8px;
+  gap: 6px;
 }
 
 .product-chip {
   background: var(--code-bg, #f8f9fa);
   border: 1px solid var(--border, #e5e4e7);
   border-radius: 6px;
-  padding: 6px 12px;
-  font-size: 12px;
+  padding: 4px 10px;
+  font-size: 11.5px;
   font-weight: 500;
   color: var(--text-h, #08060d);
 }
@@ -373,13 +373,13 @@
 .etnia-content-wrap {
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 10px;
 }
 
 .etnia-bar-large {
   display: flex;
-  height: 12px;
-  border-radius: 6px;
+  height: 10px;
+  border-radius: 5px;
   overflow: hidden;
   background: var(--code-bg, #e5e7eb);
 }
@@ -392,20 +392,20 @@
 .etnia-legend-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 6px 12px;
+  gap: 4px 8px;
 }
 
 .etnia-legend-item {
   display: flex;
   align-items: center;
-  gap: 6px;
-  font-size: 11px;
+  gap: 5px;
+  font-size: 10.5px;
   color: var(--text, #6b6375);
 }
 
 .legend-dot {
-  width: 8px;
-  height: 8px;
+  width: 7px;
+  height: 7px;
   border-radius: 50%;
   flex-shrink: 0;
 }
@@ -423,18 +423,18 @@
 .sex-content-wrap {
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 10px;
 }
 
 .sex-bar-large {
   display: flex;
-  height: 24px;
+  height: 22px;
   border-radius: 6px;
   overflow: hidden;
-  font-size: 11px;
+  font-size: 10px;
   font-weight: 600;
   color: #fff;
-  line-height: 24px;
+  line-height: 22px;
   text-align: center;
 }
 
@@ -444,7 +444,7 @@
   justify-content: center;
   white-space: nowrap;
   overflow: hidden;
-  padding: 0 8px;
+  padding: 0 6px;
   transition: width 0.3s ease;
 }
 
@@ -459,14 +459,14 @@
 .sex-details-row {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 8px;
+  gap: 6px;
 }
 
 .sex-stat-box {
   background: var(--code-bg, #f8f9fa);
   border: 1px solid var(--border, #e5e4e7);
   border-radius: 6px;
-  padding: 6px 8px;
+  padding: 5px 6px;
   display: flex;
   flex-direction: column;
   text-align: center;
@@ -479,33 +479,33 @@
 }
 
 .sex-stat-label {
-  font-size: 10px;
+  font-size: 9.5px;
   color: var(--text, #888);
   font-weight: 600;
   text-transform: uppercase;
 }
 
 .sex-stat-num {
-  font-size: 12px;
+  font-size: 11.5px;
   font-weight: 700;
   color: var(--text-h, #08060d);
 }
 
 .sex-stat-num small {
-  font-size: 10px;
+  font-size: 9.5px;
   font-weight: 500;
   color: var(--text, #888);
 }
 
 /* Card de Saldo Migratório */
 .migration-subpanel {
-  border-left: 4px solid #3b82f6;
+  border-left: 4px solid var(--state-primary, #3b82f6);
 }
 
 .migration-badge {
-  font-size: 11px;
+  font-size: 10px;
   font-weight: 600;
-  padding: 2px 8px;
+  padding: 2px 7px;
   border-radius: 6px;
 }
 
@@ -529,7 +529,7 @@
 
 .migration-desc {
   margin: 0;
-  font-size: 13px;
+  font-size: 12.5px;
   color: var(--text-h, #334155);
   line-height: 1.5;
 }
@@ -537,28 +537,28 @@
 .migration-routes-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  gap: 10px;
+  gap: 8px;
 }
 
 .migration-route-item {
   background: var(--code-bg, #f8f9fa);
   border: 1px solid var(--border, #e5e4e7);
-  border-radius: 8px;
-  padding: 10px 12px;
+  border-radius: 6px;
+  padding: 8px 10px;
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: 3px;
 }
 
 .route-label {
-  font-size: 10px;
+  font-size: 9.5px;
   color: var(--text, #888);
   font-weight: 600;
   text-transform: uppercase;
 }
 
 .route-val {
-  font-size: 12px;
+  font-size: 11.5px;
   font-weight: 600;
   color: var(--text-h, #08060d);
 }

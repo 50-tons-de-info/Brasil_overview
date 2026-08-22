@@ -181,10 +181,11 @@ export default function StateWeatherWidget({ stateCode, stateName }) {
 
   return (
     <section className="weather-widget-minimal">
+      {/* Header com Busca de Cidade */}
       <div className="weather-widget-header">
         <div className="weather-header-left">
-          <span className="weather-title">Condições Climáticas & Previsão</span>
-          <span className="weather-source-tag">Open-Meteo API</span>
+          <span className="weather-title">Clima & Previsão</span>
+          <span className="weather-source-tag">Open-Meteo</span>
         </div>
 
         {/* Busca / Seletor de Município */}
@@ -210,25 +211,28 @@ export default function StateWeatherWidget({ stateCode, stateName }) {
       </div>
 
       {/* Card Principal: Clima Atual */}
-      <div className="weather-current-card">
-        <div className="weather-current-main">
-          <div className="weather-current-icon-wrap">
-            <WeatherIcon name={current.icon} isDay={current.isDay} size={48} />
+      <div className="weather-current-hero">
+        <div className="weather-hero-top">
+          <div className="weather-hero-icon-box">
+            <WeatherIcon name={current.icon} isDay={current.isDay} size={44} />
           </div>
 
-          <div className="weather-current-temp-block">
-            <div className="weather-temp-row">
-              <span className="weather-current-temp">{current.temp}°</span>
-              <span className="weather-current-unit">C</span>
+          <div className="weather-hero-temp-block">
+            <div className="weather-temp-main-display">
+              <span className="weather-temp-number">{current.temp}°</span>
+              <span className="weather-temp-scale">C</span>
             </div>
-            <span className="weather-current-condition">{current.condition}</span>
-            <span className="weather-current-city-label">
-              Sensação de {current.feelsLike}°C • {cityName}, {current.stateUf}
+          </div>
+
+          <div className="weather-hero-desc-block">
+            <span className="weather-condition-headline">{current.condition}</span>
+            <span className="weather-location-subline">
+              Sensação de <strong>{current.feelsLike}°C</strong> • {cityName}, {current.stateUf}
             </span>
           </div>
         </div>
 
-        {/* Métricas Secundárias */}
+        {/* 4 Métricas Secundárias em Grid Limpo */}
         <div className="weather-metrics-grid">
           <div className="weather-metric-item">
             <span className="metric-label">Umidade</span>
@@ -236,17 +240,17 @@ export default function StateWeatherWidget({ stateCode, stateName }) {
           </div>
           <div className="weather-metric-item">
             <span className="metric-label">Vento</span>
-            <span className="metric-val">{current.windSpeed} km/h</span>
+            <span className="metric-val">{current.windSpeed} <small>km/h</small></span>
           </div>
           <div className="weather-metric-item">
             <span className="metric-label">Índice UV</span>
             <span className={`metric-val uv-${current.uvLevel}`}>
-              {current.uvLabel} ({current.uvIndex})
+              {current.uvLabel} <small>({current.uvIndex})</small>
             </span>
           </div>
           <div className="weather-metric-item">
             <span className="metric-label">Sol (Nascer / Pôr)</span>
-            <span className="metric-val">
+            <span className="metric-val solar-val">
               {current.sunrise} • {current.sunset}
             </span>
           </div>
@@ -263,15 +267,15 @@ export default function StateWeatherWidget({ stateCode, stateName }) {
               <span className="forecast-date">{day.date}</span>
 
               <div className="forecast-icon">
-                <WeatherIcon name={day.icon} isDay={true} size={26} />
+                <WeatherIcon name={day.icon} isDay={true} size={24} />
               </div>
 
               {day.rainProb > 0 ? (
                 <span className="forecast-rain" title="Probabilidade de chuva">
-                  💧 {day.rainProb}%
+                  {day.rainProb}%
                 </span>
               ) : (
-                <span className="forecast-rain-empty">—</span>
+                <span className="forecast-rain empty">—</span>
               )}
 
               <div className="forecast-temps">

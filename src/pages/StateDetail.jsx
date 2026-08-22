@@ -1,20 +1,25 @@
 import { useParams, useNavigate } from "react-router-dom";
 import { states } from "../data/states";
 import { IBGE_STATE_DATA } from "../data/ibgeData";
+import { getStateTheme } from "../data/stateThemes";
 import StateResume from "../components/StateResume";
 import StateIndicatorsWidget from "../components/StateIndicatorsWidget";
 import StateWeatherWidget from "../components/StateWeatherWidget";
 import StateRadioPlayer from "../components/StateRadioPlayer";
 import StateHolidaysWidget from "../components/StateHolidaysWidget";
+import "./StateDetail.css";
 
 function StateDetail() {
   const { code } = useParams();
   const navigate = useNavigate();
-  const state = states[code?.toLowerCase()];
-  const stateData = IBGE_STATE_DATA[code?.toLowerCase()];
+  const stateCode = code?.toLowerCase();
+  const state = states[stateCode];
+  const stateData = IBGE_STATE_DATA[stateCode];
+  const theme = getStateTheme(stateCode);
 
-  // teste de como vai ficar a aparencia
-  const tamplet = "lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.";
+  // Texto provisório para o resumo do estado
+  const tamplet =
+    "O estado possui papel fundamental na formação socioeconômica, cultural e histórica do Brasil. Com forte dinamismo produtivo, rica herança cultural e biodiversidade exuberante, destaca-se regional e nacionalmente em múltiplos setores da economia, turismo e desenvolvimento humano.";
 
   if (!state) {
     return (
@@ -31,63 +36,78 @@ function StateDetail() {
     );
   }
 
-  return (
-    <div style={{ maxWidth: "860px", margin: "0 auto", padding: "40px 24px", textAlign: "left", boxSizing: "border-box" }}>
-      <button
-        style={{
-          background: "transparent",
-          border: "1px solid var(--border, #e5e4e7)",
-          color: "var(--text, #6b6375)",
-          padding: "6px 14px",
-          borderRadius: "6px",
-          cursor: "pointer",
-          marginBottom: "24px",
-          fontSize: "13px",
-          fontWeight: 500
-        }}
-        onClick={() => navigate("/")}
-      >
-        ← Voltar ao mapa
-      </button>
+  // Estilo dinâmico com as cores e características do estado
+  const dynamicThemeStyle = {
+    "--state-primary": theme.primaryColor,
+    "--state-secondary": theme.secondaryColor,
+    "--state-accent": theme.accentColor,
+    "--state-glow": theme.heroGlow,
+    "--state-badge-bg": theme.badgeBg,
+    "--state-badge-border": theme.badgeBorder,
+    "--state-badge-text": theme.badgeText,
+  };
 
-      <header style={{ marginBottom: "24px" }}>
-        <h1 style={{ margin: "0 0 10px 0", fontSize: "36px", letterSpacing: "-0.5px" }}>
-          {state.name} <span style={{ fontSize: "20px", color: "var(--text, #888)", fontWeight: 400 }}>{state.uf}</span>
-        </h1>
+  return (
+    <div className="state-page-container" style={dynamicThemeStyle}>
+      {/* Ambient Glow Temático no Fundo */}
+      <div className="state-hero-glow" />
+
+      {/* Topo / Botão Voltar */}
+      <nav className="state-top-nav">
+        <button
+          type="button"
+          className="state-back-btn"
+          onClick={() => navigate("/")}
+        >
+          ← Voltar ao mapa
+        </button>
+        <span className="state-region-badge">Região {state.region || "Brasil"}</span>
+      </nav>
+
+      {/* Hero Header com Identidade Visual Própria */}
+      <header className="state-hero-header">
+        <div className="state-title-row">
+          <div className="state-title-group">
+            <span className="state-icon-emoji">{theme.icon}</span>
+            <h1 className="state-name-title">
+              {state.name}
+              <span className="state-uf-badge">{state.uf}</span>
+            </h1>
+          </div>
+          <span className="state-tagline-text">{theme.tagline}</span>
+        </div>
+
+        {/* Faixa de Identidade (Capital, Gentílico, Bioma) */}
         {stateData && (
-          <div style={{ display: "flex", gap: "8px", flexWrap: "wrap", marginTop: "8px" }}>
-            <span style={{ fontSize: "12px", padding: "4px 10px", background: "var(--code-bg, #f3f4f6)", borderRadius: "16px", color: "var(--text-h, #111)", fontWeight: 500, border: "1px solid var(--border, #e5e4e7)" }}>
-              📍 Capital: {state.capital}
+          <div className="state-identity-chips">
+            <span className="identity-chip">
+              📍 <strong>Capital:</strong> {state.capital}
             </span>
-            <span style={{ fontSize: "12px", padding: "4px 10px", background: "var(--code-bg, #f3f4f6)", borderRadius: "16px", color: "var(--text-h, #111)", fontWeight: 500, border: "1px solid var(--border, #e5e4e7)" }}>
-              👥 Gentílico: {stateData.gentilico.split("/")[0].trim()}
+            <span className="identity-chip">
+              👥 <strong>Gentílico:</strong> {stateData.gentilico.split("/")[0].trim()}
             </span>
-            <span style={{ fontSize: "12px", padding: "4px 10px", background: "var(--code-bg, #f3f4f6)", borderRadius: "16px", color: "var(--text-h, #111)", fontWeight: 500, border: "1px solid var(--border, #e5e4e7)" }}>
-              🌿 Bioma: {stateData.biomaPrincipal}
+            <span className="identity-chip">
+              🌿 <strong>Bioma Predominante:</strong> {stateData.biomaPrincipal}
             </span>
           </div>
         )}
       </header>
-      
-      {/* Resumo do Estado */}
-      <section style={{ marginBottom: "20px", lineHeight: "1.6" }}>
-        <StateResume
-          title={state.name}
-          resume={tamplet}
-        />
-      </section>
 
-      {/* Indicadores Oficiais IBGE */}
-      <StateIndicatorsWidget stateCode={code} stateName={state.name} />
+      {/* Bento Dashboard Grid: 2 Colunas Integradas */}
+      <main className="state-dashboard-grid">
+        {/* Coluna Principal: Resumo e Painel Estatístico IBGE */}
+        <section className="dashboard-main-col">
+          <StateResume title={state.name} resume={tamplet} />
+          <StateIndicatorsWidget stateCode={code} stateName={state.name} />
+        </section>
 
-      {/* Condições Climáticas & Previsão */}
-      <StateWeatherWidget stateCode={code} stateName={state.name} />
-
-      {/* Rádios ao Vivo */}
-      <StateRadioPlayer stateCode={code} stateName={state.name} />
-
-      {/* Calendário & Feriados */}
-      <StateHolidaysWidget stateCode={code} stateName={state.name} />
+        {/* Coluna Lateral: Ferramentas em Tempo Real (Clima, Rádios, Feriados) */}
+        <aside className="dashboard-side-col">
+          <StateWeatherWidget stateCode={code} stateName={state.name} />
+          <StateRadioPlayer stateCode={code} stateName={state.name} />
+          <StateHolidaysWidget stateCode={code} stateName={state.name} />
+        </aside>
+      </main>
     </div>
   );
 }
