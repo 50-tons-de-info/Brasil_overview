@@ -1,0 +1,451 @@
+.indicators-widget-minimal {
+  margin: 28px 0;
+  background: var(--code-bg, #f7f7f8);
+  border: 1px solid var(--border, #e5e4e7);
+  border-radius: 12px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  text-align: left;
+  box-sizing: border-box;
+}
+
+.indicators-widget-skeleton {
+  margin: 28px 0;
+  padding: 20px;
+  background: var(--code-bg, #f7f7f8);
+  border: 1px solid var(--border, #e5e4e7);
+  border-radius: 12px;
+  font-size: 13px;
+  color: var(--text, #888);
+  text-align: left;
+}
+
+/* Header & Abas */
+.indicators-widget-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid var(--border, #e5e4e7);
+  padding-bottom: 12px;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.indicators-header-left {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.indicators-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text-h, #08060d);
+}
+
+.indicators-badge {
+  font-size: 11px;
+  font-weight: 600;
+  padding: 2px 7px;
+  background: var(--border, #e5e4e7);
+  color: var(--text-h, #111);
+  border-radius: 12px;
+}
+
+.indicators-region-label {
+  font-size: 12px;
+  color: var(--text, #6b6375);
+  font-weight: 500;
+}
+
+/* Abas */
+.indicators-tabs {
+  display: flex;
+  gap: 6px;
+  overflow-x: auto;
+  padding-bottom: 2px;
+}
+
+.indicators-tab-btn {
+  background: var(--bg, #ffffff);
+  border: 1px solid var(--border, #e5e4e7);
+  border-radius: 20px;
+  padding: 4px 12px;
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--text, #6b6375);
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.15s ease;
+  font-family: inherit;
+}
+
+.indicators-tab-btn:hover {
+  border-color: var(--text-h, #111);
+  color: var(--text-h, #111);
+}
+
+.indicators-tab-btn.active {
+  background: var(--text-h, #08060d);
+  color: var(--bg, #fff);
+  border-color: var(--text-h, #08060d);
+}
+
+/* Painel de Conteúdo das Abas */
+.indicators-tab-pane {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* Grid de Cards Estatísticos */
+.indicators-grid-numeric {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+}
+
+.indicators-grid-numeric.four-cols {
+  grid-template-columns: repeat(4, 1fr);
+}
+
+.indicator-card {
+  background: var(--bg, #ffffff);
+  border: 1px solid var(--border, #e5e4e7);
+  border-radius: 10px;
+  padding: 12px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  transition: border-color 0.15s;
+}
+
+.indicator-card:hover {
+  border-color: var(--text, #999);
+}
+
+.indicator-card-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.indicator-label {
+  font-size: 10px;
+  color: var(--text, #888);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  font-weight: 600;
+}
+
+.indicator-rank-badge {
+  font-size: 10px;
+  font-weight: 600;
+  color: #2563eb;
+  background: rgba(37, 99, 235, 0.08);
+  padding: 1px 6px;
+  border-radius: 4px;
+}
+
+.indicator-value {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--text-h, #08060d);
+  letter-spacing: -0.3px;
+  margin: 1px 0;
+}
+
+.indicator-sub {
+  font-size: 11px;
+  color: var(--text, #6b6375);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Extremos e Destaques Municipais */
+.indicators-extremes-box,
+.indicators-products-box {
+  background: var(--bg, #ffffff);
+  border: 1px solid var(--border, #e5e4e7);
+  border-radius: 10px;
+  padding: 14px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.extremes-title,
+.products-title {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--text-h, #08060d);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.products-text {
+  margin: 0;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text-h, #08060d);
+  line-height: 1.5;
+}
+
+.extremes-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+}
+
+.extreme-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: var(--code-bg, #f8f9fa);
+  border: 1px solid var(--border, #e5e4e7);
+  border-radius: 8px;
+  padding: 8px 12px;
+}
+
+.extreme-icon {
+  font-size: 18px;
+  line-height: 1;
+}
+
+.extreme-details {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  min-width: 0;
+}
+
+.extreme-type {
+  font-size: 10px;
+  color: var(--text, #888);
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.extreme-name {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-h, #08060d);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Estrutura Econômica */
+.indicators-sectors-box {
+  background: var(--bg, #ffffff);
+  border: 1px solid var(--border, #e5e4e7);
+  border-radius: 10px;
+  padding: 14px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.sectors-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.sectors-title {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--text-h, #08060d);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.sectors-legend {
+  display: flex;
+  gap: 12px;
+  font-size: 11px;
+  color: var(--text, #6b6375);
+  flex-wrap: wrap;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-weight: 500;
+}
+
+.legend-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+}
+
+.legend-item.servicos .legend-dot,
+.sector-fill.servicos {
+  background: #3b82f6;
+}
+
+.legend-item.industria .legend-dot,
+.sector-fill.industria {
+  background: #f59e0b;
+}
+
+.legend-item.agro .legend-dot,
+.sector-fill.agro {
+  background: #10b981;
+}
+
+.sectors-bar {
+  display: flex;
+  height: 8px;
+  border-radius: 4px;
+  overflow: hidden;
+  background: var(--code-bg, #e5e7eb);
+}
+
+.sector-fill {
+  height: 100%;
+  transition: width 0.3s ease;
+}
+
+/* Cards Especiais de Agro e Migração */
+.indicators-feature-card {
+  background: var(--bg, #ffffff);
+  border: 1px solid var(--border, #e5e4e7);
+  border-radius: 10px;
+  padding: 14px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.indicators-feature-card.agro-feature {
+  border-left: 4px solid #10b981;
+}
+
+.feature-tag {
+  font-size: 11px;
+  font-weight: 700;
+  color: #10b981;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.feature-text {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-h, #08060d);
+  line-height: 1.4;
+}
+
+/* Card de Saldo Migratório */
+.indicators-migration-card {
+  background: var(--bg, #ffffff);
+  border: 1px solid var(--border, #e5e4e7);
+  border-radius: 10px;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.migration-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.migration-title {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-h, #08060d);
+}
+
+.migration-badge {
+  font-size: 11px;
+  font-weight: 600;
+  padding: 3px 9px;
+  border-radius: 6px;
+}
+
+.badge-atracao {
+  background: rgba(16, 185, 129, 0.1);
+  color: #059669;
+  border: 1px solid rgba(16, 185, 129, 0.25);
+}
+
+.badge-emissor {
+  background: rgba(245, 158, 11, 0.1);
+  color: #d97706;
+  border: 1px solid rgba(245, 158, 11, 0.25);
+}
+
+.badge-equilibrado {
+  background: rgba(59, 130, 246, 0.1);
+  color: #2563eb;
+  border: 1px solid rgba(59, 130, 246, 0.25);
+}
+
+.migration-desc {
+  margin: 0;
+  font-size: 13px;
+  color: var(--text-h, #334155);
+  line-height: 1.5;
+}
+
+.migration-routes-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+}
+
+.migration-route-item {
+  background: var(--code-bg, #f8f9fa);
+  border: 1px solid var(--border, #e5e4e7);
+  border-radius: 8px;
+  padding: 10px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.route-label {
+  font-size: 11px;
+  color: var(--text, #888);
+  font-weight: 600;
+}
+
+.route-val {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-h, #08060d);
+}
+
+@media (max-width: 768px) {
+  .indicators-grid-numeric {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .indicators-grid-numeric.four-cols {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .extremes-grid,
+  .migration-routes-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 480px) {
+  .indicators-grid-numeric,
+  .indicators-grid-numeric.four-cols {
+    grid-template-columns: 1fr;
+  }
+}

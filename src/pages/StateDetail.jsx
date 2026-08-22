@@ -1,14 +1,17 @@
 import { useParams, useNavigate } from "react-router-dom";
 import { states } from "../data/states";
+import { IBGE_STATE_DATA } from "../data/ibgeData";
 import StateResume from "../components/StateResume";
+import StateIndicatorsWidget from "../components/StateIndicatorsWidget";
+import StateWeatherWidget from "../components/StateWeatherWidget";
 import StateRadioPlayer from "../components/StateRadioPlayer";
 import StateHolidaysWidget from "../components/StateHolidaysWidget";
-import StateWeatherWidget from "../components/StateWeatherWidget";
 
 function StateDetail() {
   const { code } = useParams();
   const navigate = useNavigate();
   const state = states[code?.toLowerCase()];
+  const stateData = IBGE_STATE_DATA[code?.toLowerCase()];
 
   // teste de como vai ficar a aparencia
   const tamplet = "lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.";
@@ -47,10 +50,23 @@ function StateDetail() {
         ← Voltar ao mapa
       </button>
 
-      <header style={{ marginBottom: "20px" }}>
-        <h1 style={{ margin: "0 0 6px 0", fontSize: "36px", letterSpacing: "-0.5px" }}>
+      <header style={{ marginBottom: "24px" }}>
+        <h1 style={{ margin: "0 0 10px 0", fontSize: "36px", letterSpacing: "-0.5px" }}>
           {state.name} <span style={{ fontSize: "20px", color: "var(--text, #888)", fontWeight: 400 }}>{state.uf}</span>
         </h1>
+        {stateData && (
+          <div style={{ display: "flex", gap: "8px", flexWrap: "wrap", marginTop: "8px" }}>
+            <span style={{ fontSize: "12px", padding: "4px 10px", background: "var(--code-bg, #f3f4f6)", borderRadius: "16px", color: "var(--text-h, #111)", fontWeight: 500, border: "1px solid var(--border, #e5e4e7)" }}>
+              📍 Capital: {state.capital}
+            </span>
+            <span style={{ fontSize: "12px", padding: "4px 10px", background: "var(--code-bg, #f3f4f6)", borderRadius: "16px", color: "var(--text-h, #111)", fontWeight: 500, border: "1px solid var(--border, #e5e4e7)" }}>
+              👥 Gentílico: {stateData.gentilico.split("/")[0].trim()}
+            </span>
+            <span style={{ fontSize: "12px", padding: "4px 10px", background: "var(--code-bg, #f3f4f6)", borderRadius: "16px", color: "var(--text-h, #111)", fontWeight: 500, border: "1px solid var(--border, #e5e4e7)" }}>
+              🌿 Bioma: {stateData.biomaPrincipal}
+            </span>
+          </div>
+        )}
       </header>
       
       {/* Resumo do Estado */}
@@ -60,6 +76,9 @@ function StateDetail() {
           resume={tamplet}
         />
       </section>
+
+      {/* Indicadores Oficiais IBGE */}
+      <StateIndicatorsWidget stateCode={code} stateName={state.name} />
 
       {/* Condições Climáticas & Previsão */}
       <StateWeatherWidget stateCode={code} stateName={state.name} />
