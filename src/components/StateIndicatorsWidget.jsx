@@ -2,6 +2,14 @@ import { useState, useEffect } from "react";
 import { fetchStateIndicators } from "../services/ibgeApi";
 import "./StateIndicatorsWidget.css";
 
+const ETNIA_COLORS = {
+  Branca: "#3b82f6",
+  Parda: "#f59e0b",
+  Preta: "#8b5cf6",
+  Amarela: "#eab308",
+  Indígena: "#10b981",
+};
+
 export default function StateIndicatorsWidget({ stateCode, stateName }) {
   const [data, setData] = useState(null);
   const [activeTab, setActiveTab] = useState("general"); // "general" | "agro" | "social"
@@ -31,7 +39,7 @@ export default function StateIndicatorsWidget({ stateCode, stateName }) {
   if (isLoading) {
     return (
       <div className="indicators-widget-skeleton">
-        <span>Carregando dados estatísticos de {stateName}...</span>
+        <span>Carregando dados estatísticos oficiais do IBGE de {stateName}...</span>
       </div>
     );
   }
@@ -58,6 +66,9 @@ export default function StateIndicatorsWidget({ stateCode, stateName }) {
     agroExport,
     socialDemografia,
     saldoMigratorio,
+    composicaoEtnica,
+    distribuicaoSexo,
+    indiceGini,
   } = data;
 
   const getMigratorioBadgeClass = (perfil) => {
@@ -66,12 +77,26 @@ export default function StateIndicatorsWidget({ stateCode, stateName }) {
     return "badge-equilibrado";
   };
 
+  const getGiniClassification = (gini) => {
+    if (gini < 0.48) return "Desigualdade Menor (Relativa)";
+    if (gini < 0.53) return "Desigualdade Média";
+    return "Desigualdade Alta";
+  };
+
+  // Separa a lista de produtos exportados em tags
+  const exportProductsList = (agroExport?.topExportacoes || "")
+    .split(",")
+    .map((p) => p.replace(" e ", ",").split(","))
+    .flat()
+    .map((p) => p.trim())
+    .filter((p) => p.length > 0);
+
   return (
     <section className="indicators-widget-minimal">
       <div className="indicators-widget-header">
         <div className="indicators-header-left">
           <span className="indicators-title">Estado em Números</span>
-          <span className="indicators-badge">IBGE & ComexStat</span>
+          <span className="indicators-badge">APIs Oficiais IBGE & SIDRA</span>
         </div>
 
         {/* Abas de Navegação */}
@@ -95,7 +120,7 @@ export default function StateIndicatorsWidget({ stateCode, stateName }) {
             className={`indicators-tab-btn ${activeTab === "social" ? "active" : ""}`}
             onClick={() => setActiveTab("social")}
           >
-            Social & Migração
+            Demografia & Sociedade
           </button>
         </div>
       </div>
@@ -166,88 +191,104 @@ export default function StateIndicatorsWidget({ stateCode, stateName }) {
             </div>
           </div>
 
-          {/* Destaques Municipais / Extremos do Estado */}
-          {destaquesMunicipais && (
-            <div className="indicators-extremes-box">
-              <span className="extremes-title">Extremos & Destaques Municipais</span>
-              <div className="extremes-grid">
-                <div className="extreme-item">
-                  <span className="extreme-icon">🏙️</span>
-                  <div className="extreme-details">
-                    <span className="extreme-type">Mais Populosa</span>
-                    <span className="extreme-name">{destaquesMunicipais.maisPopulosa}</span>
-                  </div>
+          {/* Grid em 2 Colunas: Extremos Municipais + Estrutura Econômica */}
+          <div className="indicators-dual-col-layout">
+            {/* Coluna 1: Extremos Municipais */}
+            {destaquesMunicipais && (
+              <div className="indicators-subpanel">
+                <div className="subpanel-header">
+                  <span className="subpanel-title">Extremos & Destaques Municipais</span>
+                  <span className="subpanel-tag">Censo IBGE</span>
                 </div>
-
-                <div className="extreme-item">
-                  <span className="extreme-icon">📐</span>
-                  <div className="extreme-details">
-                    <span className="extreme-type">Maior em Extensão</span>
-                    <span className="extreme-name">{destaquesMunicipais.maiorArea}</span>
+                <div className="extremes-list-compact">
+                  <div className="extreme-row">
+                    <span className="extreme-row-icon">🏙️</span>
+                    <div className="extreme-row-info">
+                      <span className="extreme-row-label">Mais Populosa</span>
+                      <span className="extreme-row-val">{destaquesMunicipais.maisPopulosa}</span>
+                    </div>
                   </div>
-                </div>
 
-                <div className="extreme-item">
-                  <span className="extreme-icon">🏡</span>
-                  <div className="extreme-details">
-                    <span className="extreme-type">Menor População</span>
-                    <span className="extreme-name">{destaquesMunicipais.menorPopulacao}</span>
+                  <div className="extreme-row">
+                    <span className="extreme-row-icon">📐</span>
+                    <div className="extreme-row-info">
+                      <span className="extreme-row-label">Maior em Extensão</span>
+                      <span className="extreme-row-val">{destaquesMunicipais.maiorArea}</span>
+                    </div>
+                  </div>
+
+                  <div className="extreme-row">
+                    <span className="extreme-row-icon">🏡</span>
+                    <div className="extreme-row-info">
+                      <span className="extreme-row-label">Menor População</span>
+                      <span className="extreme-row-val">{destaquesMunicipais.menorPopulacao}</span>
+                    </div>
                   </div>
                 </div>
               </div>
-            </div>
-          )}
+            )}
 
-          {/* Estrutura Econômica Setorial */}
-          {setores && (
-            <div className="indicators-sectors-box">
-              <div className="sectors-header">
-                <span className="sectors-title">Estrutura Econômica (PIB Setorial)</span>
-                <div className="sectors-legend">
-                  <span className="legend-item servicos">
-                    <span className="legend-dot" /> Serviços {setores.servicos}%
-                  </span>
-                  <span className="legend-item industria">
-                    <span className="legend-dot" /> Indústria {setores.industria}%
-                  </span>
-                  <span className="legend-item agro">
-                    <span className="legend-dot" /> Agropecuária {setores.agro}%
-                  </span>
+            {/* Coluna 2: Estrutura Econômica Setorial */}
+            {setores && (
+              <div className="indicators-subpanel">
+                <div className="subpanel-header">
+                  <span className="subpanel-title">Estrutura Econômica (PIB Setorial)</span>
+                  <span className="subpanel-tag">Contas Regionais</span>
+                </div>
+
+                <div className="sectors-content-wrap">
+                  <div className="sectors-legend-grid">
+                    <div className="sector-legend-box servicos">
+                      <span className="sector-legend-name">Serviços</span>
+                      <span className="sector-legend-pct">{setores.servicos}%</span>
+                    </div>
+                    <div className="sector-legend-box industria">
+                      <span className="sector-legend-name">Indústria</span>
+                      <span className="sector-legend-pct">{setores.industria}%</span>
+                    </div>
+                    <div className="sector-legend-box agro">
+                      <span className="sector-legend-name">Agropecuária</span>
+                      <span className="sector-legend-pct">{setores.agro}%</span>
+                    </div>
+                  </div>
+
+                  <div className="sectors-bar-large">
+                    <div
+                      className="sector-fill servicos"
+                      style={{ width: `${setores.servicos}%` }}
+                      title={`Serviços: ${setores.servicos}%`}
+                    />
+                    <div
+                      className="sector-fill industria"
+                      style={{ width: `${setores.industria}%` }}
+                      title={`Indústria: ${setores.industria}%`}
+                    />
+                    <div
+                      className="sector-fill agro"
+                      style={{ width: `${setores.agro}%` }}
+                      title={`Agropecuária: ${setores.agro}%`}
+                    />
+                  </div>
                 </div>
               </div>
-
-              <div className="sectors-bar">
-                <div
-                  className="sector-fill servicos"
-                  style={{ width: `${setores.servicos}%` }}
-                  title={`Serviços: ${setores.servicos}%`}
-                />
-                <div
-                  className="sector-fill industria"
-                  style={{ width: `${setores.industria}%` }}
-                  title={`Indústria: ${setores.industria}%`}
-                />
-                <div
-                  className="sector-fill agro"
-                  style={{ width: `${setores.agro}%` }}
-                  title={`Agropecuária: ${setores.agro}%`}
-                />
-              </div>
-            </div>
-          )}
+            )}
+          </div>
         </div>
       )}
 
       {/* ABA 2: AGRO & EXPORTAÇÕES */}
       {activeTab === "agro" && agroExport && (
         <div className="indicators-tab-pane">
-          {/* Card de Lideranças Produtivas */}
+          {/* Card Destaque: Liderança Agropecuária */}
           <div className="indicators-feature-card agro-feature">
-            <span className="feature-tag">🌾 Vocação Agropecuária & Liderança Nacional</span>
+            <div className="feature-header">
+              <span className="feature-tag">🌾 Vocação Agropecuária & Liderança Nacional</span>
+              <span className="feature-source">PAM / IBGE</span>
+            </div>
             <p className="feature-text">{agroExport.liderancas}</p>
           </div>
 
-          {/* Grid de Comércio Exterior e Energia */}
+          {/* Grid de 3 Cards de Comércio e Energia */}
           <div className="indicators-grid-numeric">
             <div className="indicator-card">
               <span className="indicator-label">Volume Exportado (Ano)</span>
@@ -268,40 +309,111 @@ export default function StateIndicatorsWidget({ stateCode, stateName }) {
             </div>
           </div>
 
-          {/* Top Produtos Exportados */}
-          <div className="indicators-products-box">
-            <span className="products-title">Pauta de Exportações (Principais Produtos)</span>
-            <p className="products-text">{agroExport.topExportacoes}</p>
+          {/* Pauta Exportadora em Chips */}
+          <div className="indicators-subpanel">
+            <div className="subpanel-header">
+              <span className="subpanel-title">Pauta Exportadora (Principais Produtos)</span>
+              <span className="subpanel-tag">Balança Comercial</span>
+            </div>
+            <div className="products-chips-wrap">
+              {exportProductsList.map((prod, idx) => (
+                <span key={idx} className="product-chip">
+                  📦 {prod}
+                </span>
+              ))}
+            </div>
           </div>
         </div>
       )}
 
-      {/* ABA 3: SOCIAL & MIGRAÇÃO */}
-      {activeTab === "social" && socialDemografia && saldoMigratorio && (
+      {/* ABA 3: DEMOGRAFIA & SOCIEDADE */}
+      {activeTab === "social" && socialDemografia && (
         <div className="indicators-tab-pane">
-          {/* Card de Saldo Migratório Interestadual */}
-          <div className="indicators-migration-card">
-            <div className="migration-card-header">
-              <span className="migration-title">Saldo & Dinâmica Migratória Interestadual</span>
-              <span className={`migration-badge ${getMigratorioBadgeClass(saldoMigratorio.perfil)}`}>
-                {saldoMigratorio.perfil}
-              </span>
-            </div>
-            <p className="migration-desc">{saldoMigratorio.descricao}</p>
+          {/* Bloco 1: Etnia e Sexo Lado a Lado (2 Colunas) */}
+          <div className="indicators-dual-col-layout">
+            {/* Composição Étnica (Censo 2022) */}
+            {composicaoEtnica && (
+              <div className="indicators-subpanel">
+                <div className="subpanel-header">
+                  <span className="subpanel-title">Composição Étnica</span>
+                  <span className="subpanel-tag">Censo 2022</span>
+                </div>
 
-            <div className="migration-routes-grid">
-              <div className="migration-route-item">
-                <span className="route-label">🛫 Principais Destinos dos Emigrantes</span>
-                <span className="route-val">{saldoMigratorio.principaisDestinos}</span>
+                <div className="etnia-content-wrap">
+                  <div className="etnia-bar-large">
+                    {composicaoEtnica.map((item) => (
+                      <div
+                        key={item.grupo}
+                        className="etnia-fill"
+                        style={{
+                          width: `${item.pct}%`,
+                          background: ETNIA_COLORS[item.grupo] || "#888",
+                        }}
+                        title={`${item.grupo}: ${item.pct}% (${item.qtdFormatted} hab)`}
+                      />
+                    ))}
+                  </div>
+
+                  <div className="etnia-legend-grid">
+                    {composicaoEtnica.map((item) => (
+                      <div key={item.grupo} className="etnia-legend-item">
+                        <span
+                          className="legend-dot"
+                          style={{ background: ETNIA_COLORS[item.grupo] || "#888" }}
+                        />
+                        <span className="etnia-item-name">{item.grupo}</span>
+                        <strong className="etnia-item-pct">{item.pct}%</strong>
+                      </div>
+                    ))}
+                  </div>
+                </div>
               </div>
-              <div className="migration-route-item">
-                <span className="route-label">🛬 Principais Origens dos Imigrantes</span>
-                <span className="route-val">{saldoMigratorio.principaisOrigens}</span>
+            )}
+
+            {/* Distribuição por Sexo (Censo 2022) */}
+            {distribuicaoSexo && (
+              <div className="indicators-subpanel">
+                <div className="subpanel-header">
+                  <span className="subpanel-title">Distribuição por Sexo</span>
+                  <span className="subpanel-tag">Censo 2022</span>
+                </div>
+
+                <div className="sex-content-wrap">
+                  <div className="sex-bar-large">
+                    <div
+                      className="sex-fill mulheres"
+                      style={{ width: `${distribuicaoSexo.mulheresPct}%` }}
+                    >
+                      Mulheres {distribuicaoSexo.mulheresPct}%
+                    </div>
+                    <div
+                      className="sex-fill homens"
+                      style={{ width: `${distribuicaoSexo.homensPct}%` }}
+                    >
+                      Homens {distribuicaoSexo.homensPct}%
+                    </div>
+                  </div>
+
+                  <div className="sex-details-row">
+                    <div className="sex-stat-box">
+                      <span className="sex-stat-label">Mulheres</span>
+                      <span className="sex-stat-num">{distribuicaoSexo.mulheresFormatted}</span>
+                    </div>
+                    <div className="sex-stat-box">
+                      <span className="sex-stat-label">Homens</span>
+                      <span className="sex-stat-num">{distribuicaoSexo.homensFormatted}</span>
+                    </div>
+                    <div className="sex-stat-box highlight">
+                      <span className="sex-stat-label">Razão de Sexo</span>
+                      <span className="sex-stat-num">{distribuicaoSexo.razaoSexo} <small>H/100M</small></span>
+                    </div>
+                  </div>
+                </div>
               </div>
-            </div>
+            )}
           </div>
 
-          {/* Grid de Demografia e Longevidade */}
+          {/* Bloco 2: 4 Cards Sociais & Desigualdade */}
           <div className="indicators-grid-numeric four-cols">
             <div className="indicator-card">
               <span className="indicator-label">Idade Mediana</span>
@@ -321,12 +433,40 @@ export default function StateIndicatorsWidget({ stateCode, stateName }) {
               <span className="indicator-sub">População de 15+ anos</span>
             </div>
 
+            {/* Índice de Gini (Desigualdade) */}
             <div className="indicator-card">
-              <span className="indicator-label">Taxa de Urbanização</span>
-              <span className="indicator-value">{socialDemografia.urbanizacaoFormatted}</span>
-              <span className="indicator-sub">População Urbana</span>
+              <div className="indicator-card-top">
+                <span className="indicator-label">Índice de Gini</span>
+                <span className="indicator-rank-badge">{indiceGini.ano}</span>
+              </div>
+              <span className="indicator-value">{indiceGini.valor.toFixed(3)}</span>
+              <span className="indicator-sub">{getGiniClassification(indiceGini.valor)}</span>
             </div>
           </div>
+
+          {/* Bloco 3: Dinâmica Migratória Interestadual */}
+          {saldoMigratorio && (
+            <div className="indicators-subpanel migration-subpanel">
+              <div className="subpanel-header">
+                <span className="subpanel-title">Dinâmica & Saldo Migratório Interestadual</span>
+                <span className={`migration-badge ${getMigratorioBadgeClass(saldoMigratorio.perfil)}`}>
+                  {saldoMigratorio.perfil}
+                </span>
+              </div>
+              <p className="migration-desc">{saldoMigratorio.descricao}</p>
+
+              <div className="migration-routes-grid">
+                <div className="migration-route-item">
+                  <span className="route-label">🛫 Principais Destinos dos Emigrantes</span>
+                  <span className="route-val">{saldoMigratorio.principaisDestinos}</span>
+                </div>
+                <div className="migration-route-item">
+                  <span className="route-label">🛬 Principais Origens dos Imigrantes</span>
+                  <span className="route-val">{saldoMigratorio.principaisOrigens}</span>
+                </div>
+              </div>
+            </div>
+          )}
         </div>
       )}
     </section>

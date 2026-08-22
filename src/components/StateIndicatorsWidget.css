@@ -54,12 +54,6 @@
   border-radius: 12px;
 }
 
-.indicators-region-label {
-  font-size: 12px;
-  color: var(--text, #6b6375);
-  font-weight: 500;
-}
-
 /* Abas */
 .indicators-tabs {
   display: flex;
@@ -72,7 +66,7 @@
   background: var(--bg, #ffffff);
   border: 1px solid var(--border, #e5e4e7);
   border-radius: 20px;
-  padding: 4px 12px;
+  padding: 5px 14px;
   font-size: 12px;
   font-weight: 500;
   color: var(--text, #6b6375);
@@ -97,7 +91,7 @@
 .indicators-tab-pane {
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 14px;
 }
 
 /* Grid de Cards Estatísticos */
@@ -165,20 +159,31 @@
   text-overflow: ellipsis;
 }
 
-/* Extremos e Destaques Municipais */
-.indicators-extremes-box,
-.indicators-products-box {
+/* Layout em 2 Colunas (Dual Col) */
+.indicators-dual-col-layout {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+}
+
+/* Subpainéis */
+.indicators-subpanel {
   background: var(--bg, #ffffff);
   border: 1px solid var(--border, #e5e4e7);
   border-radius: 10px;
-  padding: 14px 16px;
+  padding: 16px;
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 12px;
 }
 
-.extremes-title,
-.products-title {
+.subpanel-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.subpanel-title {
   font-size: 11px;
   font-weight: 600;
   color: var(--text-h, #08060d);
@@ -186,21 +191,23 @@
   letter-spacing: 0.5px;
 }
 
-.products-text {
-  margin: 0;
-  font-size: 13px;
-  font-weight: 500;
-  color: var(--text-h, #08060d);
-  line-height: 1.5;
+.subpanel-tag {
+  font-size: 10px;
+  font-weight: 600;
+  color: var(--text, #888);
+  background: var(--code-bg, #f1f5f9);
+  padding: 2px 6px;
+  border-radius: 4px;
 }
 
-.extremes-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 12px;
+/* Extremos Lista Compacta */
+.extremes-list-compact {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
 }
 
-.extreme-item {
+.extreme-row {
   display: flex;
   align-items: center;
   gap: 10px;
@@ -210,26 +217,26 @@
   padding: 8px 12px;
 }
 
-.extreme-icon {
-  font-size: 18px;
+.extreme-row-icon {
+  font-size: 16px;
   line-height: 1;
 }
 
-.extreme-details {
+.extreme-row-info {
   display: flex;
   flex-direction: column;
   gap: 1px;
   min-width: 0;
 }
 
-.extreme-type {
+.extreme-row-label {
   font-size: 10px;
   color: var(--text, #888);
   font-weight: 600;
   text-transform: uppercase;
 }
 
-.extreme-name {
+.extreme-row-val {
   font-size: 12px;
   font-weight: 600;
   color: var(--text-h, #08060d);
@@ -239,85 +246,78 @@
 }
 
 /* Estrutura Econômica */
-.indicators-sectors-box {
-  background: var(--bg, #ffffff);
-  border: 1px solid var(--border, #e5e4e7);
-  border-radius: 10px;
-  padding: 14px 16px;
+.sectors-content-wrap {
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 12px;
 }
 
-.sectors-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  flex-wrap: wrap;
+.sectors-legend-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
   gap: 8px;
 }
 
-.sectors-title {
-  font-size: 11px;
+.sector-legend-box {
+  border-radius: 6px;
+  padding: 8px 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  text-align: center;
+}
+
+.sector-legend-box.servicos {
+  background: rgba(59, 130, 246, 0.08);
+  color: #2563eb;
+}
+
+.sector-legend-box.industria {
+  background: rgba(245, 158, 11, 0.08);
+  color: #d97706;
+}
+
+.sector-legend-box.agro {
+  background: rgba(16, 185, 129, 0.08);
+  color: #059669;
+}
+
+.sector-legend-name {
+  font-size: 10px;
   font-weight: 600;
-  color: var(--text-h, #08060d);
   text-transform: uppercase;
-  letter-spacing: 0.5px;
 }
 
-.sectors-legend {
+.sector-legend-pct {
+  font-size: 15px;
+  font-weight: 700;
+}
+
+.sectors-bar-large {
   display: flex;
-  gap: 12px;
-  font-size: 11px;
-  color: var(--text, #6b6375);
-  flex-wrap: wrap;
-}
-
-.legend-item {
-  display: flex;
-  align-items: center;
-  gap: 5px;
-  font-weight: 500;
-}
-
-.legend-dot {
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-}
-
-.legend-item.servicos .legend-dot,
-.sector-fill.servicos {
-  background: #3b82f6;
-}
-
-.legend-item.industria .legend-dot,
-.sector-fill.industria {
-  background: #f59e0b;
-}
-
-.legend-item.agro .legend-dot,
-.sector-fill.agro {
-  background: #10b981;
-}
-
-.sectors-bar {
-  display: flex;
-  height: 8px;
-  border-radius: 4px;
+  height: 10px;
+  border-radius: 5px;
   overflow: hidden;
   background: var(--code-bg, #e5e7eb);
 }
 
-.sector-fill {
-  height: 100%;
-  transition: width 0.3s ease;
+.sector-fill.servicos {
+  background: #3b82f6;
 }
 
-/* Cards Especiais de Agro e Migração */
+.sector-fill.industria {
+  background: #f59e0b;
+}
+
+.sector-fill.agro {
+  background: #10b981;
+}
+
+/* Card Destaque Agropecuário */
 .indicators-feature-card {
   background: var(--bg, #ffffff);
   border: 1px solid var(--border, #e5e4e7);
+  border-left: 4px solid #10b981;
   border-radius: 10px;
   padding: 14px 16px;
   display: flex;
@@ -325,8 +325,10 @@
   gap: 6px;
 }
 
-.indicators-feature-card.agro-feature {
-  border-left: 4px solid #10b981;
+.feature-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 }
 
 .feature-tag {
@@ -337,6 +339,11 @@
   letter-spacing: 0.5px;
 }
 
+.feature-source {
+  font-size: 10px;
+  color: var(--text, #888);
+}
+
 .feature-text {
   margin: 0;
   font-size: 14px;
@@ -345,35 +352,160 @@
   line-height: 1.4;
 }
 
-/* Card de Saldo Migratório */
-.indicators-migration-card {
-  background: var(--bg, #ffffff);
+/* Chips de Produtos Exportados */
+.products-chips-wrap {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.product-chip {
+  background: var(--code-bg, #f8f9fa);
   border: 1px solid var(--border, #e5e4e7);
-  border-radius: 10px;
-  padding: 16px;
+  border-radius: 6px;
+  padding: 6px 12px;
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--text-h, #08060d);
+}
+
+/* Composição Étnica */
+.etnia-content-wrap {
   display: flex;
   flex-direction: column;
   gap: 12px;
 }
 
-.migration-card-header {
+.etnia-bar-large {
+  display: flex;
+  height: 12px;
+  border-radius: 6px;
+  overflow: hidden;
+  background: var(--code-bg, #e5e7eb);
+}
+
+.etnia-fill {
+  height: 100%;
+  transition: width 0.3s ease;
+}
+
+.etnia-legend-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 6px 12px;
+}
+
+.etnia-legend-item {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  flex-wrap: wrap;
+  gap: 6px;
+  font-size: 11px;
+  color: var(--text, #6b6375);
+}
+
+.legend-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.etnia-item-name {
+  color: var(--text-h, #333);
+}
+
+.etnia-item-pct {
+  color: var(--text-h, #08060d);
+  margin-left: auto;
+}
+
+/* Distribuição por Sexo */
+.sex-content-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.sex-bar-large {
+  display: flex;
+  height: 24px;
+  border-radius: 6px;
+  overflow: hidden;
+  font-size: 11px;
+  font-weight: 600;
+  color: #fff;
+  line-height: 24px;
+  text-align: center;
+}
+
+.sex-fill {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  white-space: nowrap;
+  overflow: hidden;
+  padding: 0 8px;
+  transition: width 0.3s ease;
+}
+
+.sex-fill.mulheres {
+  background: #ec4899;
+}
+
+.sex-fill.homens {
+  background: #3b82f6;
+}
+
+.sex-details-row {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
   gap: 8px;
 }
 
-.migration-title {
-  font-size: 13px;
+.sex-stat-box {
+  background: var(--code-bg, #f8f9fa);
+  border: 1px solid var(--border, #e5e4e7);
+  border-radius: 6px;
+  padding: 6px 8px;
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+  gap: 2px;
+}
+
+.sex-stat-box.highlight {
+  border-color: rgba(59, 130, 246, 0.25);
+  background: rgba(59, 130, 246, 0.04);
+}
+
+.sex-stat-label {
+  font-size: 10px;
+  color: var(--text, #888);
   font-weight: 600;
+  text-transform: uppercase;
+}
+
+.sex-stat-num {
+  font-size: 12px;
+  font-weight: 700;
   color: var(--text-h, #08060d);
+}
+
+.sex-stat-num small {
+  font-size: 10px;
+  font-weight: 500;
+  color: var(--text, #888);
+}
+
+/* Card de Saldo Migratório */
+.migration-subpanel {
+  border-left: 4px solid #3b82f6;
 }
 
 .migration-badge {
   font-size: 11px;
   font-weight: 600;
-  padding: 3px 9px;
+  padding: 2px 8px;
   border-radius: 6px;
 }
 
@@ -419,17 +551,19 @@
 }
 
 .route-label {
-  font-size: 11px;
+  font-size: 10px;
   color: var(--text, #888);
   font-weight: 600;
+  text-transform: uppercase;
 }
 
 .route-val {
-  font-size: 13px;
+  font-size: 12px;
   font-weight: 600;
   color: var(--text-h, #08060d);
 }
 
+/* Responsividade */
 @media (max-width: 768px) {
   .indicators-grid-numeric {
     grid-template-columns: repeat(2, 1fr);
@@ -437,7 +571,9 @@
   .indicators-grid-numeric.four-cols {
     grid-template-columns: repeat(2, 1fr);
   }
-  .extremes-grid,
+  .indicators-dual-col-layout {
+    grid-template-columns: 1fr;
+  }
   .migration-routes-grid {
     grid-template-columns: 1fr;
   }
@@ -447,5 +583,8 @@
   .indicators-grid-numeric,
   .indicators-grid-numeric.four-cols {
     grid-template-columns: 1fr;
+  }
+  .etnia-legend-grid {
+    grid-template-columns: repeat(2, 1fr);
   }
 }
