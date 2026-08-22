@@ -1,6 +1,7 @@
 import { useParams, useNavigate } from "react-router-dom";
 import { states } from "../data/states";
-import StateResume from "../components/StateResume";
+// import StateResume from "../components/StateResume"; // Comentado pois o arquivo não existe
+import GeminiOut from "../components/geminiOut";
 
 function StateDetail() {
   const { code } = useParams();
@@ -18,13 +19,16 @@ function StateDetail() {
     <div>
       <h1>{state.name}</h1>
       
-      {/* Aqui estamos chamando o StateResume e passando as propriedades (props) */}
+      {/* 
       <StateResume
         title={state.name}
         resume ={tamplet}
-        />
+      />
+      */}
+      
+      <GeminiOut stateName={state.name} />
 
-      <button onClick={() => navigate("/")}>Back to Map</button>
+      <button onClick={() => navigate("/")} style={{ marginTop: '20px' }}>Back to Map</button>
     </div>
   );
 }

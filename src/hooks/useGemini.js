@@ -1,47 +1,46 @@
-import { useState } from 'react';
-import { output_prompt_html } from '../mappers/processGemini';
+import { useState, useCallback } from 'react';
+import { output_prompt_html } from '../mappers/processGemini.js';
 
-export function useGemini() {
-  const [history, setHistory] = useState({ dataHtml: null, loading: false, error: null });
-  const [culture, setCulture] = useState({ dataHtml: null, loading: false, error: null });
-  const [tourism, setTourism] = useState({ dataHtml: null, loading: false, error: null });
+export function use_federal_deputies() {
+    const [data, set_data] = useState(null);
+    const [is_loading, set_is_loading] = useState(false);
+    const [error, set_error] = useState(null);
 
-  // Busca a História (Prompt 1)
-  const fetchHistory = async (stateName) => {
-    setHistory({ dataHtml: null, loading: true, error: null });
-    try {
-      const result = await output_prompt_html(1, stateName);
-      setHistory({ dataHtml: result, loading: false, error: null });
-    } catch (err) {
-      setHistory({ dataHtml: null, loading: false, error: err.message });
-    }
-  };
+    const fetch_federal_deputies = useCallback(async (state_name) => {
+        set_is_loading(true);
+        set_error(null);
+        try {
+            
+            const result = await output_prompt_html(1, state_name);
+            set_data(result);
+        } catch (err) {
+            set_error(err.message || "Falha ao buscar deputados federais");
+        } finally {
+            set_is_loading(false);
+        }
+    }, []);
 
-  // Busca a Cultura (Prompt 2)
-  const fetchCulture = async (stateName) => {
-    setCulture({ dataHtml: null, loading: true, error: null });
-    try {
-      const result = await output_prompt_html(2, stateName);
-      setCulture({ dataHtml: result, loading: false, error: null });
-    } catch (err) {
-      setCulture({ dataHtml: null, loading: false, error: err.message });
-    }
-  };
+    return { data, is_loading, error, fetch_federal_deputies };
+}
 
-  // Busca os Pontos Turísticos (Prompt 3)
-  const fetchTourism = async (stateName) => {
-    setTourism({ dataHtml: null, loading: true, error: null });
-    try {
-      const result = await output_prompt_html(3, stateName);
-      setTourism({ dataHtml: result, loading: false, error: null });
-    } catch (err) {
-      setTourism({ dataHtml: null, loading: false, error: err.message });
-    }
-  };
+export function use_city_councilors() {
+    const [data, set_data] = useState(null);
+    const [is_loading, set_is_loading] = useState(false);
+    const [error, set_error] = useState(null);
 
-  return {
-    history, fetchHistory,
-    culture, fetchCulture,
-    tourism, fetchTourism
-  };
+    const fetch_city_councilors = useCallback(async (state_name) => {
+        set_is_loading(true);
+        set_error(null);
+        try {
+            // ID 2 represents the "city_councilors" prompt
+            const result = await output_prompt_html(2, state_name);
+            set_data(result);
+        } catch (err) {
+            set_error(err.message || "Falha ao buscar vereadores");
+        } finally {
+            set_is_loading(false);
+        }
+    }, []);
+
+    return { data, is_loading, error, fetch_city_councilors };
 }
