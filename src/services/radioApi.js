@@ -1,3 +1,7 @@
+import { getCachedData, setCachedData } from "../utils/apiCache.js";
+
+const RADIO_CACHE_TTL = 6 * 60 * 60 * 1000; // 6 horas
+
 const API_HOSTS = [
   "https://de1.api.radio-browser.info",
   "https://nl1.api.radio-browser.info",
@@ -236,6 +240,12 @@ function transformStation(station) {
  */
 export async function fetchRadiosByState(stateCode, stateName) {
   const code = (stateCode || "").toLowerCase();
+  const cacheKey = `radios_${code}`;
+  const cachedRadios = getCachedData(cacheKey, RADIO_CACHE_TTL);
+  if (cachedRadios) {
+    return cachedRadios;
+  }
+
   const searchVariants = STATE_SEARCH_VARIANTS[code] || [stateName];
 
   let rawStations = [];
@@ -285,5 +295,7 @@ export async function fetchRadiosByState(stateCode, stateName) {
     }
   }
 
-  return uniqueStations.slice(0, 8);
+  const result = uniqueStations.slice(0, 8);
+  setCachedData(cacheKey, result);
+  return result;
 }

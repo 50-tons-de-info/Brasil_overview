@@ -5,8 +5,10 @@ import {
   BRAZIL_TOTAL_PIB_BILHOES,
 } from "../data/ibgeData.js";
 import { states } from "../data/states.js";
+import { getCachedData, setCachedData } from "../utils/apiCache.js";
 
-// Mapeamento de Códigos IBGE das 27 UFs
+// TTL de 24 horas para estatísticas do IBGE
+const IBGE_CACHE_TTL = 24 * 60 * 60 * 1000;
 const UF_IBGE_CODES = {
   ro: 11,
   ac: 12,
@@ -36,9 +38,6 @@ const UF_IBGE_CODES = {
   go: 52,
   df: 53,
 };
-
-// Cache em memória para evitar chamadas redundantes
-const indicatorsCache = {};
 
 /**
  * Formata números no padrão brasileiro
@@ -109,8 +108,10 @@ export async function fetchStateIndicators(stateCode) {
   const uf = stateMeta?.uf || code.toUpperCase();
   const ibgeCode = UF_IBGE_CODES[code] || 43;
 
-  if (indicatorsCache[code]) {
-    return indicatorsCache[code];
+  const cacheKey = `ibge_indicators_${code}`;
+  const cached = getCachedData(cacheKey, IBGE_CACHE_TTL);
+  if (cached) {
+    return cached;
   }
 
   const baseData = IBGE_STATE_DATA[code] || {
@@ -370,6 +371,6 @@ export async function fetchStateIndicators(stateCode) {
     saldoMigratorio: baseData.saldoMigratorio,
   };
 
-  indicatorsCache[code] = result;
+  setCachedData(cacheKey, result);
   return result;
 }

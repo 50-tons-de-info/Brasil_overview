@@ -1,5 +1,9 @@
 import { STATE_HOLIDAYS } from "../data/regionalHolidays.js";
 import { states } from "../data/states.js";
+import { getCachedData, setCachedData } from "../utils/apiCache.js";
+
+const MUNICIPALITIES_CACHE_TTL = 7 * 24 * 60 * 60 * 1000; // 7 dias
+const HOLIDAYS_CACHE_TTL = 24 * 60 * 60 * 1000; // 24 horas
 
 const WEEKDAYS = [
   "domingo",
@@ -26,16 +30,15 @@ const MONTHS = [
   "Dezembro",
 ];
 
-// Cache em memória para os municípios do IBGE
-const municipalitiesCache = {};
-
 /**
  * Busca todos os municípios de uma UF via API oficial do IBGE
  */
 export async function fetchStateMunicipalities(uf) {
   const ufUpper = (uf || "").toUpperCase();
-  if (municipalitiesCache[ufUpper]) {
-    return municipalitiesCache[ufUpper];
+  const cacheKey = `ibge_municipalities_${ufUpper}`;
+  const cached = getCachedData(cacheKey, MUNICIPALITIES_CACHE_TTL);
+  if (cached) {
+    return cached;
   }
 
   try {
@@ -46,7 +49,7 @@ export async function fetchStateMunicipalities(uf) {
     if (res.ok) {
       const data = await res.json();
       const names = data.map((m) => m.nome).sort((a, b) => a.localeCompare(b, "pt-BR"));
-      municipalitiesCache[ufUpper] = names;
+      setCachedData(cacheKey, names);
       return names;
     }
   } catch (error) {
@@ -99,18 +102,25 @@ export async function fetchStateHolidays(stateCode, customYear) {
   // Define a cidade padrão: Rio Grande para RS, capital para os demais
   const defaultCity = code === "rs" ? "Rio Grande" : stateMeta?.capital || "Capital";
 
-  let nationalHolidays = [];
+  const nationalCacheKey = `brasilapi_holidays_${year}`;
+  let nationalHolidays = getCachedData(nationalCacheKey, HOLIDAYS_CACHE_TTL);
 
-  try {
-    const response = await fetch(`https://brasilapi.com.br/api/feriados/v1/${year}`, {
-      headers: { "User-Agent": "BrasilOverviewApp/1.0" },
-    });
+  if (!nationalHolidays) {
+    try {
+      const response = await fetch(`https://brasilapi.com.br/api/feriados/v1/${year}`, {
+        headers: { "User-Agent": "BrasilOverviewApp/1.0" },
+      });
 
-    if (response.ok) {
-      nationalHolidays = await response.json();
+      if (response.ok) {
+        nationalHolidays = await response.json();
+        setCachedData(nationalCacheKey, nationalHolidays);
+      }
+    } catch (error) {
+      console.warn("Falha ao buscar feriados nacionais na BrasilAPI, usando fallback...", error);
     }
-  } catch (error) {
-    console.warn("Falha ao buscar feriados nacionais na BrasilAPI, usando fallback...", error);
+  }
+
+  if (!nationalHolidays || nationalHolidays.length === 0) {
     nationalHolidays = [
       { date: `${year}-01-01`, name: "Confraternização Universal", type: "national" },
       { date: `${year}-04-21`, name: "Tiradentes", type: "national" },

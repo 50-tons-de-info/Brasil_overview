@@ -1,4 +1,8 @@
 import { states } from "../data/states.js";
+import { getCachedData, setCachedData } from "../utils/apiCache.js";
+
+const WEATHER_CACHE_TTL = 30 * 60 * 1000; // 30 minutos
+const GEO_CACHE_TTL = 7 * 24 * 60 * 60 * 1000; // 7 dias
 
 // Coordenadas das capitais brasileiras + Rio Grande (RS) para consulta instantânea
 const PRESET_COORDINATES = {
@@ -103,6 +107,12 @@ export async function getCityCoordinates(cityName, uf) {
     return PRESET_COORDINATES[normalized];
   }
 
+  const geoCacheKey = `geo_${cleanCity}_${(uf || "").toLowerCase()}`;
+  const cachedGeo = getCachedData(geoCacheKey, GEO_CACHE_TTL);
+  if (cachedGeo) {
+    return cachedGeo;
+  }
+
   // Geocodificação dinâmica para qualquer outra cidade do Brasil
   try {
     const url = `https://geocoding-api.open-meteo.com/v1/search?name=${encodeURIComponent(
@@ -123,7 +133,9 @@ export async function getCityCoordinates(cityName, uf) {
           );
           if (found) match = found;
         }
-        return { lat: match.latitude, lon: match.longitude };
+        const coords = { lat: match.latitude, lon: match.longitude };
+        setCachedData(geoCacheKey, coords);
+        return coords;
       }
     }
   } catch (err) {
@@ -142,6 +154,12 @@ export async function fetchStateWeather(stateCode, cityName) {
   const stateMeta = states[code];
   const targetCity =
     cityName || (code === "rs" ? "Rio Grande" : stateMeta?.capital || "Porto Alegre");
+
+  const weatherCacheKey = `weather_${code}_${targetCity.toLowerCase().replace(/\s+/g, "_")}`;
+  const cachedWeather = getCachedData(weatherCacheKey, WEATHER_CACHE_TTL);
+  if (cachedWeather) {
+    return cachedWeather;
+  }
 
   const coords = await getCityCoordinates(targetCity, stateMeta?.uf);
 
@@ -210,9 +228,12 @@ export async function fetchStateWeather(stateCode, cityName) {
     };
   });
 
-  return {
+  const result = {
     cityName: targetCity,
     current: currentTreated,
     forecast: forecastTreated,
   };
+
+  setCachedData(weatherCacheKey, result);
+  return result;
 }
