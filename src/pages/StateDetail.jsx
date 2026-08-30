@@ -17,10 +17,6 @@ function StateDetail() {
   const stateData = IBGE_STATE_DATA[stateCode];
   const theme = getStateTheme(stateCode);
 
-  // Texto provisório para o resumo do estado
-  const tamplet =
-    "O estado possui papel fundamental na formação socioeconômica, cultural e histórica do Brasil. Com forte dinamismo produtivo, rica herança cultural e biodiversidade exuberante, destaca-se regional e nacionalmente em múltiplos setores da economia, turismo e desenvolvimento humano.";
-
   if (!state) {
     return (
       <div style={{ padding: "40px", textAlign: "center" }}>
@@ -97,7 +93,7 @@ function StateDetail() {
       <main className="state-dashboard-grid">
         {/* Coluna Principal: Resumo e Painel Estatístico IBGE */}
         <section className="dashboard-main-col">
-          <StateResume title={state.name} resume={tamplet} />
+          <StateResume title={state.name} wikiTitle={state.wikiTitle || state.name} />
           <StateIndicatorsWidget stateCode={code} stateName={state.name} />
         </section>
 

@@ -17,6 +17,7 @@ function Home() {
       
       <footer style={{ marginTop: "50px", borderTop: "1px solid #ccc", padding: "20px" }}>
         <p>Sistemas Distribuídos - 2026</p>
+        <p></p>
       </footer>
     </main>
   );
