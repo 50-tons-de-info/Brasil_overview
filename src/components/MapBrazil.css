@@ -7,8 +7,8 @@
 }
 
 .state {
-  fill: #4caf50;
-  stroke: #ffffff;
+  fill: rgb(52, 91, 72);
+  stroke: rgb(80, 51, 28);
   stroke-width: 1.5;
   stroke-linejoin: round;
   cursor: pointer;
