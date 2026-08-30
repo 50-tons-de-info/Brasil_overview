@@ -6,6 +6,7 @@ function StateDetail() {
   const { code } = useParams();
   const stateData = states[code];
   const stateName = stateData ? stateData.name : "";
+  const displayName = stateName.replace(/\s*\(.*?\)/, "");
 
   // Chama o hook passando o nome do estado
   const { dados, carregando, erro } = useWikipedia(stateName);
@@ -28,7 +29,7 @@ function StateDetail() {
       </header>
       
       <article style={{ marginTop: "40px" }}>
-        <h1 style={{ fontSize: "2.5rem", marginBottom: "20px", color: "#333" }}>{stateName}</h1>
+        <h1 style={{ fontSize: "2.5rem", marginBottom: "20px", color: "#333" }}>{displayName}</h1>
 
         {carregando && (
           <p style={{ fontSize: "1.2rem", color: "#666" }}>
