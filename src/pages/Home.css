@@ -1,0 +1,25 @@
+@font-face {
+  font-family: "MinhaFonteMedieval";
+  src: url("../assets/fonts/Sketch.ttf") format("truetype");
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "TangerineBold";
+  src: url("../assets/fonts/Tangerine-Bold.ttf") format("truetype");
+  font-weight: bold;
+  font-style: normal;
+}
+
+.Titulo_topo {
+  font-family: "MinhaFonteMedieval", serif;
+  color: #0e0d0d;
+  font-size: 75px;
+}
+
+.Nome_Estado {
+  font-family: "TangerineBold", cursive;
+  font-size: 50px;
+  color: #333;
+}
