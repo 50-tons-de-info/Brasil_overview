@@ -1,6 +1,7 @@
 import { useParams, useNavigate } from "react-router-dom";
 import { states } from "../data/states";
 import StateResume from "../components/StateResume";
+import StateMusic from "../components/StateMusic";
 
 function StateDetail() {
   const { code } = useParams();
@@ -15,16 +16,20 @@ function StateDetail() {
   }
 
   return (
-    <div>
+    <div className="state-music">
       <h1>{state.name}</h1>
       
-      {/* Aqui estamos chamando o StateResume e passando as propriedades (props) */}
-      <StateResume
-        title={state.name}
-        resume ={tamplet}
-        />
-
-      <button onClick={() => navigate("/")}>Back to Map</button>
+      <div className="state-detail-columns">
+        <StateMusic stateUf={code} stateName={state.name} />
+        
+        <div className="state-main-content">
+          <StateResume
+            title={state.name}
+            resume={tamplet}
+          />
+          <button onClick={() => navigate("/")} style={{ marginTop: '20px' }}>Back to Map</button>
+        </div>
+      </div>
     </div>
   );
 }

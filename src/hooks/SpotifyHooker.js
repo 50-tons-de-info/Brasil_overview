@@ -1,14 +1,24 @@
 import { useState, useEffect } from "react";
-import { getPlaylistTracks } from "../services/spotifyService";
+import { getTopTracksByState } from "../services/Spotify";
+import { mapSpotifyTracks } from "../mappers/SpotifyMapper";
 
-export function useSpotify(playlistId) {
+export function useSpotify(stateUf, stateName) {
     const [tracks, setTracks] = useState([]);
+    const [artistsUsed, setArtistsUsed] = useState([]);
+    const [topArtist, setTopArtist] = useState("");
+    const [region, setRegion] = useState("");
+    const [genresUsed, setGenresUsed] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
 
     useEffect(() => {
-        if (!playlistId) {
+        if (!stateUf) {
             setTracks([]);
+            setArtistsUsed([]);
+            setTopArtist("");
+            setRegion("");
+            setGenresUsed([]);
+            setLoading(false);
             return;
         }
 
@@ -16,17 +26,26 @@ export function useSpotify(playlistId) {
             setLoading(true);
             setError(null);
             try {
-                const data = await getPlaylistTracks(playlistId);
-                setTracks(data);
+                const data = await getTopTracksByState(stateUf, stateName);
+                setTracks(mapSpotifyTracks(data.rawItems));
+                setArtistsUsed(data.artistsUsed);
+                setTopArtist(data.topArtist);
+                setRegion(data.region);
+                setGenresUsed(data.genresUsed);
             } catch (err) {
-                setError(err.message || "An error occurred while fetching tracks.");
+                setTracks([]);
+                setArtistsUsed([]);
+                setTopArtist("");
+                setRegion("");
+                setGenresUsed([]);
+                setError(err.message || "Não foi possível carregar as músicas.");
             } finally {
                 setLoading(false);
             }
         };
 
         fetchTracks();
-    }, [playlistId]);
+    }, [stateUf, stateName]);
 
-    return { tracks, loading, error };
+    return { tracks, artistsUsed, topArtist, region, genresUsed, loading, error };
 }
