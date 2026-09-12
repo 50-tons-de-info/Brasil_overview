@@ -1,348 +1,205 @@
 .holidays-widget-minimal {
   margin: 0;
-  background: var(--code-bg, #f7f7f8);
-  border: 1px solid var(--border, #e5e4e7);
-  border-radius: 12px;
-  padding: 16px 18px;
+  background: transparent;
+  border: none;
+  padding: 0;
   display: flex;
   flex-direction: column;
-  gap: 12px;
-  text-align: left;
   box-sizing: border-box;
 }
 
 .holidays-widget-skeleton {
   margin: 0;
-  padding: 16px 18px;
-  background: var(--code-bg, #f7f7f8);
-  border: 1px solid var(--border, #e5e4e7);
-  border-radius: 12px;
-  font-size: 13px;
-  color: var(--text, #888);
-  text-align: left;
+  padding: 20px 24px;
+  background: rgba(255,255,255,.08);
+  border: 1px solid var(--ink-faded, #5B4630);
+  font-family: 'EB Garamond', serif;
+  font-size: 14px;
+  color: var(--ink-faded, #5B4630);
+  font-style: italic;
 }
 
-/* Header */
+/* Header com Busca de Cidade */
 .holidays-widget-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  border-bottom: 1px solid var(--border, #e5e4e7);
-  padding-bottom: 10px;
-  gap: 8px;
-  flex-wrap: wrap;
+  border-bottom: 1px solid var(--ink-faded, #5B4630);
+  padding-bottom: 12px;
+  margin-bottom: 16px;
+  gap: 10px;
 }
 
-.holidays-header-left {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
-.holidays-title {
-  font-size: 14px;
-  font-weight: 600;
-  color: var(--text-h, #08060d);
-}
-
-.holidays-year-tag {
-  font-size: 10px;
-  font-weight: 600;
-  padding: 2px 7px;
-  background: var(--border, #e5e4e7);
-  color: var(--text-h, #111);
-  border-radius: 12px;
-}
-
-.holidays-city-search-wrap {
+.holidays-city-form {
   display: flex;
   align-items: center;
   gap: 6px;
 }
 
-.holidays-city-label {
-  font-size: 11px;
-  color: var(--text, #6b6375);
-  font-weight: 500;
-}
-
 .holidays-city-input {
-  padding: 4px 8px;
-  border-radius: 6px;
-  border: 1px solid var(--border, #e5e4e7);
-  background: var(--bg, #ffffff);
-  color: var(--text-h, #111);
-  font-size: 11px;
-  font-family: inherit;
-  width: 115px;
-  transition: all 0.15s;
+  padding: 5px 10px;
+  border: 1px solid var(--ink-faded, #5B4630);
+  background: rgba(255,255,255,.15);
+  color: var(--ink, #2B1D10);
+  font-family: 'EB Garamond', serif;
+  font-size: 14px;
+  width: 160px;
 }
 
 .holidays-city-input:focus {
   outline: none;
-  border-color: var(--state-primary, #111);
+  border-color: var(--rubric, #9C2B1F);
 }
 
-/* Próximo Feriado Destaque */
-.next-holiday-banner {
-  background: var(--bg, #ffffff);
-  border: 1px solid var(--border, #e5e4e7);
-  border-left: 4px solid var(--state-primary, #2563eb);
-  border-radius: 10px;
-  padding: 12px 14px;
+.holidays-city-btn {
+  background: transparent;
+  border: 1px solid var(--ink-faded, #5B4630);
+  color: var(--ink, #2B1D10);
+  padding: 4px 8px;
+  cursor: pointer;
+}
+
+/* Carimbo do Próximo Feriado / stamp-row */
+.stamp-row {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 20px;
+  border: 1px solid var(--rubric, #9C2B1F);
+  padding: 16px 18px;
+  margin-bottom: 20px;
+  background: rgba(156,43,31,.04);
 }
 
-.next-holiday-date-col {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  background: var(--code-bg, #f3f4f6);
-  border: 1px solid var(--border, #e5e4e7);
-  border-radius: 8px;
-  padding: 6px 10px;
-  min-width: 52px;
-  flex-shrink: 0;
+.stamp-date {
+  font-family: 'Cinzel', serif;
+  font-size: 30px;
+  color: var(--ink, #2B1D10);
 }
 
-.next-holiday-day {
-  font-size: 14px;
-  font-weight: 700;
-  color: var(--text-h, #08060d);
-  line-height: 1.1;
-}
-
-.next-holiday-weekday {
-  font-size: 9.5px;
-  color: var(--text, #888);
-  text-transform: capitalize;
-}
-
-.next-holiday-info {
-  display: flex;
-  flex-direction: column;
-  gap: 3px;
-  min-width: 0;
-  flex: 1;
-}
-
-.next-holiday-top-row {
+.stamp {
+  margin-left: auto;
+  border: 2px solid var(--rubric, #9C2B1F);
+  color: var(--rubric, #9C2B1F);
+  border-radius: 50%;
+  width: 74px;
+  height: 74px;
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  gap: 6px;
+  justify-content: center;
+  text-align: center;
+  font-family: 'Cinzel', serif;
+  font-size: 12px;
+  transform: rotate(-8deg);
+  line-height: 1.2;
 }
 
-.next-holiday-badge-type {
-  font-size: 9.5px;
-  font-weight: 600;
-  color: var(--text, #888);
-  text-transform: uppercase;
-}
-
-.next-holiday-countdown {
-  font-size: 10px;
-  font-weight: 600;
-  color: var(--state-primary, #2563eb);
-  background: var(--state-badge-bg, rgba(37, 99, 235, 0.08));
-  border: 1px solid var(--state-badge-border, rgba(37, 99, 235, 0.2));
-  padding: 1px 6px;
-  border-radius: 4px;
-}
-
-.next-holiday-name {
-  margin: 0;
-  font-size: 13px;
-  font-weight: 700;
-  color: var(--text-h, #08060d);
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-/* Linha de Controles & Filtros */
+/* Filtros em Pílulas */
 .holidays-controls-row {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
+  margin-bottom: 8px;
 }
 
 .holidays-filters {
   display: flex;
-  gap: 4px;
+  gap: 6px;
   overflow-x: auto;
-  padding-bottom: 2px;
+  padding-bottom: 4px;
 }
 
 .holidays-filter-pill {
-  background: var(--bg, #ffffff);
-  border: 1px solid var(--border, #e5e4e7);
-  border-radius: 14px;
-  padding: 3px 9px;
-  font-size: 11px;
-  font-weight: 500;
-  color: var(--text, #6b6375);
+  background: transparent;
+  border: 1px solid var(--ink-faded, #5B4630);
+  padding: 4px 10px;
+  font-family: 'EB Garamond', serif;
+  font-size: 13px;
+  font-variant: small-caps;
+  color: var(--ink-faded, #5B4630);
   cursor: pointer;
   white-space: nowrap;
   transition: all 0.15s ease;
-  font-family: inherit;
 }
 
 .holidays-filter-pill:hover {
-  border-color: var(--state-primary, #111);
-  color: var(--state-primary, #111);
+  background: rgba(43,29,16,.05);
+  color: var(--ink, #2B1D10);
 }
 
 .holidays-filter-pill.active {
-  background: var(--state-primary, #08060d);
-  color: #fff;
-  border-color: var(--state-primary, #08060d);
+  background: var(--rubric, #9C2B1F);
+  color: var(--parchment, #E7D9B4);
+  border-color: var(--rubric, #9C2B1F);
 }
 
-.holidays-active-city-indicator {
-  font-size: 10.5px;
-  color: var(--text, #888);
+/* Grade 2 Colunas estilo holiday-grid */
+.holiday-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0 20px;
 }
 
-.holidays-active-city-indicator strong {
-  color: var(--text-h, #08060d);
+@media (max-width: 760px) {
+  .holiday-grid {
+    grid-template-columns: 1fr;
+  }
 }
 
-/* Lista de Feriados */
-.holidays-list {
+.hrow {
   display: flex;
-  flex-direction: column;
-  gap: 6px;
-  max-height: 280px;
-  overflow-y: auto;
-  padding-right: 2px;
-}
-
-.holidays-empty {
-  font-size: 12px;
-  color: var(--text, #888);
-  padding: 16px 0;
-  text-align: center;
-}
-
-.holiday-item-row {
-  background: var(--bg, #ffffff);
-  border: 1px solid var(--border, #e5e4e7);
-  border-radius: 8px;
-  padding: 8px 10px;
-  display: flex;
-  align-items: center;
   justify-content: space-between;
-  gap: 8px;
-  transition: border-color 0.15s;
-}
-
-.holiday-item-row:hover {
-  border-color: var(--text, #999);
-}
-
-.holiday-item-row.past {
-  opacity: 0.5;
-  background: var(--code-bg, #fcfcfd);
-}
-
-.holiday-item-row.today {
-  border-color: var(--state-primary, #10b981);
-  background: var(--state-badge-bg, rgba(16, 185, 129, 0.04));
-}
-
-.holiday-item-date-box {
-  display: flex;
-  flex-direction: column;
   align-items: center;
-  background: var(--code-bg, #f3f4f6);
-  border: 1px solid var(--border, #e5e4e7);
-  border-radius: 6px;
-  padding: 3px 6px;
-  min-width: 40px;
-  flex-shrink: 0;
+  padding: 10px 2px;
+  border-bottom: 1px dotted var(--parchment-shadow, #B89A61);
 }
 
-.holiday-item-day {
-  font-size: 11.5px;
-  font-weight: 700;
-  color: var(--text-h, #08060d);
-  line-height: 1.1;
+.hrow.past {
+  opacity: .5;
 }
 
-.holiday-item-weekday {
-  font-size: 8.5px;
-  color: var(--text, #888);
-  text-transform: capitalize;
+.hdate {
+  font-family: 'Cinzel', serif;
+  font-size: 13px;
+  width: 44px;
+  color: var(--ink, #2B1D10);
 }
 
-.holiday-item-details {
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-  min-width: 0;
+.hname {
   flex: 1;
+  padding: 0 10px;
+  font-family: 'EB Garamond', serif;
+  font-size: 15px;
+  color: var(--ink, #2B1D10);
 }
 
-.holiday-item-name {
+.htag {
+  font-family: 'EB Garamond', serif;
+  font-size: 10.5px;
+  font-variant: small-caps;
+  padding: 1px 7px;
+  border-radius: 8px;
+  border: 1px solid currentColor;
+}
+
+.htag.nac {
+  color: var(--verdigris, #3C6E5D);
+}
+
+.htag.est {
+  color: var(--rubric, #9C2B1F);
+}
+
+.htag.mun {
+  color: var(--gold, #A8792A);
+}
+
+.hstatus {
+  font-family: 'EB Garamond', serif;
   font-size: 12px;
-  font-weight: 600;
-  color: var(--text-h, #08060d);
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+  color: var(--ink-faded, #5B4630);
+  min-width: 64px;
+  text-align: right;
 }
 
-.holiday-item-sub {
-  display: flex;
-  align-items: center;
-  gap: 4px;
-}
-
-.holiday-type-tag {
-  font-size: 9px;
-  font-weight: 600;
-  padding: 1px 5px;
-  border-radius: 3px;
-  text-transform: uppercase;
-}
-
-.holiday-type-tag.national {
-  background: rgba(37, 99, 235, 0.08);
-  color: #2563eb;
-}
-
-.holiday-type-tag.state {
-  background: rgba(16, 185, 129, 0.08);
-  color: #059669;
-}
-
-.holiday-type-tag.municipal {
-  background: rgba(245, 158, 11, 0.08);
-  color: #d97706;
-}
-
-.holiday-item-countdown-col {
-  flex-shrink: 0;
-}
-
-.holiday-status-label {
-  font-size: 10px;
-  font-weight: 500;
-}
-
-.holiday-status-label.past {
-  color: var(--text, #888);
-}
-
-.holiday-status-label.today {
-  color: #10b981;
-  font-weight: 700;
-}
-
-.holiday-status-label.future {
-  color: var(--state-primary, #2563eb);
+.hstatus.next {
+  font-family: 'Cinzel', serif;
+  color: var(--rubric, #9C2B1F);
   font-weight: 600;
 }

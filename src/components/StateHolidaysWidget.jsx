@@ -4,9 +4,7 @@ import "./StateHolidaysWidget.css";
 
 export default function StateHolidaysWidget({ stateCode, stateName }) {
   const [data, setData] = useState(null);
-  const [filter, setFilter] = useState("all"); // "all" | "upcoming" | "national" | "state" | "municipal"
-  const [activeCity, setActiveCity] = useState("");
-  const [inputCity, setInputCity] = useState("");
+  const [filter, setFilter] = useState("all"); // "all" | "upcoming" | "national" | "state"
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
@@ -17,9 +15,6 @@ export default function StateHolidaysWidget({ stateCode, stateName }) {
       .then((res) => {
         if (isMounted) {
           setData(res);
-          const defCity = res.defaultCity || "";
-          setActiveCity(defCity);
-          setInputCity(defCity);
           setIsLoading(false);
         }
       })
@@ -33,44 +28,24 @@ export default function StateHolidaysWidget({ stateCode, stateName }) {
     };
   }, [stateCode]);
 
-  // Feriados aplicáveis à cidade ativa confirmada
-  const cityHolidays = useMemo(() => {
+  const stateNationalHolidays = useMemo(() => {
     if (!data) return [];
-    const { holidays } = data;
-    const currentCity = activeCity.trim().toLowerCase();
+    return data.holidays.filter((h) => h.type === "national" || h.type === "state");
+  }, [data]);
 
-    return holidays.filter((h) => {
-      if (h.type === "national" || h.type === "state") {
-        return true;
-      }
-      if (h.type === "municipal") {
-        if (!currentCity) return true;
-        const holidayCities = (h.city || "")
-          .toLowerCase()
-          .split("/")
-          .map((c) => c.trim());
-        return holidayCities.some((c) => currentCity.includes(c) || c.includes(currentCity));
-      }
-      return true;
-    });
-  }, [data, activeCity]);
-
-  // Próximo feriado da cidade selecionada
   const nextHoliday = useMemo(() => {
-    const upcoming = cityHolidays.filter((h) => h.daysRemaining >= 0);
+    const upcoming = stateNationalHolidays.filter((h) => h.daysRemaining >= 0);
     return upcoming.length > 0 ? upcoming[0] : null;
-  }, [cityHolidays]);
+  }, [stateNationalHolidays]);
 
-  // Feriados filtrados pela categoria selecionada
   const displayedHolidays = useMemo(() => {
-    return cityHolidays.filter((h) => {
+    return stateNationalHolidays.filter((h) => {
       if (filter === "upcoming") return !h.isPast;
       if (filter === "national") return h.type === "national";
       if (filter === "state") return h.type === "state";
-      if (filter === "municipal") return h.type === "municipal";
       return true;
     });
-  }, [cityHolidays, filter]);
+  }, [stateNationalHolidays, filter]);
 
   if (isLoading) {
     return (
@@ -80,97 +55,51 @@ export default function StateHolidaysWidget({ stateCode, stateName }) {
     );
   }
 
-  if (!data || data.holidays.length === 0) {
+  if (!data || stateNationalHolidays.length === 0) {
     return null;
   }
 
-  const { allCities, year } = data;
-
-  const handleInputChange = (e) => {
-    const val = e.target.value;
-    setInputCity(val);
-
-    const match = allCities.find((c) => c.toLowerCase() === val.trim().toLowerCase());
-    if (match && match.toLowerCase() !== activeCity.toLowerCase()) {
-      setActiveCity(match);
-    }
-  };
-
-  const handleSearchSubmit = (e) => {
-    if (e) e.preventDefault();
-    const trimmed = inputCity.trim();
-    if (trimmed && trimmed.toLowerCase() !== activeCity.toLowerCase()) {
-      setActiveCity(trimmed);
-    }
+  const getTagClass = (type) => {
+    if (type === "national") return "htag nac";
+    return "htag est";
   };
 
   const getCountdownLabel = (h) => {
-    if (h.isToday) return "É hoje!";
+    if (h.isToday) return "É HOJE!";
     if (h.daysRemaining === 1) return "Amanhã";
     if (h.daysRemaining > 1) return `Em ${h.daysRemaining} dias`;
     return "Já ocorreu";
   };
 
+  const mid = Math.ceil(displayedHolidays.length / 2);
+  const leftCol = displayedHolidays.slice(0, mid);
+  const rightCol = displayedHolidays.slice(mid);
+
   return (
     <section className="holidays-widget-minimal">
-      <div className="holidays-widget-header">
-        <div className="holidays-header-left">
-          <span className="holidays-title">Feriados e Datas Comemorativas</span>
-          <span className="holidays-year-tag">{year}</span>
-        </div>
-
-        {/* Seletor / Busca de Cidade com confirmação */}
-        <div className="holidays-city-search-wrap">
-          <label htmlFor="city-input" className="holidays-city-label">
-            Município:
-          </label>
-          <form onSubmit={handleSearchSubmit} className="holidays-city-form">
-            <input
-              id="city-input"
-              list="cities-datalist"
-              className="holidays-city-input"
-              value={inputCity}
-              onChange={handleInputChange}
-              placeholder="Pesquisar cidade..."
-              aria-label="Selecionar município"
-            />
-            <datalist id="cities-datalist">
-              {allCities.map((city) => (
-                <option key={city} value={city} />
-              ))}
-            </datalist>
-            <button type="submit" className="holidays-city-btn" title="Buscar cidade" aria-label="Buscar cidade">
-              🔍
-            </button>
-          </form>
-        </div>
-      </div>
-
-      {/* Destaque do Próximo Feriado para a Cidade */}
+      {/* Carimbo em Destaque do Próximo Feriado */}
       {nextHoliday && (
-        <div className="next-holiday-banner">
-          <div className="next-holiday-date-col">
-            <span className="next-holiday-day">{nextHoliday.displayDate}</span>
-            <span className="next-holiday-weekday">{nextHoliday.weekday}</span>
-          </div>
-
-          <div className="next-holiday-info">
-            <div className="next-holiday-top-row">
-              <span className="next-holiday-badge-type">{nextHoliday.typeLabel}</span>
-              <span className="next-holiday-countdown">
-                {nextHoliday.isToday
-                  ? "🎉 É HOJE!"
-                  : nextHoliday.daysRemaining === 1
-                  ? "Amanhã"
-                  : `Faltam ${nextHoliday.daysRemaining} dias`}
-              </span>
+        <div className="stamp-row">
+          <div>
+            <div className="hdate" style={{ fontSize: "11px", color: "var(--ink-faded)" }}>
+              {nextHoliday.weekday.toUpperCase()}
             </div>
-            <h4 className="next-holiday-name">{nextHoliday.name}</h4>
+            <div className="stamp-date">{nextHoliday.displayDate}</div>
+            <div>
+              {nextHoliday.name} <span style={{ fontSize: "13px", color: "var(--ink-faded)" }}>({nextHoliday.typeLabel})</span>
+            </div>
+          </div>
+          <div className="stamp">
+            {nextHoliday.isToday
+              ? "É HOJE!"
+              : nextHoliday.daysRemaining === 1
+              ? "AMANHÃ"
+              : `FALTAM\n${nextHoliday.daysRemaining} DIAS`}
           </div>
         </div>
       )}
 
-      {/* Barra de Filtros em Cápsula */}
+      {/* Barra de Filtros */}
       <div className="holidays-controls-row">
         <div className="holidays-filters">
           <button
@@ -178,7 +107,7 @@ export default function StateHolidaysWidget({ stateCode, stateName }) {
             className={`holidays-filter-pill ${filter === "all" ? "active" : ""}`}
             onClick={() => setFilter("all")}
           >
-            Todos ({cityHolidays.length})
+            Todos ({stateNationalHolidays.length})
           </button>
           <button
             type="button"
@@ -201,58 +130,31 @@ export default function StateHolidaysWidget({ stateCode, stateName }) {
           >
             Estaduais
           </button>
-          <button
-            type="button"
-            className={`holidays-filter-pill ${filter === "municipal" ? "active" : ""}`}
-            onClick={() => setFilter("municipal")}
-          >
-            Municipais
-          </button>
         </div>
-
-        <span className="holidays-active-city-indicator">
-          Exibindo para: <strong>{activeCity || stateName}</strong>
-        </span>
       </div>
 
-      {/* Lista Minimalista de Feriados */}
-      <div className="holidays-list">
-        {displayedHolidays.length === 0 ? (
-          <div className="holidays-empty">
-            {filter === "municipal"
-              ? `Nenhum feriado municipal específico cadastrado para "${activeCity}".`
-              : "Nenhum feriado encontrado para este filtro."}
-          </div>
-        ) : (
-          displayedHolidays.map((item) => (
-            <div
-              key={item.id}
-              className={`holiday-item-row ${item.isToday ? "today" : ""} ${
-                item.isPast ? "past" : ""
-              }`}
-            >
-              <div className="holiday-item-date-box">
-                <span className="holiday-item-day">{item.displayDate}</span>
-                <span className="holiday-item-weekday">{item.weekday.split("-")[0]}</span>
-              </div>
-
-              <div className="holiday-item-details">
-                <span className="holiday-item-name">{item.name}</span>
-                <div className="holiday-item-sub">
-                  <span className={`holiday-type-tag ${item.type}`}>
-                    {item.typeLabel}
-                  </span>
-                </div>
-              </div>
-
-              <div className="holiday-item-countdown-col">
-                <span className={`holiday-status-label ${item.isPast ? "past" : item.isToday ? "today" : "future"}`}>
-                  {getCountdownLabel(item)}
-                </span>
-              </div>
+      {/* Grade de 2 Colunas */}
+      <div className="holiday-grid">
+        <div>
+          {leftCol.map((item) => (
+            <div key={item.id} className={`hrow ${item.isPast ? "past" : ""}`}>
+              <span className="hdate">{item.displayDate}</span>
+              <span className="hname">{item.name}</span>
+              <span className={getTagClass(item.type)}>{item.typeLabel}</span>
+              <span className={`hstatus ${!item.isPast ? "next" : ""}`}>{getCountdownLabel(item)}</span>
             </div>
-          ))
-        )}
+          ))}
+        </div>
+        <div>
+          {rightCol.map((item) => (
+            <div key={item.id} className={`hrow ${item.isPast ? "past" : ""}`}>
+              <span className="hdate">{item.displayDate}</span>
+              <span className="hname">{item.name}</span>
+              <span className={getTagClass(item.type)}>{item.typeLabel}</span>
+              <span className={`hstatus ${!item.isPast ? "next" : ""}`}>{getCountdownLabel(item)}</span>
+            </div>
+          ))}
+        </div>
       </div>
     </section>
   );

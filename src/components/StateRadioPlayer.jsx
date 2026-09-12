@@ -23,7 +23,6 @@ export default function StateRadioPlayer({ stateCode, stateName }) {
     }
   }, []);
 
-  // Carrega as rádios ao mudar o estado
   useEffect(() => {
     let isMounted = true;
     setIsLoading(true);
@@ -60,14 +59,12 @@ export default function StateRadioPlayer({ stateCode, stateName }) {
     };
   }, [stateCode, stateName, cleanupHls]);
 
-  // Sincroniza o volume
   useEffect(() => {
     if (audioRef.current) {
       audioRef.current.volume = isMuted ? 0 : volume;
     }
   }, [volume, isMuted]);
 
-  // Gerencia fonte de áudio
   useEffect(() => {
     if (!selectedRadio || !audioRef.current) return;
 
@@ -185,23 +182,10 @@ export default function StateRadioPlayer({ stateCode, stateName }) {
     setIsPlaying(true);
   };
 
-  const handleNextStation = () => {
-    if (!radios.length || !selectedRadio) return;
-    const currentIndex = radios.findIndex((r) => r.id === selectedRadio.id);
-    const nextIndex = (currentIndex + 1) % radios.length;
-    setSelectedRadio(radios[nextIndex]);
-    setIsPlaying(true);
-  };
-
-  const toggleMute = () => {
-    if (!audioRef.current) return;
-    setIsMuted(!isMuted);
-  };
-
   if (isLoading) {
     return (
       <div className="radio-player-skeleton">
-        <span className="radio-skeleton-pulse">Carregando estações de {stateName}...</span>
+        <span>Carregando estações de {stateName}...</span>
       </div>
     );
   }
@@ -230,138 +214,73 @@ export default function StateRadioPlayer({ stateCode, stateName }) {
         }}
       />
 
-      <div className="radio-deck">
-        <div className="radio-meta">
-          <div className="radio-logo-wrap">
-            {selectedRadio?.favicon ? (
-              <img
-                key={selectedRadio.id}
-                src={selectedRadio.favicon}
-                alt={selectedRadio.name}
-                className="radio-logo-img"
-                onError={(e) => {
-                  e.currentTarget.style.display = "none";
-                  const fallback = e.currentTarget.parentElement?.querySelector(".radio-logo-fallback");
-                  if (fallback) fallback.style.display = "flex";
-                }}
-              />
-            ) : null}
-            <div
-              className="radio-logo-fallback"
-              style={{ display: selectedRadio?.favicon ? "none" : "flex" }}
-            >
-              {selectedRadio?.name ? selectedRadio.name.replace(/^(Rádio|Radio)\s+/i, "").charAt(0).toUpperCase() : "R"}
-            </div>
-          </div>
+      {/* Módulo Vitrola / Gramofone com Controle de Volume */}
+      <div className="gramophone">
+        <button
+          type="button"
+          className="seal-play"
+          onClick={togglePlay}
+          aria-label={isPlaying ? "Pausar" : "Tocar"}
+        >
+          {isBuffering ? (
+            <span className="radio-mini-spinner" />
+          ) : isPlaying ? (
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+              <rect x="3" y="2" width="4" height="12" />
+              <rect x="9" y="2" width="4" height="12" />
+            </svg>
+          ) : (
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+              <path d="M4 2l10 6-10 6z" />
+            </svg>
+          )}
+        </button>
 
-          <div className="radio-info-text">
-            <div className="radio-info-title-row">
-              <span className="radio-station-name">{selectedRadio?.name}</span>
-              {isPlaying && <span className="radio-status-dot" title="Transmissão ao vivo" />}
-            </div>
-            <span className="radio-station-sub">
-              {mainTag} • {stateName}
-            </span>
-          </div>
+        <div style={{ flex: 1 }}>
+          <div className="station-name">{selectedRadio?.name}</div>
+          <div className="station-meta">{stateName}</div>
         </div>
 
-        <div className="radio-actions">
-          {/* Play/Pause */}
+        {/* Controle de Volume */}
+        <div className="gramophone-volume">
           <button
             type="button"
-            className={`radio-ctrl-btn radio-play-btn ${isPlaying ? "playing" : ""}`}
-            onClick={togglePlay}
-            aria-label={isPlaying ? "Pausar" : "Tocar"}
+            className="volume-toggle-btn"
+            onClick={() => setIsMuted(!isMuted)}
+            title={isMuted ? "Ativar som" : "Mutar"}
           >
-            {isBuffering ? (
-              <span className="radio-mini-spinner" />
-            ) : isPlaying ? (
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
-                <rect x="6" y="4" width="4" height="16" rx="1" />
-                <rect x="14" y="4" width="4" height="16" rx="1" />
-              </svg>
-            ) : (
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
-                <polygon points="5,3 19,12 5,21" />
-              </svg>
-            )}
+            {isMuted || volume === 0 ? "🔇" : "🔊"}
           </button>
-
-          {/* Próxima */}
-          <button
-            type="button"
-            className="radio-ctrl-btn radio-skip-btn"
-            onClick={handleNextStation}
-            aria-label="Próxima rádio"
-            title="Próxima rádio"
-          >
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
-              <polygon points="5,4 15,12 5,20" />
-              <line x1="19" y1="4" x2="19" y2="20" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" />
-            </svg>
-          </button>
-
-          {/* Volume */}
-          <div className="radio-volume-wrap">
-            <button
-              type="button"
-              className="radio-mute-btn"
-              onClick={toggleMute}
-              aria-label="Controle de áudio"
-            >
-              {isMuted || volume === 0 ? (
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                  <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5" fill="currentColor" />
-                  <line x1="23" y1="9" x2="17" y2="15" />
-                  <line x1="17" y1="9" x2="23" y2="15" />
-                </svg>
-              ) : (
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                  <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5" fill="currentColor" />
-                  <path d="M15.54 8.46a5 5 0 0 1 0 7.07" />
-                  <path d="M19.07 4.93a10 10 0 0 1 0 14.14" />
-                </svg>
-              )}
-            </button>
-            <input
-              type="range"
-              min="0"
-              max="1"
-              step="0.05"
-              value={isMuted ? 0 : volume}
-              onChange={(e) => setVolume(parseFloat(e.target.value))}
-              className="radio-volume-slider"
-              aria-label="Volume"
-            />
-          </div>
+          <input
+            type="range"
+            min="0"
+            max="1"
+            step="0.05"
+            value={isMuted ? 0 : volume}
+            onChange={(e) => {
+              setVolume(parseFloat(e.target.value));
+              if (isMuted) setIsMuted(false);
+            }}
+            className="volume-slider"
+            title="Volume"
+          />
         </div>
       </div>
 
-      {error && (
-        <div className="radio-error-inline">
-          <span>{error}</span>
-          <button type="button" onClick={handleNextStation} className="radio-error-skip">
-            Pular para a próxima
-          </button>
-        </div>
-      )}
+      {error && <div className="radio-error-inline">{error}</div>}
 
-      {/* Seletor Minimalista em Pills */}
-      <div className="radio-station-pills">
-        {radios.map((radio) => {
-          const isSelected = selectedRadio?.id === radio.id;
-          return (
-            <button
-              key={radio.id}
-              type="button"
-              className={`radio-pill ${isSelected ? "active" : ""}`}
-              onClick={() => handleSelectRadio(radio)}
-            >
-              {isSelected && isPlaying && <span className="pill-dot" />}
-              <span className="pill-label">{radio.name}</span>
-            </button>
-          );
-        })}
+      <p className="panel-title">Outras emissoras</p>
+      <div className="station-list">
+        {radios.map((radio) => (
+          <button
+            key={radio.id}
+            type="button"
+            className={`station-row ${selectedRadio?.id === radio.id ? "active" : ""}`}
+            onClick={() => handleSelectRadio(radio)}
+          >
+            <span>{radio.name}</span>
+          </button>
+        ))}
       </div>
     </section>
   );

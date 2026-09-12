@@ -1,0 +1,203 @@
+/* ==========================================================================
+   OLDSTAMP WIDGETS — Estilos para parecer carimbos antigos
+   Aplicável a StateHolidaysWidget, StateIndicatorsWidget, StateRadioPlayer,
+   StateWeatherWidget e StateResume
+   ========================================================================== */
+
+/* Card base — aspecto de papel envelhecido com bordas irregulares */
+.holidays-widget-minimal,
+.indicators-widget-minimal,
+.radio-player-minimal,
+.weather-widget-minimal,
+.state-resume-card {
+  background: #fdfbf7;
+  background-image: 
+    repeating-linear-gradient(90deg, transparent, transparent 2px, rgba(120, 100, 60, 0.03) 2px, rgba(120, 100, 60, 0.03) 4px),
+    repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(120, 100, 60, 0.02) 2px, rgba(120, 100, 60, 0.02) 4px),
+    radial-gradient(ellipse at 5% 5%, rgba(139, 110, 60, 0.05), transparent 40%),
+    radial-gradient(ellipse at 95% 95%, rgba(139, 110, 60, 0.04), transparent 40%);
+  border: 2.5px solid #9b8b6b;
+  border-radius: 8px;
+  box-shadow: 
+    inset 0 1px 0 rgba(255, 255, 255, 0.6),
+    inset -1px -1px 0 rgba(139, 110, 60, 0.15),
+    0 4px 10px rgba(0, 0, 0, 0.12),
+    0 0 0 1px var(--ink);
+  transform: rotate(-0.3deg);
+}
+
+/* Alternância de rotação leve para parecer mais orgânico */
+.radio-player-minimal,
+.state-resume-card {
+  transform: rotate(0.2deg);
+}
+
+.weather-widget-minimal {
+  transform: rotate(-0.4deg);
+}
+
+.indicators-widget-minimal {
+  transform: rotate(0.1deg);
+}
+
+/* Headers dos widgets — bordas pontilhadas tipo carimbo */
+.holidays-widget-header,
+.indicators-widget-header,
+.weather-widget-header {
+  border-bottom: 1.5px dashed #8b6d3f;
+  padding-bottom: 14px;
+}
+
+/* Títulos — cor sépia em vez de preto puro */
+.holidays-title,
+.indicators-title,
+.weather-title {
+  color: #5a4a30;
+  text-shadow: 1px 1px 0 rgba(255, 255, 255, 0.4);
+}
+
+/* Tags/badges — estilo de carimbo manual */
+.holidays-year-tag,
+.indicators-badge,
+.weather-source-tag,
+.state-resume-badge {
+  background: #efe5d9;
+  border: 1.5px solid #9b8b6b;
+  color: #5a4a30;
+  font-weight: 700;
+  box-shadow: 
+    inset 0 1px 0 rgba(255, 255, 255, 0.7),
+    1px 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+/* Botões/pills — aspecto de papel carimbado */
+.holidays-filter-pill,
+.indicators-tab-btn,
+.radio-pill {
+  background: #f5f2ed;
+  border: 1.5px solid #9b8b6b;
+  color: #5a4a30;
+  transition: all 0.15s ease;
+}
+
+.holidays-filter-pill:hover,
+.indicators-tab-btn:hover,
+.radio-pill:hover {
+  border-color: #6b5a3a;
+  background: #efe5d9;
+}
+
+.holidays-filter-pill.active,
+.indicators-tab-btn.active,
+.radio-pill.active {
+  background: #8b6d3f;
+  color: #fdfbf7;
+  border-color: #6b5a30;
+  box-shadow: 
+    0 2px 4px rgba(0, 0, 0, 0.15),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+}
+
+/* Inputs — estilo envelhecido */
+.holidays-city-input,
+.weather-city-input {
+  background: #f9f7f3;
+  border: 1.5px solid #9b8b6b;
+  color: #5a4a30;
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.05);
+}
+
+.holidays-city-input:focus,
+.weather-city-input:focus {
+  border-color: #6b5a3a;
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.05), 0 0 0 3px rgba(139, 110, 60, 0.1);
+  outline: none;
+}
+
+/* Cards de conteúdo interno (indicadores, métricas, etc) */
+.indicator-card,
+.holiday-item-row,
+.weather-metric-item,
+.weather-forecast-card,
+.overview-metric-card {
+  background: #fdfbf7;
+  border: 1px solid #d4c9b0;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+}
+
+/* Highlight de cards especiais */
+.holiday-item-row.today,
+.weather-forecast-card.today {
+  background: #f5efe2;
+  border-color: #8b6d3f;
+  box-shadow: 
+    0 2px 4px rgba(139, 110, 60, 0.15),
+    inset 0 1px 0 rgba(255, 255, 255, 0.5);
+}
+
+/* Cards de destaque (próximo feriado, clima atual) */
+.next-holiday-banner,
+.weather-current-hero {
+  background: #f9f7f3;
+  border: 2px solid #9b8b6b;
+  box-shadow: 
+    inset 0 1px 0 rgba(255, 255, 255, 0.6),
+    0 3px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* Bandeira/imagem do estado — moldura de atlas */
+.state-resume-flag-box {
+  background: #efe5d9;
+  border: 3px double #9b8b6b;
+  box-shadow: 
+    inset 0 1px 0 rgba(255, 255, 255, 0.5),
+    0 3px 8px rgba(0, 0, 0, 0.12);
+}
+
+/* Dividers — linha sépia em vez de preta */
+.tear-divider {
+  border-top-color: #9b8b6b;
+  opacity: 0.5;
+}
+
+/* Textos — escala cromática envelhecida */
+.eyebrow {
+  color: #8a8271;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+}
+
+/* Labels e títulos pequenos */
+.metric-label,
+.holiday-type-tag,
+.indicator-label,
+.forecast-weekday {
+  color: #8a8271;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+/* Overlay de sombra no header de cards — como papel envelhecido em camadas */
+.state-resume-card-header::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  pointer-events: none;
+  background: 
+    radial-gradient(ellipse at 0% 0%, rgba(139, 110, 60, 0.04), transparent 50%);
+}
+
+/* Responsividade — manter o aspecto envelhecido */
+@media (max-width: 800px) {
+  .holidays-widget-minimal,
+  .indicators-widget-minimal,
+  .radio-player-minimal,
+  .weather-widget-minimal,
+  .state-resume-card {
+    transform: rotate(0deg);
+  }
+}

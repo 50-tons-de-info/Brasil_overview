@@ -202,7 +202,7 @@ export default function StateIndicatorsWidget({ stateCode, stateName }) {
                 </div>
                 <div className="extremes-list-compact">
                   <div className="extreme-row">
-                    <span className="extreme-row-icon">🏙️</span>
+                    <span className="extreme-row-icon extreme-row-icon-primary" aria-hidden="true" />
                     <div className="extreme-row-info">
                       <span className="extreme-row-label">Mais Populosa</span>
                       <span className="extreme-row-val">{destaquesMunicipais.maisPopulosa}</span>
@@ -210,7 +210,7 @@ export default function StateIndicatorsWidget({ stateCode, stateName }) {
                   </div>
 
                   <div className="extreme-row">
-                    <span className="extreme-row-icon">📐</span>
+                    <span className="extreme-row-icon extreme-row-icon-secondary" aria-hidden="true" />
                     <div className="extreme-row-info">
                       <span className="extreme-row-label">Maior em Extensão</span>
                       <span className="extreme-row-val">{destaquesMunicipais.maiorArea}</span>
@@ -218,7 +218,7 @@ export default function StateIndicatorsWidget({ stateCode, stateName }) {
                   </div>
 
                   <div className="extreme-row">
-                    <span className="extreme-row-icon">🏡</span>
+                    <span className="extreme-row-icon extreme-row-icon-accent" aria-hidden="true" />
                     <div className="extreme-row-info">
                       <span className="extreme-row-label">Menor População</span>
                       <span className="extreme-row-val">{destaquesMunicipais.menorPopulacao}</span>
@@ -282,7 +282,7 @@ export default function StateIndicatorsWidget({ stateCode, stateName }) {
           {/* Card Destaque: Liderança Agropecuária */}
           <div className="indicators-feature-card agro-feature">
             <div className="feature-header">
-              <span className="feature-tag">🌾 Vocação Agropecuária & Liderança Nacional</span>
+              <span className="feature-tag">Vocação Agropecuária &amp; Liderança Nacional</span>
               <span className="feature-source">PAM / IBGE</span>
             </div>
             <p className="feature-text">{agroExport.liderancas}</p>
@@ -318,7 +318,7 @@ export default function StateIndicatorsWidget({ stateCode, stateName }) {
             <div className="products-chips-wrap">
               {exportProductsList.map((prod, idx) => (
                 <span key={idx} className="product-chip">
-                  📦 {prod}
+                  {prod}
                 </span>
               ))}
             </div>
