@@ -32,7 +32,7 @@ const paths = [
   { code: "pb", d: "M401.575,141.096c2.081-3.081,16.791-6.82,19.117-4.616c0,1.918,7.259,1.686,10.133,2.712c-0.492,3.038,12.652,1.533,14.408,2.259c1.421,0.589,3.833,11.983,1.421,12.202c-0.874-1.124-2.083-1.739-3.586-1.835c-2.957-0.027-2.546,1.863-4.383,3.108c-2.626,1.767-6.571,1.917-9.558,2.109c-0.162,1.232-3.943,4.438-5.259,4.916c-3.122,1.149-2.657-2.727-5.095-3.602c0.713-1.124,4.082-5.203,3.725-6.205c-1.423-3.846-12.051,5.52-14.981,3.506c-1.396-0.973-6.218,1.493-3.476-2.588C405.574,150.776,400.398,142.889,401.575,141.096z" },
 ];
 
-function MapBrazil() {
+function MapBrazil({ onStateHover }) {
   const navigate = useNavigate();
 
   return (
@@ -47,6 +47,8 @@ function MapBrazil() {
           d={d}
           className="state"
           onClick={() => navigate(`/state/${code}`)}
+          onMouseEnter={() => onStateHover && onStateHover(code)}
+          onMouseLeave={() => onStateHover && onStateHover(null)}
         >
           <title>{states[code]?.name}</title>
         </path>
