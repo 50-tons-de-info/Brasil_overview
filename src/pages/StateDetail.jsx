@@ -8,6 +8,7 @@ import StateIndicatorsWidget from "../components/StateIndicatorsWidget";
 import StateWeatherWidget from "../components/StateWeatherWidget";
 import StateRadioPlayer from "../components/StateRadioPlayer";
 import StateHolidaysWidget from "../components/StateHolidaysWidget";
+import GeminiOut from "../components/geminiOut";
 import "./StateDetail.css";
 
 function StateDetail() {
@@ -96,6 +97,7 @@ function StateDetail() {
         <section className="dashboard-main-col">
           <StateResume title={state.name} wikiTitle={state.wikiTitle || state.name} />
           <StateIndicatorsWidget stateCode={code} stateName={state.name} />
+          <GeminiOut stateName={state.name} />
         </section>
 
         {/* Coluna Lateral: Ferramentas em Tempo Real (Clima, Rádios, Feriados) */}
