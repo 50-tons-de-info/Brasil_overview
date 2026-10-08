@@ -34,6 +34,7 @@ function Home() {
 
   return (
     <main
+      className="home-page"
       style={{
         backgroundImage: `url(${bgTexture})`,
         backgroundRepeat: "repeat",

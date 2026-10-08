@@ -1,0 +1,133 @@
+/* ==========================================================================
+   DOSSIÊ FEDERATIVO — Design System
+   Tema: cartório/dossiê oficial. Papel quente, tipografia serifada + mono
+   de dados, selos, réguas tracejadas, sombras duras (sem blur/degradê).
+   A cor de cada estado vem da própria bandeira (ver data/stateThemes.js).
+   ========================================================================== */
+
+@import url("https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;0,9..144,700;0,9..144,800;1,9..144,500;1,9..144,600&family=Public+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap");
+
+:root {
+  /* Papel & tinta — pergaminho envelhecido de atlas, nem branco puro nem preto puro */
+  --paper: #f2ecd9;
+  --paper-raised: #f9f4e7;
+  --paper-card: #fdfaf0;
+  --ink: #211d14;
+  --ink-soft: #57503f;
+  --ink-faint: #8a8271;
+  --line: #d7cca8;
+  --line-soft: #e6ddc2;
+  --line-strong: #bfaf83;
+
+  /* Acento padrão (usado fora do contexto de um estado, ex: Home) */
+  --brand: #1f5f4e;
+  --brand-ink: #0f342a;
+
+  /* Sombra "carimbada": deslocada e dura, nunca borrada em excesso */
+  --stamp-shadow: 3px 3px 0 rgba(33, 29, 20, 0.14);
+  --stamp-shadow-lg: 5px 5px 0 rgba(33, 29, 20, 0.12);
+  --stamp-shadow-sm: 2px 2px 0 rgba(33, 29, 20, 0.1);
+
+  /* Tipografia */
+  --font-display: "Fraunces", "Iowan Old Style", Georgia, serif;
+  --font-body: "Public Sans", -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-mono: "IBM Plex Mono", "SFMono-Regular", Consolas, monospace;
+
+  --radius-sm: 4px;
+  --radius: 8px;
+  --radius-lg: 12px;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  background-color: var(--paper);
+  color: var(--ink);
+  font-family: var(--font-body);
+}
+
+/* Textura de "página de atlas antiga": pautas horizontais finas + leve
+   escurecimento nas bordas superior/inferior, como o desgaste do papel
+   de um atlas encadernado há décadas — nunca borrado, sempre discreto. */
+.ledger-texture {
+  background-image:
+    repeating-linear-gradient(
+      to bottom,
+      transparent 0px,
+      transparent 34px,
+      var(--line-soft) 34px,
+      var(--line-soft) 35px
+    ),
+    radial-gradient(ellipse at 50% -10%, rgba(33, 29, 20, 0.06), transparent 55%),
+    radial-gradient(ellipse at 50% 110%, rgba(33, 29, 20, 0.05), transparent 55%);
+  background-repeat: repeat, no-repeat, no-repeat;
+}
+
+/* Rótulo tipo "eyebrow": mono, maiúsculo, espaçado — usado como legenda
+   de seção, sempre carregando informação (fonte/categoria), não decoração. */
+.eyebrow {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--ink-faint);
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+/* Selo/carimbo — usado para UF, badges de fonte de dados etc. */
+.stamp {
+  font-family: var(--font-mono);
+  font-weight: 700;
+  font-size: 11px;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  border: 1.5px solid currentColor;
+  border-radius: var(--radius-sm);
+  padding: 2px 8px;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+/* Cartão base "documento": borda sólida + sombra deslocada, cantos discretos. */
+.doc-card {
+  background: var(--paper-card);
+  border: 1.5px solid var(--line);
+  border-radius: var(--radius);
+  box-shadow: var(--stamp-shadow);
+}
+
+/* Moldura dupla de atlas: linha fina de tinta + respiro de papel + linha
+   grossa externa, como as bordas gravadas de mapas antigos. Usar com
+   moderação — em elementos que merecem ler como "página de atlas". */
+.atlas-frame {
+  box-shadow:
+    0 0 0 1.5px var(--ink),
+    0 0 0 5px var(--paper-card),
+    0 0 0 6.5px var(--line-strong);
+}
+
+/* Divisor tracejado, como linha de corte/perfuração de um talão. */
+.tear-divider {
+  border: none;
+  border-top: 1.5px dashed var(--line-strong);
+  margin: 0;
+}
+
+::selection {
+  background: var(--ink);
+  color: var(--paper);
+}
+
+a {
+  color: inherit;
+}
+
+button {
+  font-family: var(--font-body);
+}

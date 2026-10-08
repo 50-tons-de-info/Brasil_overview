@@ -12,6 +12,16 @@
   font-style: normal;
 }
 
+#root:has(.home-page) {
+  align-items: stretch;
+  justify-content: flex-start;
+  overflow: visible;
+}
+
+.home-page {
+  align-self: stretch;
+}
+
 .Titulo_topo {
   font-family: "MinhaFonteMedieval", serif;
   color: #0e0d0d;
