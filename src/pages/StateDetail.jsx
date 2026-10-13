@@ -3,6 +3,7 @@ import { states } from "../data/states";
 import { IBGE_STATE_DATA } from "../data/ibgeData";
 import { getStateTheme } from "../data/stateThemes";
 import StateResume from "../components/StateResume";
+import StateMusic from "../components/StateMusic";
 import StateIndicatorsWidget from "../components/StateIndicatorsWidget";
 import StateWeatherWidget from "../components/StateWeatherWidget";
 import StateRadioPlayer from "../components/StateRadioPlayer";
@@ -94,6 +95,7 @@ function StateDetail() {
         {/* Coluna Principal: Resumo e Painel Estatístico IBGE */}
         <section className="dashboard-main-col">
           <StateResume title={state.name} wikiTitle={state.wikiTitle || state.name} />
+          <StateMusic stateUf={code} stateName={state.name} />
           <StateIndicatorsWidget stateCode={code} stateName={state.name} />
         </section>
 
