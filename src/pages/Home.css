@@ -20,16 +20,92 @@
 
 .home-page {
   align-self: stretch;
+  min-height: 100vh;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-repeat: repeat;
+  background-color: rgb(136, 125, 108);
+  overflow: hidden;
+}
+
+
+.home-stage {
+  --paper-w: 1911;
+  --paper-h: 937;
+
+  position: relative;
+  aspect-ratio: var(--paper-w) / var(--paper-h);
+  width: min(100vw, calc(100vh * var(--paper-w) / var(--paper-h)));
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+  background-position: center;
+  container-type: inline-size; /* habilita unidades cqw */
+}
+
+
+.home-map-slot {
+  position: absolute;
+  left: 13.5%;
+  top: 21%;
+  width: 29%;
+}
+
+.home-map-slot svg {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+
+.home-info {
+  position: absolute;
+  left: 46%;
+  top: 22.5%;
+  width: 42%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .Titulo_topo {
   font-family: "MinhaFonteMedieval", serif;
   color: #0e0d0d;
-  font-size: 75px;
+  font-size: 3.1cqw;
+  line-height: 1.1;
+  margin: 0;
+  text-align: center;
+  white-space: nowrap;
+}
+
+.home-flag-box {
+  margin-top: 3cqw;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.home-flag {
+  width: 21cqw;
+  border-radius: 1.2cqw;
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+}
+
+.home-flag-loading {
+  width: 21cqw;
+  height: 14cqw;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-style: italic;
+  color: #555;
 }
 
 .Nome_Estado {
   font-family: "TangerineBold", cursive;
-  font-size: 50px;
+  font-size: 2.4cqw;
   color: #333;
+  margin: 0.6cqw 0 0;
+  line-height: 1;
 }
