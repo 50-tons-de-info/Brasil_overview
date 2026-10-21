@@ -4,12 +4,10 @@ import { states } from "../data/states";
 import { IBGE_STATE_DATA } from "../data/ibgeData";
 import { getStateTheme } from "../data/stateThemes";
 import StateResume from "../components/StateResume";
-import StateMusic from "../components/StateMusic";
 import StateIndicatorsWidget from "../components/StateIndicatorsWidget";
 import StateWeatherWidget from "../components/StateWeatherWidget";
 import StateRadioPlayer from "../components/StateRadioPlayer";
 import StateHolidaysWidget from "../components/StateHolidaysWidget";
-import GeminiOut from "../components/geminiOut";
 import "./StateDetail.css";
 
 const TABS = [
@@ -224,8 +222,6 @@ function StateDetail() {
                     </div>
                   </div>
                 )}
-                <StateMusic stateUf={code} stateName={state.name} />
-                <GeminiOut stateName={state.name} />
               </div>
             )}
 
