@@ -1,0 +1,14 @@
+{
+  "questions": [
+    {
+      "id": 1,
+      "name": "federal_deputies",
+      "prompt": "Informe o número de deputados federais que representam o estado {state} na Câmara dos Deputados. Responda apenas com o número de deputados federais, sem explicações adicionais."
+    },
+    {
+      "id": 2,
+      "name": "city_councilors",
+      "prompt": "Informe o número de vereadores totais do estado {state}. Responda apenas com o número de vereadores, sem explicações adicionais. Não inclua municípios de outros estados."
+    }
+  ]
+}
