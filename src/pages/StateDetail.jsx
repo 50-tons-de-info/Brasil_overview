@@ -4,6 +4,7 @@ import { states } from "../data/states";
 import { IBGE_STATE_DATA } from "../data/ibgeData";
 import { getStateTheme } from "../data/stateThemes";
 import StateResume from "../components/StateResume";
+import StateMusic from "../components/TopTracksPanel";
 import StateIndicatorsWidget from "../components/StateIndicatorsWidget";
 import StateWeatherWidget from "../components/StateWeatherWidget";
 import StateRadioPlayer from "../components/StateRadioPlayer";
@@ -16,6 +17,7 @@ const TABS = [
   { key: "weather", label: "Clima & Previsão", roman: "III" },
   { key: "radios", label: "Rádios ao Vivo", roman: "IV" },
   { key: "holidays", label: "Feriados", roman: "V" },
+  { key: "spotify", label: "Música & Spotify", roman: "VI" },
 ];
 
 const STATE_REGIONS = {
@@ -94,6 +96,7 @@ function StateDetail() {
     weather: `Clima & previsão — ${state.name}`,
     radios: `Rádios ao vivo — ${state.name}`,
     holidays: `Feriados & datas comemorativas`,
+    spotify: `Música regional — ${state.name}`,
   };
 
   const nameParts = formatStateNameParts(state.name);
@@ -250,6 +253,13 @@ function StateDetail() {
             {activeTab === "holidays" && (
               <div className="tab active">
                 <StateHolidaysWidget stateCode={code} stateName={state.name} />
+              </div>
+            )}
+
+            {/* ABA 6: MÚSICA & SPOTIFY */}
+            {activeTab === "spotify" && (
+              <div className="tab active">
+                <StateMusic stateUf={state.uf} stateName={state.name} />
               </div>
             )}
           </main>

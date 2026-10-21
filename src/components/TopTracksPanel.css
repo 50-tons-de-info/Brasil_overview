@@ -1,0 +1,272 @@
+
+.top-tracks-panel {
+  --tt-title-font: 'Cinzel', 'Cormorant SC', Georgia, serif;
+  --tt-body-font: 'EB Garamond', 'Cormorant Garamond', Georgia, serif;
+  --tt-ink: #2b1d12;
+  --tt-ink-soft: #6b5640;
+  --tt-red: #9b2c22;
+  --tt-gold: #b8862b;
+  --tt-cream: #f6ebd0;
+
+  margin-top: 28px;
+  background: transparent;
+  border: 1px solid var(--tt-ink);
+  border-radius: 12px;
+  overflow: hidden;
+  color: var(--tt-ink);
+  font-family: var(--tt-body-font);
+  box-shadow: none;
+}
+
+/* ---------- Cabeçalho (só título) ---------- */
+
+.top-tracks-panel__header {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 16px 22px 14px;
+  border-bottom: 1px solid var(--tt-gold);
+}
+
+.top-tracks-panel__eyebrow {
+  position: static;
+  align-self: flex-start;
+  padding: 0;
+  background: none;
+  border: 0;
+  border-radius: 0;
+  font-family: var(--tt-body-font);
+  font-size: 0.95rem;
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  font-variant: small-caps;
+  text-transform: lowercase;
+  color: var(--tt-red);
+}
+
+.top-tracks-panel__state {
+  margin: 0;
+  font-family: var(--tt-title-font);
+  font-size: 1.6rem;
+  font-weight: 600;
+  line-height: 1.15;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--tt-ink);
+}
+
+/* gêneros, líder regional e lista de artistas escondidos
+   (apague esta regra para mostrá-los de novo) */
+.top-tracks-panel__artists {
+  display: none;
+}
+
+/* ---------- Grade de capas ---------- */
+
+.top-tracks-panel__body {
+  padding: 18px 22px 22px;
+}
+
+.top-tracks-panel__list,
+.top-tracks-panel__skeleton {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 16px;
+}
+
+@media (max-width: 900px) {
+  .top-tracks-panel__list,
+  .top-tracks-panel__skeleton {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+.track-row {
+  position: relative;
+  border: 1px solid var(--tt-ink);
+  border-radius: 6px;
+  overflow: hidden;
+  background: rgba(230, 215, 180, 0.5);
+  transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+}
+
+.track-row:hover {
+  transform: translateY(-5px) scale(1.03);
+  border-color: var(--tt-red);
+  box-shadow: 0 14px 26px rgba(43, 29, 18, 0.38);
+  z-index: 2;
+}
+
+.track-row__art-wrap {
+  position: relative;
+  display: block;
+}
+
+.track-row__art {
+  display: block;
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  object-fit: cover;
+  filter: sepia(0.15);
+  transition: transform 0.4s ease, filter 0.3s ease;
+}
+
+.track-row:hover .track-row__art {
+  transform: scale(1.08);
+  filter: sepia(0) saturate(1.05) brightness(0.55);
+}
+
+.track-row__art--empty {
+  background:
+    repeating-linear-gradient(45deg, rgba(90, 62, 36, 0.1) 0 5px, transparent 5px 10px),
+    rgba(230, 215, 180, 0.6);
+}
+
+/* selo do ranking */
+.track-row__rank {
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  z-index: 3;
+  padding: 1px 8px;
+  background: rgba(43, 29, 18, 0.88);
+  color: var(--tt-cream);
+  font-family: var(--tt-title-font);
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  border-radius: 999px;
+}
+
+.track-row:nth-child(-n + 3) .track-row__rank {
+  background: var(--tt-red);
+}
+
+/* nome da música: só aparece no hover */
+.track-row__meta {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 12px;
+  text-align: center;
+  opacity: 0;
+  transform: translateY(8px);
+  transition: opacity 0.3s ease, transform 0.3s ease;
+  pointer-events: none;
+}
+
+.track-row:hover .track-row__meta {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.track-row__title {
+  font-family: var(--tt-title-font);
+  font-size: 0.95rem;
+  font-weight: 600;
+  line-height: 1.25;
+  letter-spacing: 0.03em;
+  color: var(--tt-cream);
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.track-row__artist {
+  font-family: var(--tt-body-font);
+  font-size: 0.9rem;
+  letter-spacing: 0.04em;
+  font-variant: small-caps;
+  color: #e3c88f;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* celular/tablet (sem hover): nome sempre visível embaixo da capa */
+@media (hover: none) {
+  .track-row__meta {
+    inset: auto 0 0 0;
+    justify-content: flex-end;
+    opacity: 1;
+    transform: none;
+    padding: 24px 8px 8px;
+    background: linear-gradient(to top, rgba(43, 29, 18, 0.9), transparent);
+  }
+}
+
+/* ---------- Observação (ano dos dados) ---------- */
+
+.top-tracks-panel__note {
+  margin: 0 22px;
+  padding: 12px 0 16px;
+  border-top: 1px dotted rgba(90, 62, 36, 0.45);
+  font-family: var(--tt-body-font);
+  font-size: 0.95rem;
+  font-style: italic;
+  line-height: 1.4;
+  color: var(--tt-ink-soft);
+}
+
+/* ---------- Erro / vazio ---------- */
+
+.top-tracks-panel__state-msg {
+  padding: 28px 22px;
+  text-align: center;
+}
+
+.top-tracks-panel__state-msg p {
+  margin: 0 0 4px;
+  font-family: var(--tt-title-font);
+  font-size: 1.05rem;
+  letter-spacing: 0.04em;
+  color: var(--tt-ink);
+}
+
+.top-tracks-panel__state-msg span {
+  font-size: 0.95rem;
+  color: var(--tt-ink-soft);
+}
+
+.top-tracks-panel__state-msg[role='alert'] p {
+  color: var(--tt-red);
+}
+
+/* ---------- Skeleton ---------- */
+
+.skeleton-row {
+  aspect-ratio: 1 / 1;
+  border: 1px solid var(--tt-ink);
+  border-radius: 6px;
+  overflow: hidden;
+  background: linear-gradient(90deg, rgba(90, 62, 36, 0.1) 25%, rgba(90, 62, 36, 0.2) 50%, rgba(90, 62, 36, 0.1) 75%);
+  background-size: 200% 100%;
+  animation: tt-shimmer 1.4s infinite linear;
+}
+
+.skeleton-row__art,
+.skeleton-row__lines {
+  display: none;
+}
+
+@keyframes tt-shimmer {
+  from { background-position: 200% 0; }
+  to   { background-position: -200% 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .skeleton-row { animation: none; }
+  .track-row,
+  .track-row__art,
+  .track-row__meta { transition: none; }
+}
