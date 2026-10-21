@@ -82,6 +82,15 @@ const WMO_CODES = {
 
 const WEEKDAYS_SHORT = ["Dom", "Seg", "Ter", "Qua", "Qui", "Sex", "Sáb"];
 
+function getCurrentWeatherIcon(weatherCode, isDay) {
+  if (!isDay) {
+    if (weatherCode === 0) return "moon";
+    if ([1, 2, 3, 45, 48].includes(weatherCode)) return "cloud-moon";
+  }
+
+  return WMO_CODES[weatherCode]?.icon || "cloud-sun";
+}
+
 /**
  * Classifica o índice UV de acordo com a OMS
  */
@@ -156,7 +165,7 @@ export async function fetchStateWeather(stateCode, cityName) {
   const targetCity =
     cityName || (code === "rs" ? "Rio Grande" : stateMeta?.capital || "Porto Alegre");
 
-  const weatherCacheKey = `weather_${code}_${targetCity.toLowerCase().replace(/\s+/g, "_")}`;
+  const weatherCacheKey = `weather_v2_${code}_${targetCity.toLowerCase().replace(/\s+/g, "_")}`;
   const cachedWeather = getCachedData(weatherCacheKey, WEATHER_CACHE_TTL);
   if (cachedWeather) {
     return cachedWeather;
@@ -179,6 +188,7 @@ export async function fetchStateWeather(stateCode, cityName) {
     label: "Parcialmente nublado",
     icon: "cloud-sun",
   };
+  const isDay = current.is_day === 1;
   const todayUv = raw.daily?.uv_index_max?.[0] || 0;
   const uvClass = getUVClassification(todayUv);
 
@@ -191,10 +201,10 @@ export async function fetchStateWeather(stateCode, cityName) {
     humidity: current.relative_humidity_2m,
     windSpeed: Math.round(current.wind_speed_10m),
     precipitation: current.precipitation,
-    isDay: current.is_day === 1,
+    isDay,
     weatherCode: current.weather_code,
     condition: weatherInfo.label,
-    icon: weatherInfo.icon,
+    icon: getCurrentWeatherIcon(current.weather_code, isDay),
     uvIndex: todayUv,
     uvLabel: uvClass.label,
     uvLevel: uvClass.level,

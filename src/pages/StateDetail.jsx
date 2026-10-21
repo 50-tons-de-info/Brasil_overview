@@ -26,6 +26,18 @@ const STATE_REGIONS = {
   pr: "Sul", rs: "Sul", sc: "Sul"
 };
 
+const COMPASS_ROSES = Object.fromEntries(
+  Object.entries(
+    import.meta.glob("../assets/icons/compass-roses/rosa_dos_ventos_*.png", {
+      eager: true,
+      query: "?url",
+      import: "default",
+    })
+  )
+    .map(([path, url]) => [path.match(/_([A-Z]{2})\.png$/)?.[1].toLowerCase(), url])
+    .filter(([code]) => code)
+);
+
 function formatStateNameParts(name) {
   if (!name) return { main: "", sub: "" };
   const words = name.split(" ");
@@ -91,9 +103,6 @@ function StateDetail() {
       <div className="sheet">
         {/* Topbar com fita horizontal */}
         <div className="topbar">
-          <button type="button" className="back-btn" onClick={() => navigate("/")}>
-            ← Todos os estados
-          </button>
           <div className="ribbon" id="ribbonTitle">
             {activeTabMeta.roman} · {activeTabMeta.label.toUpperCase()}
           </div>
@@ -102,24 +111,33 @@ function StateDetail() {
         <div className="layout">
           {/* Cartucho / Sidebar */}
           <aside className="cartouche">
-            <svg className="compass" viewBox="0 0 100 100" fill="none" stroke="currentColor" strokeWidth="1.4">
-              <circle cx="50" cy="50" r="44" />
-              <circle cx="50" cy="50" r="3" fill="currentColor" stroke="none" />
-              <path d="M50 6 L58 50 L50 94 L42 50 Z" fill="currentColor" stroke="none" opacity=".85" />
-              <path d="M6 50 L50 42 L94 50 L50 58 Z" fill="currentColor" stroke="none" opacity=".45" />
-            </svg>
-            <h1 className="state-name">
-              {nameParts.main}
-              {nameParts.sub && <span>{nameParts.sub}</span>}
-            </h1>
-            <div className="uf-badge">{state.uf}</div>
-            <p className="motto">"{theme.tagline}"</p>
-            <div className="flag-colors">
-              <i style={{ "--c": theme.primaryColor }} />
-              <i style={{ "--c": theme.secondaryColor }} />
-              <i style={{ "--c": theme.accentColor }} />
+            <button type="button" className="back-btn" onClick={() => navigate("/")}>
+              ← Todos os estados
+            </button>
+            <div className="identity-block">
+              <div className="compass-wrap">
+                <img
+                  className="compass-rose"
+                  src={COMPASS_ROSES[stateCode]}
+                  alt={`Rosa dos ventos de ${state.name}`}
+                />
+              </div>
+              <h1 className="state-name">
+                {nameParts.main}
+                {nameParts.sub && <span>{nameParts.sub}</span>}
+              </h1>
+              <p className="motto">"{theme.tagline}"</p>
+              <div className="flag-ribbon">
+                <i style={{ "--c": theme.primaryColor }} />
+                <i style={{ "--c": theme.secondaryColor }} />
+                <i style={{ "--c": theme.accentColor }} />
+              </div>
+              <div className="state-meta">
+                <span className="uf-mark">{state.uf}</span>
+                <span className="meta-sep" />
+                <span className="region-mark">Região {STATE_REGIONS[stateCode] || "Brasil"}</span>
+              </div>
             </div>
-            <div className="region-tag">Região {STATE_REGIONS[stateCode] || "Brasil"}</div>
 
             <div className="rope" />
 

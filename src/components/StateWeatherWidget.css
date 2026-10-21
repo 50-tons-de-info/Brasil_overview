@@ -13,7 +13,7 @@
 .weather-widget-skeleton {
   margin: 0;
   padding: 20px 24px;
-  background: rgba(255,255,255,.08);
+  background: rgba(255, 255, 255, .08);
   border: 1px solid var(--ink-faded, #5B4630);
   font-family: 'EB Garamond', serif;
   font-size: 14px;
@@ -32,6 +32,24 @@
   flex-wrap: wrap;
 }
 
+.weather-header-left {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  margin-left: 22px;
+}
+
+.weather-header-left .panel-title {
+  font-size: 18px;
+  margin-bottom: 0;
+}
+
+.weather-current-city {
+  font-family: 'Cinzel', serif;
+  font-size: 20px;
+  color: var(--ink, #2B1D10);
+}
+
 .panel-title {
   font-family: 'EB Garamond', serif;
   font-variant: small-caps;
@@ -45,18 +63,20 @@
   display: flex;
   align-items: center;
   gap: 0;
+  align-self: center;
+  margin: 10px 10px 0 10px;
 }
 
 .weather-city-input {
   padding: 5px 10px;
   border: 1px solid var(--ink-faded, #5B4630);
   border-right: none;
-  background: rgba(255,255,255,.15);
+  background: rgba(255, 255, 255, .15);
   color: var(--ink, #2B1D10);
   font-family: 'EB Garamond', serif;
   font-size: 14px;
   width: 160px;
-  height: 32px;
+  height: 28px;
   border-radius: 2px 0 0 2px;
   box-sizing: border-box;
 }
@@ -67,12 +87,12 @@
 }
 
 .weather-city-btn {
-  background: rgba(255,255,255,.12);
+  background: rgba(255, 255, 255, .12);
   border: 1px solid var(--ink-faded, #5B4630);
   color: var(--ink, #2B1D10);
   padding: 4px 10px;
   cursor: pointer;
-  height: 32px;
+  height: 28px;
   border-radius: 0 2px 2px 0;
   display: flex;
   align-items: center;
@@ -81,8 +101,14 @@
   transition: background 0.15s ease, border-color 0.15s ease;
 }
 
+.weather-city-btn img {
+  width: 20px;
+  height: 26px;
+  object-fit: contain;
+}
+
 .weather-city-btn:hover {
-  background: rgba(156,43,31,.12);
+  background: rgba(156, 43, 31, .12);
   border-color: var(--rubric, #9C2B1F);
 }
 
@@ -93,9 +119,19 @@
   align-items: center;
   flex-wrap: wrap;
   border: 1px solid var(--ink-faded, #5B4630);
-  padding: 18px;
+  border-left: none;
+  border-right: none;
+  border-top: none;
+  padding: 4px 18px 18px;
   margin-bottom: 4px;
-  background: rgba(255,255,255,.06);
+  background: rgba(255, 255, 255, .06);
+}
+
+.dial-row .weather-icon {
+  width: 90px;
+  height: 90px;
+  object-fit: contain;
+  flex: 0 0 90px;
 }
 
 .dial-temp {
@@ -115,14 +151,16 @@
 /* Instrumentos Redondos */
 .instruments {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 12px;
-  margin-bottom: 8px;
+  margin: 0 22px 8px;
 }
 
 .instrument {
   border: 1px solid var(--ink-faded, #5B4630);
   border-radius: 50%;
+  width: min(100%, 184px);
+  justify-self: center;
   aspect-ratio: 1;
   display: flex;
   flex-direction: column;
@@ -130,71 +168,88 @@
   justify-content: center;
   text-align: center;
   padding: 8px;
-  background: rgba(255,255,255,.05);
+  background: rgba(255, 255, 255, .05);
 }
 
 .instrument .lab {
   font-family: 'EB Garamond', serif;
   font-variant: small-caps;
-  font-size: 11.5px;
+  font-size: 13px;
   color: var(--ink-faded, #5B4630);
 }
 
 .instrument .num {
   font-family: 'Cinzel', serif;
-  font-size: 16px;
+  font-size: 18px;
   color: var(--ink, #2B1D10);
   margin-top: 2px;
 }
 
 /* Previsão 7 Dias — week & day */
+.weather-widget-minimal>.panel-title {
+  font-size: 18px;
+  margin-bottom: 0;
+  margin-left: 22px;
+}
+
 .week {
-  display: flex;
-  gap: 10px;
-  overflow-x: auto;
-  padding-bottom: 6px;
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  justify-content: center;
+  gap: 8px;
+  overflow-x: hidden;
+  padding: 0 14px 10px;
 }
 
 .day {
-  flex: 0 0 96px;
+  min-width: 0;
   border: 1px solid var(--ink-faded, #5B4630);
-  padding: 10px 8px;
+  padding: 8px 6px;
   text-align: center;
-  background: rgba(255,255,255,.04);
+  background: rgba(255, 255, 255, .04);
 }
 
 .day.today {
   border-color: var(--rubric, #9C2B1F);
-  background: rgba(156,43,31,.06);
+  background: rgba(156, 43, 31, .06);
 }
 
 .day .dname {
   font-family: 'EB Garamond', serif;
   font-variant: small-caps;
-  font-size: 12.5px;
+  font-size: 17px;
+  line-height: 1.05;
   color: var(--ink, #2B1D10);
 }
 
 .day .ddate {
   font-family: 'EB Garamond', serif;
-  font-size: 11px;
+  font-size: 14px;
+  line-height: 1.05;
   color: var(--ink-faded, #5B4630);
   margin-bottom: 4px;
 }
 
-.day svg {
+.day svg,
+.day .weather-icon {
+  width: min(100%, 150px);
+  height: auto;
+  aspect-ratio: 1;
   margin: 4px 0;
+  object-fit: contain;
 }
 
 .day .prob {
   font-family: 'Cinzel', serif;
-  font-size: 11.5px;
+  font-size: 15px;
+  line-height: 1;
   color: var(--rubric, #9C2B1F);
 }
 
 .day .temps {
   font-family: 'Cinzel', serif;
-  font-size: 13px;
-  margin-top: 2px;
+  font-size: 16px;
+  line-height: 1;
+  margin-top: 3px;
   color: var(--ink, #2B1D10);
 }

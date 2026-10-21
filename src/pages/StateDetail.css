@@ -5,7 +5,7 @@
 .state-page-shell {
   width: 100vw;
   height: 100vh;
-  padding: 20px 30px;
+  padding: 10px 6px;
   background: transparent;
   display: flex;
   justify-content: center;
@@ -16,8 +16,8 @@
 
 /* Folha de pergaminho principal */
 .sheet {
-  width: min(96vw, 1400px);
-  height: min(94vh, 840px);
+  width: min(99.5vw, 1660px);
+  height: min(99.5vh, 1000px);
   aspect-ratio: 3440 / 1920;
   position: relative;
   background-image: url("../assets/textures/paper.png");
@@ -25,7 +25,7 @@
   background-position: center;
   background-repeat: no-repeat;
   color: var(--ink, #2B1D10);
-  padding: 38px 50px 32px 44px;
+  padding: 38px 50px 32px 60px;
   filter: drop-shadow(0 20px 45px rgba(0, 0, 0, .85));
   box-sizing: border-box;
   display: flex;
@@ -70,14 +70,14 @@
 
 .back-btn {
   font-family: 'EB Garamond', serif;
-  font-size: 13.5px;
+  font-size: 15px;
   font-variant: small-caps;
   letter-spacing: .03em;
   background: transparent;
-  border: 1px solid var(--rubric, #9C2B1F);
+  border: 0;
   color: var(--rubric, #9C2B1F);
-  padding: 5px 12px;
-  border-radius: 2px;
+  padding: 0;
+  border-radius: 0;
   cursor: pointer;
   transition: background 0.15s ease;
 }
@@ -97,12 +97,14 @@
   letter-spacing: .08em;
   color: var(--rubric, #9C2B1F);
   font-weight: 600;
+  margin-left: auto;
+  text-align: right;
 }
 
 /* Grid de Layout */
 .layout {
   display: grid;
-  grid-template-columns: 250px 1fr;
+  grid-template-columns: 320px 1fr;
   gap: 0;
   position: relative;
   flex: 1 1 auto;
@@ -114,7 +116,7 @@
 .layout::before {
   content: "";
   position: absolute;
-  left: 250px;
+  left: 320px;
   top: -4px;
   bottom: -4px;
   width: 1px;
@@ -124,17 +126,31 @@
 
 /* Cartucho / Sidebar */
 .cartouche {
-  padding: 2px 18px 2px 2px;
+  padding: 0 14px 2px 0;
   position: relative;
   overflow: hidden;
   max-height: 100%;
 }
 
-.compass {
-  width: 46px;
-  height: 46px;
-  margin-bottom: 10px;
-  color: var(--state-primary, var(--gold, #A8792A));
+.compass-wrap {
+  display: flex;
+  justify-content: center;
+  margin: 2px 0 4px;
+}
+
+.compass-rose {
+  width: 150px;
+  height: 150px;
+  object-fit: contain;
+  filter: saturate(.82) contrast(1.02);
+}
+
+.identity-block {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 0 26px;
 }
 
 .state-name {
@@ -149,53 +165,57 @@
 
 .state-name span {
   display: block;
-  font-size: 26px;
-}
-
-.uf-badge {
-  display: inline-block;
-  margin-top: 8px;
-  font-family: 'Cinzel', serif;
-  font-size: 12px;
-  letter-spacing: .1em;
-  border: 1px solid var(--state-primary, var(--rubric, #9C2B1F));
-  color: var(--state-primary, var(--rubric, #9C2B1F));
-  padding: 2px 9px;
-  border-radius: 2px;
 }
 
 .motto {
   font-family: 'EB Garamond', serif;
   font-style: italic;
   color: var(--ink-faded, #5B4630);
-  font-size: 15px;
-  margin: 12px 0 8px;
+  font-size: 14.5px;
+  margin: 7px 0 0;
   line-height: 1.4;
+  max-width: 200px;
 }
 
-.flag-colors {
+.flag-ribbon {
   display: flex;
-  gap: 6px;
-  margin-bottom: 10px;
+  width: 86px;
+  height: 6px;
+  margin: 16px 0 12px;
+  border: 1px solid rgba(43, 29, 16, .4);
+  overflow: hidden;
 }
 
-.flag-colors i {
-  width: 16px;
-  height: 16px;
+.flag-ribbon i {
+  flex: 1;
   background: var(--c);
-  display: inline-block;
-  border: 1px solid rgba(0, 0, 0, .25);
 }
 
-.region-tag {
-  display: inline-block;
-  font-family: 'EB Garamond', serif;
+.state-meta {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+}
+
+.uf-mark {
+  font-family: 'Cinzel', serif;
+  font-size: 12.5px;
+  letter-spacing: .14em;
+  color: var(--rubric, #9C2B1F);
+}
+
+.meta-sep {
+  width: 1px;
+  height: 10px;
+  background: var(--ink-faded, #5B4630);
+  opacity: .45;
+}
+
+.region-mark {
   font-variant: small-caps;
-  font-size: 13px;
-  color: var(--verdigris, #3C6E5D);
-  border: 1px solid var(--verdigris, #3C6E5D);
-  padding: 2px 10px;
-  border-radius: 20px;
+  font-size: 13.5px;
+  letter-spacing: .03em;
+  color: var(--ink-faded, #5B4630);
 }
 
 .rope {
@@ -439,7 +459,7 @@
 /* Responsividade */
 @media (max-width: 860px) {
   .sheet {
-    padding: 20px 16px;
+    padding: 20px 28px;
   }
 
   .layout {

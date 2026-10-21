@@ -17,7 +17,7 @@ function Home() {
     }
 
     let isMounted = true;
-    const stateName = states[hoveredStateCode]?.name;
+    const stateName = states[hoveredStateCode]?.wikiTitle || states[hoveredStateCode]?.name;
 
     if (stateName) {
       getFlagFromWiki(stateName).then(flagUrl => {
@@ -71,26 +71,26 @@ function Home() {
             alignItems: "center", // Garante que a bandeira fique no meio do texto
           }}
         >
-          
+
           <h1 className="Titulo_topo" style={{ margin: 0, textAlign: "center" }}>
             Overview dos estados brasileiros
           </h1>
-          
+
           {hoveredStateName && (
-            <div 
-              style={{ 
+            <div
+              style={{
                 /* 👇 AQUI VOCÊ AJUSTA O ESPAÇAMENTO ENTRE O TÍTULO E A BANDEIRA 👇 */
-                marginTop: "80px", 
-                display: "flex", 
-                flexDirection: "column", 
-                alignItems: "center" 
+                marginTop: "80px",
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center"
               }}
             >
               {hoveredFlag ? (
-                <img 
-                  src={hoveredFlag} 
-                  alt={`Bandeira de ${hoveredStateName}`} 
-                  style={{ width: "500px", borderRadius: "25px", boxShadow: "0 6px 12px rgba(0,0,0,0.15)" }} 
+                <img
+                  src={hoveredFlag}
+                  alt={`Bandeira de ${hoveredStateName}`}
+                  style={{ width: "500px", borderRadius: "25px", boxShadow: "0 6px 12px rgba(0,0,0,0.15)" }}
                 />
               ) : (
                 <div style={{ width: "250px", height: "166px", display: "flex", alignItems: "center", justifyContent: "center", fontStyle: "italic", color: "#555" }}>

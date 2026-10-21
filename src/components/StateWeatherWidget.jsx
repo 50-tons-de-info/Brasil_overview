@@ -2,48 +2,49 @@ import { useState, useEffect } from "react";
 import { fetchStateWeather } from "../services/weatherApi";
 import { fetchStateMunicipalities } from "../services/holidaysApi";
 import { states } from "../data/states";
+import cloudLightning from "../assets/icons/weather/cloud_lightning.png";
+import cloudPlain from "../assets/icons/weather/cloud_plain.png";
+import cloudRainHeavyLines from "../assets/icons/weather/cloud_rain_heavy_lines.png";
+import cloudRainLight from "../assets/icons/weather/cloud_rain_light.png";
+import cloudRainMedium from "../assets/icons/weather/cloud_rain_medium.png";
+import cloudSnowDotsBottom from "../assets/icons/weather/cloud_snow_dots_bottom.png";
+import cloudMoon from "../assets/icons/weather/cloud_moon.png";
+import cloudSunBig from "../assets/icons/weather/cloud_sun_big.png";
+import cloudSunRain from "../assets/icons/weather/cloud_sun_rain.png";
+import moonWithStars from "../assets/icons/weather/moon_with_stars.png";
+import sunFace from "../assets/icons/weather/sun_face.png";
+import magnifyingGlass from "../assets/icons/magnifying_glass.png";
 import "./StateWeatherWidget.css";
 
-function WeatherIcon({ name, isDay = true, size = 28 }) {
-  switch (name) {
-    case "sun":
-      return (
-        <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="var(--gold, #A8792A)" strokeWidth="1.5">
-          <circle cx="12" cy="12" r="5" />
-          <line x1="12" y1="1" x2="12" y2="3" strokeLinecap="round" />
-          <line x1="12" y1="21" x2="12" y2="23" strokeLinecap="round" />
-          <line x1="4.22" y1="4.22" x2="5.64" y2="5.64" strokeLinecap="round" />
-          <line x1="18.36" y1="18.36" x2="19.78" y2="19.78" strokeLinecap="round" />
-          <line x1="1" y1="12" x2="3" y2="12" strokeLinecap="round" />
-          <line x1="21" y1="12" x2="23" y2="12" strokeLinecap="round" />
-        </svg>
-      );
-    case "sun-cloud":
-    case "cloud-sun":
-    case "cloud":
-      return (
-        <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="var(--ink-faded, #5B4630)" strokeWidth="1.5">
-          <path d="M6 15a4 4 0 0 1 .5-8 5 5 0 0 1 9-2 4.5 4.5 0 0 1 1.5 8.7" />
-        </svg>
-      );
-    case "rain-light":
-    case "rain":
-    case "rain-shower":
-    case "rain-heavy":
-    case "thunderstorm":
-      return (
-        <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="var(--rubric, #9C2B1F)" strokeWidth="1.5">
-          <path d="M6 14a4 4 0 0 1 .5-8 5 5 0 0 1 9-2 4.5 4.5 0 0 1 1.5 8.7" />
-          <path d="M8 18l-1 2M12 18l-1 2M16 18l-1 2" strokeLinecap="round" />
-        </svg>
-      );
-    default:
-      return (
-        <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="var(--ink-faded, #5B4630)" strokeWidth="1.5">
-          <path d="M6 15a4 4 0 0 1 .5-8 5 5 0 0 1 9-2 4.5 4.5 0 0 1 1.5 8.7" />
-        </svg>
-      );
-  }
+const WEATHER_ICON_FILES = {
+  sun: sunFace,
+  "sun-cloud": cloudSunBig,
+  "cloud-sun": cloudSunBig,
+  cloud: cloudPlain,
+  fog: cloudPlain,
+  "cloud-moon": cloudMoon,
+  moon: moonWithStars,
+  "rain-light": cloudRainLight,
+  rain: cloudRainMedium,
+  "rain-heavy": cloudRainHeavyLines,
+  snow: cloudSnowDotsBottom,
+  "rain-shower": cloudSunRain,
+  thunderstorm: cloudLightning,
+};
+
+function WeatherIcon({ name, size = 28 }) {
+  const fileName = WEATHER_ICON_FILES[name] || WEATHER_ICON_FILES.cloud;
+
+  return (
+    <img
+      src={fileName}
+      alt=""
+      width={size}
+      height={size}
+      className="weather-icon"
+      aria-hidden="true"
+    />
+  );
 }
 
 export default function StateWeatherWidget({ stateCode, stateName }) {
@@ -136,6 +137,7 @@ export default function StateWeatherWidget({ stateCode, stateName }) {
       <div className="weather-widget-header">
         <div className="weather-header-left">
           <span className="panel-title">MUNICÍPIO:</span>
+          <span className="weather-current-city">{cityName}</span>
         </div>
 
         <form onSubmit={handleSearchSubmit} className="weather-city-form">
@@ -154,19 +156,14 @@ export default function StateWeatherWidget({ stateCode, stateName }) {
             ))}
           </datalist>
           <button type="submit" className="weather-city-btn" title="Buscar cidade" aria-label="Buscar cidade">
-            🔍
+            <img src={magnifyingGlass} alt="" aria-hidden="true" />
           </button>
         </form>
       </div>
 
       {/* Dial / Temperatura Principal */}
       <div className="dial-row">
-        <svg width="52" height="52" viewBox="0 0 40 40" fill="none" stroke="var(--ink)" strokeWidth="1.6">
-          <circle cx="14" cy="24" r="8" />
-          <path d="M20 26a8 8 0 0 0-13-8" />
-          <circle cx="14" cy="24" r="8" fill="none" />
-          <path d="M9 12l2 2M16 8v3M23 12l-2 2" strokeLinecap="round" />
-        </svg>
+        <WeatherIcon name={current.icon} size={60} />
         <div>
           <div className="dial-temp">{current.temp}°C</div>
           <div className="dial-cond">
