@@ -22,7 +22,6 @@
   text-align: left;
 }
 
-/* Header & Abas */
 .indicators-widget-header {
   display: flex;
   align-items: center;
@@ -57,7 +56,6 @@
   border-radius: 8px;
 }
 
-/* Sub-Abas Internas */
 .indicators-tabs {
   display: flex;
   gap: 6px;
@@ -90,14 +88,12 @@
   font-weight: 600;
 }
 
-/* Painel de Conteúdo das Abas */
 .indicators-tab-pane {
   display: flex;
   flex-direction: column;
   gap: 16px;
 }
 
-/* Grid de Cards Estatísticos estilo legend-box */
 .indicators-grid-numeric {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -162,14 +158,12 @@
   text-overflow: ellipsis;
 }
 
-/* Layout em 2 Colunas estilo two-col */
 .indicators-dual-col-layout {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: 18px;
 }
 
-/* Subpainéis */
 .indicators-subpanel {
   display: flex;
   flex-direction: column;
@@ -201,7 +195,6 @@
   border-radius: 8px;
 }
 
-/* Extremos Lista Ledger com pontos de diamante */
 .extremes-list-compact {
   border: 1px solid var(--ink-faded, #5B4630);
   display: flex;
@@ -261,7 +254,6 @@
   color: var(--ink, #2B1D10);
 }
 
-/* Estrutura Econômica — scale-bar */
 .sectors-content-wrap {
   display: flex;
   flex-direction: column;
@@ -317,7 +309,6 @@
   background: var(--rubric, #9C2B1F);
 }
 
-/* Card Destaque Agropecuário */
 .indicators-feature-card {
   border: 1px solid var(--ink-faded, #5B4630);
   padding: 14px 16px;
@@ -352,7 +343,6 @@
   line-height: 1.5;
 }
 
-/* Chips de Produtos Exportados */
 .products-chips-wrap {
   display: flex;
   flex-wrap: wrap;
@@ -368,7 +358,6 @@
   color: var(--ink, #2B1D10);
 }
 
-/* Composição Étnica */
 .etnia-content-wrap {
   border: 1px solid var(--ink-faded, #5B4630);
   padding: 14px;
@@ -415,7 +404,6 @@
   margin-left: auto;
 }
 
-/* Distribuição por Sexo */
 .sex-content-wrap {
   border: 1px solid var(--ink-faded, #5B4630);
   padding: 14px;
@@ -480,7 +468,6 @@
   color: var(--ink, #2B1D10);
 }
 
-/* Card de Saldo Migratório */
 .migration-subpanel {
   border: 1px solid var(--ink-faded, #5B4630);
   padding: 14px 16px;
@@ -545,7 +532,6 @@
   color: var(--ink, #2B1D10);
 }
 
-/* Responsividade */
 @media (max-width: 768px) {
   .indicators-grid-numeric,
   .indicators-grid-numeric.four-cols {

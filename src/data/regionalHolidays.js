@@ -1,7 +1,3 @@
-/**
- * Feriados Estaduais Oficiais e Principais Feriados Municipais por Estado
- * Datas no formato 'MM-DD' para cálculo dinâmico no ano corrente
- */
 export const STATE_HOLIDAYS = {
   ac: [
     { monthDay: "01-23", name: "Dia do Evangélico", type: "state" },

@@ -1,4 +1,3 @@
-
 .top-tracks-panel {
   --tt-title-font: 'Cinzel', 'Cormorant SC', Georgia, serif;
   --tt-body-font: 'EB Garamond', 'Cormorant Garamond', Georgia, serif;
@@ -17,8 +16,6 @@
   font-family: var(--tt-body-font);
   box-shadow: none;
 }
-
-/* ---------- Cabeçalho (só título) ---------- */
 
 .top-tracks-panel__header {
   display: flex;
@@ -55,13 +52,9 @@
   color: var(--tt-ink);
 }
 
-/* gêneros, líder regional e lista de artistas escondidos
-   (apague esta regra para mostrá-los de novo) */
 .top-tracks-panel__artists {
   display: none;
 }
-
-/* ---------- Grade de capas ---------- */
 
 .top-tracks-panel__body {
   padding: 18px 22px 22px;
@@ -125,7 +118,6 @@
     rgba(230, 215, 180, 0.6);
 }
 
-/* selo do ranking */
 .track-row__rank {
   position: absolute;
   top: 8px;
@@ -145,7 +137,6 @@
   background: var(--tt-red);
 }
 
-/* nome da música: só aparece no hover */
 .track-row__meta {
   position: absolute;
   inset: 0;
@@ -193,7 +184,6 @@
   overflow: hidden;
 }
 
-/* celular/tablet (sem hover): nome sempre visível embaixo da capa */
 @media (hover: none) {
   .track-row__meta {
     inset: auto 0 0 0;
@@ -205,8 +195,6 @@
   }
 }
 
-/* ---------- Observação (ano dos dados) ---------- */
-
 .top-tracks-panel__note {
   margin: 0 22px;
   padding: 12px 0 16px;
@@ -217,8 +205,6 @@
   line-height: 1.4;
   color: var(--tt-ink-soft);
 }
-
-/* ---------- Erro / vazio ---------- */
 
 .top-tracks-panel__state-msg {
   padding: 28px 22px;
@@ -241,8 +227,6 @@
 .top-tracks-panel__state-msg[role='alert'] p {
   color: var(--tt-red);
 }
-
-/* ---------- Skeleton ---------- */
 
 .skeleton-row {
   aspect-ratio: 1 / 1;

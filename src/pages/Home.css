@@ -30,7 +30,6 @@
   overflow: hidden;
 }
 
-
 .home-stage {
   --paper-w: 1911;
   --paper-h: 937;
@@ -41,9 +40,8 @@
   background-size: 100% 100%;
   background-repeat: no-repeat;
   background-position: center;
-  container-type: inline-size; /* habilita unidades cqw */
+  container-type: inline-size; 
 }
-
 
 .home-map-slot {
   position: absolute;
@@ -57,7 +55,6 @@
   height: auto;
   display: block;
 }
-
 
 .home-info {
   position: absolute;

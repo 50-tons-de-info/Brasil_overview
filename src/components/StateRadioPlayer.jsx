@@ -214,7 +214,6 @@ export default function StateRadioPlayer({ stateCode, stateName }) {
         }}
       />
 
-      {/* Módulo Vitrola / Gramofone com Controle de Volume */}
       <div className="gramophone">
         <button
           type="button"
@@ -241,7 +240,6 @@ export default function StateRadioPlayer({ stateCode, stateName }) {
           <div className="station-meta">{stateName}</div>
         </div>
 
-        {/* Controle de Volume */}
         <div className="gramophone-volume">
           <button
             type="button"

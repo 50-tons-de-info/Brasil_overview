@@ -133,7 +133,6 @@ export default function StateWeatherWidget({ stateCode, stateName }) {
 
   return (
     <section className="weather-widget-minimal">
-      {/* Busca de Município */}
       <div className="weather-widget-header">
         <div className="weather-header-left">
           <span className="panel-title">MUNICÍPIO:</span>
@@ -161,7 +160,6 @@ export default function StateWeatherWidget({ stateCode, stateName }) {
         </form>
       </div>
 
-      {/* Dial / Temperatura Principal */}
       <div className="dial-row">
         <WeatherIcon name={current.icon} size={60} />
         <div>
@@ -172,7 +170,6 @@ export default function StateWeatherWidget({ stateCode, stateName }) {
         </div>
       </div>
 
-      {/* Instrumentos redondos */}
       <div className="instruments">
         <div className="instrument">
           <div className="lab">Umidade</div>
@@ -192,7 +189,6 @@ export default function StateWeatherWidget({ stateCode, stateName }) {
         </div>
       </div>
 
-      {/* Previsão 7 Dias */}
       <p className="panel-title">Previsão para 7 dias — Open-Meteo</p>
       <div className="week">
         {forecast.map((day, idx) => (

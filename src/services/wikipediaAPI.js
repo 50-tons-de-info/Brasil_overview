@@ -1,6 +1,6 @@
 import { getCachedData, setCachedData } from "../utils/apiCache.js";
 
-const WIKI_CACHE_TTL = 7 * 24 * 60 * 60 * 1000; // 7 dias
+const WIKI_CACHE_TTL = 7 * 24 * 60 * 60 * 1000;
 const wikipedia_api = "https://pt.wikipedia.org/api/rest_v1/page/summary/";
 
 export async function states_resume(title) {

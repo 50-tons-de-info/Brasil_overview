@@ -39,14 +39,11 @@ function Home() {
       className="home-page"
       style={{ backgroundImage: `url(${bgTexture})` }}
     >
-      {/* Palco: mantém a proporção do pergaminho; tudo dentro usa % e cqw */}
       <div className="home-stage" style={{ backgroundImage: `url(${paper})` }}>
-        {/* Coluna do mapa */}
         <div className="home-map-slot">
           <MapBrazil onStateHover={setHoveredStateCode} />
         </div>
 
-        {/* Coluna do título + bandeira */}
         <div className="home-info">
           <h1 className="Titulo_topo">Overview dos estados brasileiros</h1>
 

@@ -1,19 +1,16 @@
 import { states } from "../data/states.js";
 import { getCachedData, setCachedData } from "../utils/apiCache.js";
 
-const WEATHER_CACHE_TTL = 30 * 60 * 1000; // 30 minutos
-const GEO_CACHE_TTL = 7 * 24 * 60 * 60 * 1000; // 7 dias
+const WEATHER_CACHE_TTL = 30 * 60 * 1000;
+const GEO_CACHE_TTL = 7 * 24 * 60 * 60 * 1000;
 
-// Coordenadas das capitais brasileiras + Rio Grande (RS) para consulta instantânea
 const PRESET_COORDINATES = {
-  // Rio Grande do Sul
   "rio grande": { lat: -32.035, lon: -52.0986 },
   "porto alegre": { lat: -30.0346, lon: -51.2177 },
   "pelotas": { lat: -31.7699, lon: -52.341 },
   "caxias do sul": { lat: -29.1678, lon: -51.1794 },
   "santa maria": { lat: -29.6842, lon: -53.8069 },
 
-  // Capitais
   "rio branco": { lat: -9.9753, lon: -67.8249 },
   "maceió": { lat: -9.6658, lon: -35.7351 },
   "maceio": { lat: -9.6658, lon: -35.7351 },
@@ -53,9 +50,6 @@ const PRESET_COORDINATES = {
   "palmas": { lat: -10.2491, lon: -48.3243 },
 };
 
-/**
- * Tradução dos códigos meteorológicos WMO
- */
 const WMO_CODES = {
   0: { label: "Céu limpo", icon: "sun" },
   1: { label: "Predominantemente limpo", icon: "sun-cloud" },
@@ -91,9 +85,6 @@ function getCurrentWeatherIcon(weatherCode, isDay) {
   return WMO_CODES[weatherCode]?.icon || "cloud-sun";
 }
 
-/**
- * Classifica o índice UV de acordo com a OMS
- */
 function getUVClassification(uv) {
   if (uv < 3) return { label: "Baixo", level: "low" };
   if (uv < 6) return { label: "Moderado", level: "moderate" };
@@ -102,9 +93,6 @@ function getUVClassification(uv) {
   return { label: "Extremo", level: "extreme" };
 }
 
-/**
- * Obtém as coordenadas de uma cidade (pré-mapeada ou via Geocoding API)
- */
 export async function getCityCoordinates(cityName, uf) {
   const normalized = (cityName || "")
     .toLowerCase()
@@ -122,7 +110,6 @@ export async function getCityCoordinates(cityName, uf) {
     return cachedGeo;
   }
 
-  // Geocodificação dinâmica para qualquer outra cidade do Brasil via Open-Meteo
   try {
     const url = `https://geocoding-api.open-meteo.com/v1/search?name=${encodeURIComponent(
       cityName
@@ -131,7 +118,6 @@ export async function getCityCoordinates(cityName, uf) {
     if (res.ok) {
       const data = await res.json();
       if (data.results && data.results.length > 0) {
-        // Tenta achar na mesma UF se fornecida
         let match = data.results[0];
         if (uf) {
           const ufUpper = uf.toUpperCase();
@@ -152,13 +138,9 @@ export async function getCityCoordinates(cityName, uf) {
     console.warn(`Erro na geocodificação de ${cityName}:`, err);
   }
 
-  // Fallback para as coordenadas da capital da respectiva UF ou Rio Grande
   return { lat: -15.7975, lon: -47.8919 };
 }
 
-/**
- * Busca dados climáticos atuais e previsão de 7 dias via Open-Meteo API
- */
 export async function fetchStateWeather(stateCode, cityName) {
   const code = (stateCode || "").toLowerCase();
   const stateMeta = states[code];
@@ -182,7 +164,6 @@ export async function fetchStateWeather(stateCode, cityName) {
 
   const raw = await response.json();
 
-  // 1. Tratamento dos dados Atuais
   const current = raw.current;
   const weatherInfo = WMO_CODES[current.weather_code] || {
     label: "Parcialmente nublado",
@@ -214,7 +195,6 @@ export async function fetchStateWeather(stateCode, cityName) {
     stateUf: stateMeta?.uf || code.toUpperCase(),
   };
 
-  // 2. Tratamento da previsão diária de 7 dias
   const daily = raw.daily;
   const forecastTreated = daily.time.map((dateStr, idx) => {
     const [year, month, day] = dateStr.split("-").map(Number);

@@ -19,7 +19,6 @@
   font-style: italic;
 }
 
-/* Header com Busca de Cidade */
 .holidays-widget-header {
   display: flex;
   align-items: center;
@@ -59,7 +58,6 @@
   cursor: pointer;
 }
 
-/* Carimbo do Próximo Feriado / stamp-row */
 .stamp-row {
   display: flex;
   align-items: center;
@@ -93,7 +91,6 @@
   line-height: 1.2;
 }
 
-/* Filtros em Pílulas */
 .holidays-controls-row {
   margin-bottom: 8px;
 }
@@ -129,7 +126,6 @@
   border-color: var(--rubric, #9C2B1F);
 }
 
-/* Grade 2 Colunas estilo holiday-grid */
 .holiday-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;

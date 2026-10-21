@@ -7,7 +7,6 @@ import {
 import { states } from "../data/states.js";
 import { getCachedData, setCachedData } from "../utils/apiCache.js";
 
-// TTL de 24 horas para estatísticas do IBGE
 const IBGE_CACHE_TTL = 24 * 60 * 60 * 1000;
 const UF_IBGE_CODES = {
   ro: 11,
@@ -39,18 +38,12 @@ const UF_IBGE_CODES = {
   df: 53,
 };
 
-/**
- * Formata números no padrão brasileiro
- */
 const fmtNumber = (val) => new Intl.NumberFormat("pt-BR").format(val);
 const fmtCurrency = (val) =>
   new Intl.NumberFormat("pt-BR", { style: "currency", currency: "BRL", maximumFractionDigits: 0 }).format(val);
 const fmtPercent = (val) =>
   new Intl.NumberFormat("pt-BR", { minimumFractionDigits: 1, maximumFractionDigits: 1 }).format(val) + "%";
 
-/**
- * Formata PIB em Bilhões ou Trilhões
- */
 function formatPibTotal(bilhoes) {
   if (bilhoes >= 1000) {
     const tri = bilhoes / 1000;
@@ -59,9 +52,6 @@ function formatPibTotal(bilhoes) {
   return `R$ ${bilhoes.toLocaleString("pt-BR", { minimumFractionDigits: 1, maximumFractionDigits: 1 })} bilhões`;
 }
 
-/**
- * Formata Exportações em US$
- */
 function formatUsdExport(bilhoes) {
   if (bilhoes < 1) {
     const milhoes = bilhoes * 1000;
@@ -70,9 +60,6 @@ function formatUsdExport(bilhoes) {
   return `US$ ${bilhoes.toLocaleString("pt-BR", { minimumFractionDigits: 1, maximumFractionDigits: 1 })} bilhões`;
 }
 
-/**
- * Calcula os rankings nacionais (1º a 27º) entre todas as UFs
- */
 function calculateNationalRankings(targetCode) {
   const allStates = Object.keys(IBGE_STATE_DATA).map((k) => ({
     code: k,
@@ -99,9 +86,6 @@ function calculateNationalRankings(targetCode) {
   };
 }
 
-/**
- * Busca dados estatísticos oficiais ao vivo diretamente das APIs do IBGE
- */
 export async function fetchStateIndicators(stateCode) {
   const code = (stateCode || "").toLowerCase();
   const stateMeta = states[code];
@@ -150,14 +134,12 @@ export async function fetchStateIndicators(stateCode) {
     },
   };
 
-  // Variáveis com valores padrão para resiliência
   let apiMeta = null;
   let apiMunicipiosCount = baseData.municipios;
   let apiPop = baseData.populacaoCenso;
   let apiIdh = baseData.idh;
   let apiPibTotalBilhoes = baseData.pibTotalBilhoes;
 
-  // Novos dados demográficos ao vivo do SIDRA
   let apiEtniaList = [
     { grupo: "Branca", qtd: Math.round(baseData.populacaoCenso * 0.7), pct: 70.0 },
     { grupo: "Parda", qtd: Math.round(baseData.populacaoCenso * 0.2), pct: 20.0 },
@@ -179,7 +161,6 @@ export async function fetchStateIndicators(stateCode) {
     ano: 2024,
   };
 
-  // Requisições paralelas e em tempo real a todas as APIs oficiais do IBGE
   try {
     const [metaRes, munRes, popRes, idhRes, pibRes, etniaRes, sexoRes, giniRes] = await Promise.allSettled([
       fetch(`https://servicodados.ibge.gov.br/api/v1/localidades/estados/${uf}`, {
@@ -216,7 +197,6 @@ export async function fetchStateIndicators(stateCode) {
       apiMunicipiosCount = munRes.value.length;
     }
 
-    // Trata série populacional do IBGE
     if (popRes.status === "fulfilled" && Array.isArray(popRes.value) && popRes.value[0]?.res?.[0]?.res) {
       const popSeries = popRes.value[0].res[0].res;
       const latestYear = Object.keys(popSeries).sort().pop();
@@ -226,7 +206,6 @@ export async function fetchStateIndicators(stateCode) {
       }
     }
 
-    // Trata IDH oficial da API de pesquisas
     if (idhRes.status === "fulfilled" && Array.isArray(idhRes.value) && idhRes.value[0]?.res?.[0]?.res) {
       const idhSeries = idhRes.value[0].res[0].res;
       const latestIdhYear = Object.keys(idhSeries).sort().pop();
@@ -236,7 +215,6 @@ export async function fetchStateIndicators(stateCode) {
       }
     }
 
-    // Trata PIB oficial em Mil Reais da API do SIDRA
     if (pibRes.status === "fulfilled" && Array.isArray(pibRes.value) && pibRes.value[0]?.resultados?.[0]?.series?.[0]?.serie) {
       const pibSeries = pibRes.value[0].resultados[0].series[0].serie;
       const latestPibYear = Object.keys(pibSeries).sort().pop();
@@ -246,7 +224,6 @@ export async function fetchStateIndicators(stateCode) {
       }
     }
 
-    // 1. Trata Composição Étnica (Cor ou Raça - Censo 2022) ao vivo
     if (etniaRes.status === "fulfilled" && Array.isArray(etniaRes.value) && etniaRes.value[0]?.resultados) {
       const etniaMap = {};
       let totalCenso = 0;
@@ -267,7 +244,6 @@ export async function fetchStateIndicators(stateCode) {
       }
     }
 
-    // 2. Trata Proporção de Homens e Mulheres (Sexo - Censo 2022) ao vivo
     if (sexoRes.status === "fulfilled" && Array.isArray(sexoRes.value) && sexoRes.value[0]?.resultados) {
       let hQtd = 0;
       let mQtd = 0;
@@ -295,7 +271,6 @@ export async function fetchStateIndicators(stateCode) {
       }
     }
 
-    // 3. Trata Índice de Gini (Desigualdade de Renda - PNAD Contínua) ao vivo
     if (giniRes.status === "fulfilled" && Array.isArray(giniRes.value) && giniRes.value[0]?.resultados?.[0]?.series?.[0]?.serie) {
       const giniSeries = giniRes.value[0].resultados[0].series[0].serie;
       const latestGiniYear = Object.keys(giniSeries).sort().pop();

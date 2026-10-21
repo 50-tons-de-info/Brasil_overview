@@ -4,7 +4,7 @@ import "./StateHolidaysWidget.css";
 
 export default function StateHolidaysWidget({ stateCode, stateName }) {
   const [data, setData] = useState(null);
-  const [filter, setFilter] = useState("all"); // "all" | "upcoming" | "national" | "state"
+  const [filter, setFilter] = useState("all");
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
@@ -77,7 +77,6 @@ export default function StateHolidaysWidget({ stateCode, stateName }) {
 
   return (
     <section className="holidays-widget-minimal">
-      {/* Carimbo em Destaque do Próximo Feriado */}
       {nextHoliday && (
         <div className="stamp-row">
           <div>
@@ -99,7 +98,6 @@ export default function StateHolidaysWidget({ stateCode, stateName }) {
         </div>
       )}
 
-      {/* Barra de Filtros */}
       <div className="holidays-controls-row">
         <div className="holidays-filters">
           <button
@@ -133,7 +131,6 @@ export default function StateHolidaysWidget({ stateCode, stateName }) {
         </div>
       </div>
 
-      {/* Grade de 2 Colunas */}
       <div className="holiday-grid">
         <div>
           {leftCol.map((item) => (

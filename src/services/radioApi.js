@@ -1,6 +1,6 @@
 import { getCachedData, setCachedData } from "../utils/apiCache.js";
 
-const RADIO_CACHE_TTL = 6 * 60 * 60 * 1000; // 6 horas
+const RADIO_CACHE_TTL = 6 * 60 * 60 * 1000;
 
 const API_HOSTS = [
   "https://de1.api.radio-browser.info",
@@ -8,7 +8,6 @@ const API_HOSTS = [
   "https://at1.api.radio-browser.info",
 ];
 
-// Logos oficiais e verificados para as maiores redes e emissoras brasileiras
 const KNOWN_RADIO_LOGOS = [
   { match: /oceano/i, logo: "https://cdn.instant.audio/images/logos/radiosaovivo-net/oceano-fm.png" },
   { match: /gaucha|gzh/i, logo: "https://gauchazh.clicrbs.com.br/static/icons/mstile-70x70.png" },
@@ -33,7 +32,6 @@ const KNOWN_RADIO_LOGOS = [
   { match: /itapoan/i, logo: "https://itapoanfm.com.br/favicon.ico" },
 ];
 
-// Emissoras curadas de destaque regional por estado
 const CURATED_STATE_RADIOS = {
   rs: [
     {
@@ -52,7 +50,6 @@ const CURATED_STATE_RADIOS = {
   ],
 };
 
-// Mapeamento de normalização de termos de busca por estado
 const STATE_SEARCH_VARIANTS = {
   ac: ["Acre", "AC"],
   al: ["Alagoas", "AL"],
@@ -83,9 +80,6 @@ const STATE_SEARCH_VARIANTS = {
   to: ["Tocantins", "TO"],
 };
 
-/**
- * Normaliza o nome da rádio para chave raiz a fim de evitar duplicatas
- */
 function getRadioRootKey(name) {
   if (!name) return "";
   return name
@@ -100,9 +94,6 @@ function getRadioRootKey(name) {
     .trim();
 }
 
-/**
- * Checa se duas chaves normalizadas representam a mesma emissora
- */
 function isDuplicateStation(key1, key2) {
   if (!key1 || !key2) return false;
   if (key1 === key2) return true;
@@ -113,9 +104,6 @@ function isDuplicateStation(key1, key2) {
   return false;
 }
 
-/**
- * Obtém o melhor logo para uma rádio (verificado ou favicon da API)
- */
 function resolveStationLogo(name, apiFavicon) {
   for (const known of KNOWN_RADIO_LOGOS) {
     if (known.match.test(name)) {
@@ -135,9 +123,6 @@ function resolveStationLogo(name, apiFavicon) {
   return null;
 }
 
-/**
- * Realiza a requisição com rotação automática entre servidores de fallback
- */
 async function fetchWithFallback(endpoint) {
   for (const host of API_HOSTS) {
     try {
@@ -157,9 +142,6 @@ async function fetchWithFallback(endpoint) {
   throw new Error("Não foi possível conectar aos servidores da Radio Browser API.");
 }
 
-/**
- * Limpa e formata as tags de gêneros musicais da rádio
- */
 function processTags(rawTags) {
   if (!rawTags) return ["Variados"];
 
@@ -201,9 +183,6 @@ function processTags(rawTags) {
   return Array.from(new Set(formatted)).slice(0, 3);
 }
 
-/**
- * Trata o objeto de rádio recebido da API
- */
 function transformStation(station) {
   const streamUrl = station.url_resolved || station.url;
   const name = (station.name || "Rádio Local").trim();
@@ -232,12 +211,6 @@ function transformStation(station) {
   };
 }
 
-/**
- * Busca e trata as rádios de um estado específico, eliminando duplicatas e adicionando curadoria
- * @param {string} stateCode - Sigla do estado em minúsculo (ex: "rs", "ba", "sp")
- * @param {string} stateName - Nome do estado (ex: "Rio Grande do Sul")
- * @returns {Promise<Array>} Lista de rádios tratadas, únicas e ordenadas
- */
 export async function fetchRadiosByState(stateCode, stateName) {
   const code = (stateCode || "").toLowerCase();
   const cacheKey = `radios_${code}`;
@@ -250,10 +223,8 @@ export async function fetchRadiosByState(stateCode, stateName) {
 
   let rawStations = [];
 
-  // 1. Inclui estações curadas de destaque para o estado se existirem (ex: Oceano FM no RS)
   const curated = CURATED_STATE_RADIOS[code] || [];
 
-  // 2. Busca na API pelas variantes de termo do estado
   for (const query of searchVariants) {
     const endpoint = `/json/stations/search?countrycode=BR&state=${encodeURIComponent(
       query
@@ -270,13 +241,11 @@ export async function fetchRadiosByState(stateCode, stateName) {
     }
   }
 
-  // 3. Combina curadas com estações da API
   const allCandidateStations = [
     ...curated,
     ...rawStations.map((st) => transformStation(st)),
   ];
 
-  // 4. Deduplicação inteligente por raiz do nome e por URL
   const seenRootKeys = [];
   const seenUrls = new Set();
   const uniqueStations = [];

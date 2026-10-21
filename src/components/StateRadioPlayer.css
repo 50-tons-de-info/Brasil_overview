@@ -19,7 +19,6 @@
   font-style: italic;
 }
 
-/* Vitrola / Gramofone */
 .gramophone {
   border: 1px solid var(--gold, #A8792A);
   padding: 18px 20px;
@@ -97,7 +96,6 @@
   margin-bottom: 14px;
 }
 
-/* Lista de Emissoras estilo Tabela Tinta/Pontilhada */
 .station-list {
   display: flex;
   flex-direction: column;

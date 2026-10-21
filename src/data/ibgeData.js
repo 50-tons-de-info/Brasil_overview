@@ -1,7 +1,3 @@
-/**
- * Dados Oficiais Consolidados do Censo IBGE, Contas Regionais, ComexStat e Estudos Migratórios
- * 27 Unidades Federativas do Brasil
- */
 export const IBGE_STATE_DATA = {
   ac: {
     gentilico: "Acreano / Acriano",
@@ -950,7 +946,6 @@ export const IBGE_STATE_DATA = {
   },
 };
 
-// Populações Totais das Regiões do Brasil (Censo 2022) para cálculos comparativos
 export const REGIONS_POPULATION = {
   "Norte": 17354984,
   "Nordeste": 54658515,

@@ -2,7 +2,6 @@ import { useSpotify } from '../hooks/SpotifyHooker';
 import { getStateTheme } from '../data/stateThemes';
 import './TopTracksPanel.css';
 
-// Ano em que os dados do ranking foram coletados.
 const DATA_YEAR = '2025';
 
 export default function StateMusic({ stateUf, stateName }) {

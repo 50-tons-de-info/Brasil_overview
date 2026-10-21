@@ -2,8 +2,8 @@ import { STATE_HOLIDAYS } from "../data/regionalHolidays.js";
 import { states } from "../data/states.js";
 import { getCachedData, setCachedData } from "../utils/apiCache.js";
 
-const MUNICIPALITIES_CACHE_TTL = 7 * 24 * 60 * 60 * 1000; // 7 dias
-const HOLIDAYS_CACHE_TTL = 24 * 60 * 60 * 1000; // 24 horas
+const MUNICIPALITIES_CACHE_TTL = 7 * 24 * 60 * 60 * 1000;
+const HOLIDAYS_CACHE_TTL = 24 * 60 * 60 * 1000;
 
 const WEEKDAYS = [
   "domingo",
@@ -30,9 +30,6 @@ const MONTHS = [
   "Dezembro",
 ];
 
-/**
- * Busca todos os municípios de uma UF via API oficial do IBGE
- */
 export async function fetchStateMunicipalities(uf) {
   const ufUpper = (uf || "").toUpperCase();
   const cacheKey = `ibge_municipalities_${ufUpper}`;
@@ -59,18 +56,12 @@ export async function fetchStateMunicipalities(uf) {
   return [];
 }
 
-/**
- * Retorna o dia da semana para uma data no formato YYYY-MM-DD
- */
 function getWeekdayName(dateString) {
   const [year, month, day] = dateString.split("-").map(Number);
   const date = new Date(year, month - 1, day);
   return WEEKDAYS[date.getDay()];
 }
 
-/**
- * Calcula a diferença em dias entre hoje e a data do feriado
- */
 function calculateDaysRemaining(dateString) {
   const [year, month, day] = dateString.split("-").map(Number);
   const holidayDate = new Date(year, month - 1, day);
@@ -82,24 +73,17 @@ function calculateDaysRemaining(dateString) {
   return Math.ceil(diffTime / (1000 * 60 * 60 * 24));
 }
 
-/**
- * Formata data para exibição (ex: "20/09")
- */
 function formatDisplayDate(dateString) {
   const [, month, day] = dateString.split("-");
   return `${day}/${month}`;
 }
 
-/**
- * Busca os feriados nacionais via BrasilAPI e agrega com feriados estaduais e municipais
- */
 export async function fetchStateHolidays(stateCode, customYear) {
   const year = customYear || new Date().getFullYear();
   const code = (stateCode || "").toLowerCase();
   const stateMeta = states[code];
   const uf = stateMeta?.uf || code.toUpperCase();
 
-  // Define a cidade padrão: Rio Grande para RS, capital para os demais
   const defaultCity = code === "rs" ? "Rio Grande" : stateMeta?.capital || "Capital";
 
   const nationalCacheKey = `brasilapi_holidays_${year}`;
@@ -134,7 +118,6 @@ export async function fetchStateHolidays(stateCode, customYear) {
     ];
   }
 
-  // 1. Trata os feriados nacionais
   const treatedNationals = nationalHolidays.map((h) => {
     const daysRemaining = calculateDaysRemaining(h.date);
     return {
@@ -154,7 +137,6 @@ export async function fetchStateHolidays(stateCode, customYear) {
     };
   });
 
-  // 2. Trata os feriados estaduais e municipais
   const regionalList = STATE_HOLIDAYS[code] || [];
   const treatedRegionals = regionalList.map((r) => {
     const fullDate = `${year}-${r.monthDay}`;
@@ -178,14 +160,11 @@ export async function fetchStateHolidays(stateCode, customYear) {
     };
   });
 
-  // 3. Mescla e ordena cronologicamente
   const allHolidays = [...treatedNationals, ...treatedRegionals];
   allHolidays.sort((a, b) => a.date.localeCompare(b.date));
 
-  // 4. Busca todos os municípios do estado via IBGE
   const ibgeMunicipalities = await fetchStateMunicipalities(uf);
 
-  // 5. Cidades com feriados específicos cadastrados
   const registeredCitiesSet = new Set();
   regionalList.forEach((r) => {
     if (r.type === "municipal" && r.city) {
@@ -196,11 +175,9 @@ export async function fetchStateHolidays(stateCode, customYear) {
     }
   });
 
-  // Garante que a defaultCity e a capital estejam na lista se não vier do IBGE
   if (defaultCity) registeredCitiesSet.add(defaultCity);
   if (stateMeta?.capital) registeredCitiesSet.add(stateMeta.capital);
 
-  // Lista combinada de cidades (todas as do IBGE + registradas)
   const allCities = Array.from(
     new Set([...Array.from(registeredCitiesSet), ...ibgeMunicipalities])
   ).sort((a, b) => a.localeCompare(b, "pt-BR"));

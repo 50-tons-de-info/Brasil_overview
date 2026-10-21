@@ -1,5 +1,3 @@
-// Paleta oficial extraída das bandeiras dos estados, preservando as cores reais
-// em vez de uma versão envelhecida que deslocava a identidade visual do estado.
 const RAW_THEMES = {
   ac: { primaryColor: "#06994F", secondaryColor: "#F1E61D", accentColor: "#AF4605", tagline: "Onde a floresta guia o relógio do estado" },
   al: { primaryColor: "#D62922", secondaryColor: "#0377B8", accentColor: "#F8FBF9", tagline: "Litoral de águas claras e cana-de-açúcar" },

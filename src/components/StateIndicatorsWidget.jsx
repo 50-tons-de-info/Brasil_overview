@@ -12,7 +12,7 @@ const ETNIA_COLORS = {
 
 export default function StateIndicatorsWidget({ stateCode, stateName }) {
   const [data, setData] = useState(null);
-  const [activeTab, setActiveTab] = useState("general"); // "general" | "agro" | "social"
+  const [activeTab, setActiveTab] = useState("general");
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
@@ -83,7 +83,6 @@ export default function StateIndicatorsWidget({ stateCode, stateName }) {
     return "Desigualdade Alta";
   };
 
-  // Separa a lista de produtos exportados em tags
   const exportProductsList = (agroExport?.topExportacoes || "")
     .split(",")
     .map((p) => p.replace(" e ", ",").split(","))
@@ -99,7 +98,6 @@ export default function StateIndicatorsWidget({ stateCode, stateName }) {
           <span className="indicators-badge">APIs Oficiais IBGE & SIDRA</span>
         </div>
 
-        {/* Abas de Navegação */}
         <div className="indicators-tabs">
           <button
             type="button"
@@ -125,12 +123,9 @@ export default function StateIndicatorsWidget({ stateCode, stateName }) {
         </div>
       </div>
 
-      {/* ABA 1: GERAL & ECONOMIA */}
       {activeTab === "general" && (
         <div className="indicators-tab-pane">
-          {/* Grid de 6 Cards Quantitativos com Rankings */}
           <div className="indicators-grid-numeric">
-            {/* População */}
             <div className="indicator-card">
               <div className="indicator-card-top">
                 <span className="indicator-label">População</span>
@@ -140,7 +135,6 @@ export default function StateIndicatorsWidget({ stateCode, stateName }) {
               <span className="indicator-sub">{regionalShareFormatted} da Região {regionName}</span>
             </div>
 
-            {/* Área Territorial */}
             <div className="indicator-card">
               <div className="indicator-card-top">
                 <span className="indicator-label">Área Territorial</span>
@@ -150,7 +144,6 @@ export default function StateIndicatorsWidget({ stateCode, stateName }) {
               <span className="indicator-sub">Densidade: {densityFormatted}</span>
             </div>
 
-            {/* PIB Total */}
             <div className="indicator-card">
               <div className="indicator-card-top">
                 <span className="indicator-label">PIB Total</span>
@@ -160,7 +153,6 @@ export default function StateIndicatorsWidget({ stateCode, stateName }) {
               <span className="indicator-sub">{pibShareBrasilFormatted} do PIB nacional</span>
             </div>
 
-            {/* PIB per capita */}
             <div className="indicator-card">
               <div className="indicator-card-top">
                 <span className="indicator-label">PIB per capita</span>
@@ -170,7 +162,6 @@ export default function StateIndicatorsWidget({ stateCode, stateName }) {
               <span className="indicator-sub">Contas Regionais</span>
             </div>
 
-            {/* IDH */}
             <div className="indicator-card">
               <div className="indicator-card-top">
                 <span className="indicator-label">IDH Estadual</span>
@@ -180,7 +171,6 @@ export default function StateIndicatorsWidget({ stateCode, stateName }) {
               <span className="indicator-sub">Muito Alto desenvolvimento</span>
             </div>
 
-            {/* Municípios */}
             <div className="indicator-card">
               <div className="indicator-card-top">
                 <span className="indicator-label">Municípios</span>
@@ -191,9 +181,7 @@ export default function StateIndicatorsWidget({ stateCode, stateName }) {
             </div>
           </div>
 
-          {/* Grid em 2 Colunas: Extremos Municipais + Estrutura Econômica */}
           <div className="indicators-dual-col-layout">
-            {/* Coluna 1: Extremos Municipais */}
             {destaquesMunicipais && (
               <div className="indicators-subpanel">
                 <div className="subpanel-header">
@@ -228,7 +216,6 @@ export default function StateIndicatorsWidget({ stateCode, stateName }) {
               </div>
             )}
 
-            {/* Coluna 2: Estrutura Econômica Setorial */}
             {setores && (
               <div className="indicators-subpanel">
                 <div className="subpanel-header">
@@ -276,10 +263,8 @@ export default function StateIndicatorsWidget({ stateCode, stateName }) {
         </div>
       )}
 
-      {/* ABA 2: AGRO & EXPORTAÇÕES */}
       {activeTab === "agro" && agroExport && (
         <div className="indicators-tab-pane">
-          {/* Card Destaque: Liderança Agropecuária */}
           <div className="indicators-feature-card agro-feature">
             <div className="feature-header">
               <span className="feature-tag">Vocação Agropecuária &amp; Liderança Nacional</span>
@@ -288,7 +273,6 @@ export default function StateIndicatorsWidget({ stateCode, stateName }) {
             <p className="feature-text">{agroExport.liderancas}</p>
           </div>
 
-          {/* Grid de 3 Cards de Comércio e Energia */}
           <div className="indicators-grid-numeric">
             <div className="indicator-card">
               <span className="indicator-label">Volume Exportado (Ano)</span>
@@ -309,7 +293,6 @@ export default function StateIndicatorsWidget({ stateCode, stateName }) {
             </div>
           </div>
 
-          {/* Pauta Exportadora em Chips */}
           <div className="indicators-subpanel">
             <div className="subpanel-header">
               <span className="subpanel-title">Pauta Exportadora (Principais Produtos)</span>
@@ -326,12 +309,9 @@ export default function StateIndicatorsWidget({ stateCode, stateName }) {
         </div>
       )}
 
-      {/* ABA 3: DEMOGRAFIA & SOCIEDADE */}
       {activeTab === "social" && socialDemografia && (
         <div className="indicators-tab-pane">
-          {/* Bloco 1: Etnia e Sexo Lado a Lado (2 Colunas) */}
           <div className="indicators-dual-col-layout">
-            {/* Composição Étnica (Censo 2022) */}
             {composicaoEtnica && (
               <div className="indicators-subpanel">
                 <div className="subpanel-header">
@@ -370,7 +350,6 @@ export default function StateIndicatorsWidget({ stateCode, stateName }) {
               </div>
             )}
 
-            {/* Distribuição por Sexo (Censo 2022) */}
             {distribuicaoSexo && (
               <div className="indicators-subpanel">
                 <div className="subpanel-header">
@@ -413,7 +392,6 @@ export default function StateIndicatorsWidget({ stateCode, stateName }) {
             )}
           </div>
 
-          {/* Bloco 2: 4 Cards Sociais & Desigualdade */}
           <div className="indicators-grid-numeric four-cols">
             <div className="indicator-card">
               <span className="indicator-label">Idade Mediana</span>
@@ -433,7 +411,6 @@ export default function StateIndicatorsWidget({ stateCode, stateName }) {
               <span className="indicator-sub">População de 15+ anos</span>
             </div>
 
-            {/* Índice de Gini (Desigualdade) */}
             <div className="indicator-card">
               <div className="indicator-card-top">
                 <span className="indicator-label">Índice de Gini</span>
@@ -444,7 +421,6 @@ export default function StateIndicatorsWidget({ stateCode, stateName }) {
             </div>
           </div>
 
-          {/* Bloco 3: Dinâmica Migratória Interestadual */}
           {saldoMigratorio && (
             <div className="indicators-subpanel migration-subpanel">
               <div className="subpanel-header">

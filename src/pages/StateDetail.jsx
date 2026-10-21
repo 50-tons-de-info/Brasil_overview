@@ -9,6 +9,7 @@ import StateIndicatorsWidget from "../components/StateIndicatorsWidget";
 import StateWeatherWidget from "../components/StateWeatherWidget";
 import StateRadioPlayer from "../components/StateRadioPlayer";
 import StateHolidaysWidget from "../components/StateHolidaysWidget";
+import paperTexture from "../assets/textures/paper.png";
 import "./StateDetail.css";
 
 const TABS = [
@@ -103,8 +104,12 @@ function StateDetail() {
 
   return (
     <div className="state-page-shell" style={dynamicThemeStyle}>
-      <div className="sheet">
-        {/* Topbar com fita horizontal */}
+      <div
+        className="sheet"
+        style={{
+          backgroundImage: `url(${paperTexture})`,
+        }}
+      >
         <div className="topbar">
           <div className="ribbon" id="ribbonTitle">
             {activeTabMeta.roman} · {activeTabMeta.label.toUpperCase()}
@@ -112,7 +117,6 @@ function StateDetail() {
         </div>
 
         <div className="layout">
-          {/* Cartucho / Sidebar */}
           <aside className="cartouche">
             <button type="button" className="back-btn" onClick={() => navigate("/")}>
               ← Todos os estados
@@ -179,15 +183,12 @@ function StateDetail() {
             </nav>
           </aside>
 
-          {/* Painel Principal de Gráficos e Dados */}
           <main className="chart-panel">
-            {/* Cabeçalho da Seção */}
             <div className="section-head">
               <span className="roman">{activeTabMeta.roman}</span>
               <h2>{sectionHeadings[activeTab]}</h2>
             </div>
 
-            {/* ABA 1: VISÃO GERAL */}
             {activeTab === "overview" && (
               <div className="tab active">
                 <StateResume title={state.name} wikiTitle={state.wikiTitle || state.name} />
@@ -228,35 +229,30 @@ function StateDetail() {
               </div>
             )}
 
-            {/* ABA 2: ESTATÍSTICAS & ECONOMIA */}
             {activeTab === "indicators" && (
               <div className="tab active">
                 <StateIndicatorsWidget stateCode={code} stateName={state.name} />
               </div>
             )}
 
-            {/* ABA 3: CLIMA & PREVISÃO */}
             {activeTab === "weather" && (
               <div className="tab active">
                 <StateWeatherWidget stateCode={code} stateName={state.name} />
               </div>
             )}
 
-            {/* ABA 4: RÁDIOS AO VIVO */}
             {activeTab === "radios" && (
               <div className="tab active">
                 <StateRadioPlayer stateCode={code} stateName={state.name} />
               </div>
             )}
 
-            {/* ABA 5: FERIADOS */}
             {activeTab === "holidays" && (
               <div className="tab active">
                 <StateHolidaysWidget stateCode={code} stateName={state.name} />
               </div>
             )}
 
-            {/* ABA 6: MÚSICA & SPOTIFY */}
             {activeTab === "spotify" && (
               <div className="tab active">
                 <StateMusic stateUf={state.uf} stateName={state.name} />

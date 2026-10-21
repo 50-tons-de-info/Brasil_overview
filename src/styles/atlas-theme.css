@@ -1,47 +1,24 @@
-/* ==========================================================================
-   ATLAS THEME — Brasil Império / cartografia antiga
-   ==========================================================================
-   Importe este arquivo DEPOIS do stylesheet global do projeto (o arquivo
-   que já define --paper, --ink, --font-display etc., provavelmente
-   importado no seu main.jsx/App.jsx como "./index.css" ou "./App.css").
-   Exemplo:
-
-     import "./index.css";
-     import "./atlas-theme.css";   // <- adicione esta linha por último
-
-   Como os seletores abaixo têm a mesma especificidade dos originais, a
-   ordem de importação é o que garante que estes tokens "envelhecidos"
-   substituam os valores modernos atuais em todo o site.
-   ========================================================================== */
-
 @import url('https://fonts.googleapis.com/css2?family=Old+Standard+TT:ital,wght@0,400;0,700;1,400&family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Cinzel:wght@500;700&display=swap');
 
 :root {
-  /* Tipografia de atlas oitocentista:
-     - display: serifa de livro antigo para títulos ("Dossiê Federativo")
-     - body: garalda clássica para texto corrido (resumos, parágrafos)
-     - mono: capitular gravada, usada em rótulos, selos e códigos de UF */
+  
   --font-display: 'Old Standard TT', 'Playfair Display', Georgia, serif;
   --font-body: 'EB Garamond', Georgia, 'Times New Roman', serif;
   --font-mono: 'Cinzel', Georgia, serif;
 
-  /* Papel envelhecido (pergaminho), não branco/cinza moderno */
   --paper: #e7d9b1;
   --paper-raised: #efe1ba;
   --paper-card: #f7ecd1;
 
-  /* Tinta sépia em vez de preto puro */
   --ink: #2b2013;
   --ink-soft: #4a3b26;
   --ink-faint: #7c6947;
   --brand: #7a2420;
 
-  /* Linhas / vincos do papel */
   --line: #c2ac79;
   --line-soft: #ddc99a;
   --line-strong: #9c8657;
 
-  /* Cantos e sombras — como o relevo de um carimbo de cera */
   --radius: 6px;
   --radius-sm: 4px;
   --radius-lg: 10px;
@@ -58,10 +35,6 @@ body {
   background-position: center;
 }
 
-/* ---------- Papel com manchas de idade + grão fino ----------
-   Usada nas páginas inteiras (home-page, state-page-shell). Substitui o
-   fundo branco/liso por manchas de "foxing" (o amarelado irregular de
-   papel antigo) e um grão sutil por cima de tudo. */
 .ledger-texture {
   position: relative;
   background-color: var(--paper);
@@ -88,7 +61,6 @@ body {
   z-index: 1;
 }
 
-/* ---------- Rótulo tipo carimbo/gravura (eyebrow) ---------- */
 .eyebrow {
   font-family: var(--font-mono);
   font-size: 11px;
@@ -98,7 +70,6 @@ body {
   color: var(--ink-faint);
 }
 
-/* ---------- Divisor "borda rasgada de papel" ---------- */
 .tear-divider {
   border: none;
   height: 8px;
@@ -112,7 +83,6 @@ body {
   opacity: 0.55;
 }
 
-/* ---------- Cartões estilo folha de dossiê ---------- */
 .doc-card {
   background: var(--paper-card);
   border: 1.5px solid var(--line);
@@ -120,7 +90,6 @@ body {
   box-shadow: var(--stamp-shadow);
 }
 
-/* ---------- Moldura de prancha de atlas (usada ao redor do mapa) ---------- */
 .atlas-frame {
   position: relative;
   border: 3px double var(--line-strong);
