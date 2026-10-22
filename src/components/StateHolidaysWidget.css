@@ -132,6 +132,31 @@
   gap: 0 20px;
 }
 
+@media (max-width: 1440px), (max-height: 850px) {
+  .stamp-row {
+    padding: 10px 14px;
+    margin-bottom: 12px;
+    gap: 14px;
+  }
+  .stamp-date {
+    font-size: 22px;
+  }
+  .stamp {
+    width: 58px;
+    height: 58px;
+    font-size: 10px;
+  }
+  .holiday-grid {
+    gap: 0 14px;
+  }
+  .hrow {
+    padding: 6px 2px;
+  }
+  .hname {
+    font-size: 14px;
+  }
+}
+
 @media (max-width: 760px) {
   .holiday-grid {
     grid-template-columns: 1fr;

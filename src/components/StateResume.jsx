@@ -18,7 +18,7 @@ export default function StateResume({ title, wikiTitle, fallbackResume }) {
           <img
             src={dados.imagem}
             alt={`Bandeira / Escudo de ${title}`}
-            style={{ width: "210px", height: "135px", objectFit: "cover", display: "block" }}
+            className="escutcheon-img"
           />
         </div>
       )}

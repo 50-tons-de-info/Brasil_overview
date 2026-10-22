@@ -106,3 +106,54 @@
   margin: 0.6cqw 0 0;
   line-height: 1;
 }
+
+@media (max-width: 900px) {
+  .home-page {
+    overflow-y: auto;
+    padding: 24px 12px;
+    align-items: flex-start;
+  }
+
+  .home-stage {
+    aspect-ratio: auto;
+    min-height: auto;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-size: cover;
+    padding: 40px 16px;
+  }
+
+  .home-map-slot {
+    position: static;
+    width: 90%;
+    max-width: 440px;
+    margin-bottom: 24px;
+  }
+
+  .home-info {
+    position: static;
+    width: 100%;
+  }
+
+  .Titulo_topo {
+    font-size: clamp(20px, 4.8vw, 32px);
+    white-space: normal;
+  }
+
+  .home-flag {
+    width: clamp(140px, 35vw, 220px);
+    border-radius: 8px;
+  }
+
+  .home-flag-loading {
+    width: clamp(140px, 35vw, 220px);
+    height: 110px;
+  }
+
+  .Nome_Estado {
+    font-size: clamp(24px, 5.5vw, 38px);
+    margin-top: 6px;
+  }
+}

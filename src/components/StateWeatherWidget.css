@@ -156,7 +156,7 @@
 .instrument {
   border: 1px solid var(--ink-faded, #5B4630);
   border-radius: 50%;
-  width: min(100%, 184px);
+  width: min(100%, 140px);
   justify-self: center;
   aspect-ratio: 1;
   display: flex;
@@ -228,7 +228,8 @@
 
 .day svg,
 .day .weather-icon {
-  width: min(100%, 150px);
+  width: min(100%, 75px);
+  max-height: 75px;
   height: auto;
   aspect-ratio: 1;
   margin: 4px 0;
@@ -248,4 +249,111 @@
   line-height: 1;
   margin-top: 3px;
   color: var(--ink, #2B1D10);
+}
+
+/* ========================================================
+   RESPONSIVIDADE: Notebooks (1366x768, 1280x800)
+   ======================================================== */
+@media (max-width: 1440px), (max-height: 850px) {
+  .weather-header-left {
+    margin-left: 8px;
+  }
+
+  .weather-header-left .panel-title {
+    font-size: 16px;
+  }
+
+  .weather-current-city {
+    font-size: 17px;
+  }
+
+  .dial-row {
+    padding: 2px 12px 10px;
+    gap: 16px;
+  }
+
+  .dial-row .weather-icon {
+    width: 65px;
+    height: 65px;
+    flex: 0 0 65px;
+  }
+
+  .dial-temp {
+    font-size: 36px;
+  }
+
+  .dial-cond {
+    font-size: 14px;
+  }
+
+  .instruments {
+    margin: 0 8px 6px;
+    gap: 8px;
+  }
+
+  .instrument {
+    width: min(100%, 105px);
+    padding: 6px;
+  }
+
+  .instrument .lab {
+    font-size: 11px;
+  }
+
+  .instrument .num {
+    font-size: 15px;
+  }
+
+  .weather-widget-minimal>.panel-title {
+    font-size: 15px;
+    margin-left: 8px;
+  }
+
+  .week {
+    padding: 0 8px 6px;
+    gap: 6px;
+  }
+
+  .day {
+    padding: 6px 4px;
+  }
+
+  .day .dname {
+    font-size: 14px;
+  }
+
+  .day .ddate {
+    font-size: 12px;
+  }
+
+  .day svg,
+  .day .weather-icon {
+    width: min(100%, 50px);
+    max-height: 50px;
+  }
+
+  .day .prob {
+    font-size: 13px;
+  }
+
+  .day .temps {
+    font-size: 14px;
+  }
+}
+
+@media (max-width: 768px) {
+  .instruments {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .week {
+    grid-template-columns: repeat(4, 1fr);
+    overflow-x: auto;
+  }
+}
+
+@media (max-width: 480px) {
+  .week {
+    grid-template-columns: repeat(2, 1fr);
+  }
 }
