@@ -1,131 +1,46 @@
-================================================================================
-          BRASIL_OVERVIEW — ATLAS FEDERATIVO DO BRASIL VIA WEB SERVICES
-                Universidade Federal do Rio Grande (FURG)
-      Centro de Ciências Computacionais — Engenharia de Computação
-              Disciplina: Sistemas Distribuídos (2025/2026)
-================================================================================
+============================================================
+              BRASIL_OVERVIEW — GUIA DE ACESSO
+  Sistemas Distribuídos — Engenharia de Computação (FURG)
+============================================================
 
 INTEGRANTES:
 - Lincon A. de Souza
 - Lucas D. S. Pereira
 - Miguel C. da Silva
 
---------------------------------------------------------------------------------
-1. ACESSO RÁPIDO ONLINE (SEM INSTALAÇÃO)
---------------------------------------------------------------------------------
-A aplicação está 100% hospedada, funcional e acessível diretamente pelo navegador web,
-sem necessidade de instalar nenhum software, plugin ou dependência:
+------------------------------------------------------------
+1. ACESSO ONLINE (SEM NECESSIDADE DE INSTALAÇÃO)
+------------------------------------------------------------
+A aplicação está hospedada e pronta para uso pelo navegador:
 
-  URL de Produção: https://brasil-overview.onrender.com/
-  Repositório GitHub: https://github.com/50-tons-de-info/Brasil_overview
+  Link de acesso: https://brasil-overview.onrender.com/
 
-AVISO SOBRE A HOSPEDAGEM (RENDER FREE TIER):
-Como a aplicação está hospedada no plano gratuito do Render, o servidor web entra
-em modo de suspensão após períodos de inatividade. Portanto, o primeiro acesso
-pode levar entre 30 e 50 segundos para inicializar. Uma vez carregada, a navegação
-torna-se instantânea, pois se trata de uma Single Page Application (SPA).
+* Observação: Por estar hospedada no plano gratuito do Render,
+  se o servidor estiver em repouso após inatividade, a primeira
+  abertura pode demorar cerca de 30 a 50 segundos para subir.
+  Depois de carregada, a navegação é imediata.
 
---------------------------------------------------------------------------------
-2. GUIA DE USO E NAVEGAÇÃO
---------------------------------------------------------------------------------
-1. Página Inicial (Home / Mapa do Brasil):
-   - Apresenta o mapa do Brasil com temática cartográfica clássica/marítima.
-   - Ao passar o mouse sobre qualquer estado, seu nome e bandeira são exibidos
-     dinamicamente no canto superior direito.
-   - Clique em qualquer um dos 26 estados ou no Distrito Federal para abrir o
-     Dossiê Federativo daquela unidade.
+------------------------------------------------------------
+2. EXECUÇÃO LOCAL (OPCIONAL)
+------------------------------------------------------------
+Caso queira executar a aplicação no seu ambiente local:
 
-2. Dossiê do Estado (Painel de Detalhes):
-   - A barra lateral (cartouche) exibe o brasão/rosa dos ventos temático do estado,
-     seu lema histórico, dados censitários básicos e o menu de navegação por abas.
-   - Navegação por Abas (algarismos romanos):
-     • I. VISÃO GERAL:
-       Resumo histórico e geográfico oficial obtido via API da Wikipedia, além
-       de cartões com indicadores consolidados (População, PIB, IDH, Área).
-     • II. ESTATÍSTICAS & ECONOMIA:
-       Painel detalhado com 8 consultas concorrentes ao IBGE e SIDRA, incluindo
-       ranqueamento nacional em 6 métricas, decomposição do PIB (serviços, indústria,
-       agro), balança comercial de exportações, gráfico étnico-racial e razão de sexo.
-     • III. CLIMA & PREVISÃO:
-       Condições meteorológicas ao vivo da Open-Meteo (temperatura, sensação,
-       umidade, vento, precipitação e índice UV com escala OMS). Inclui previsão
-       estendida de 7 dias e campo de busca para consultar o tempo de qualquer
-       município oficial do estado selecionado.
-     • IV. RÁDIOS AO VIVO:
-       Reprodutor de áudio integrado com streaming HLS (.m3u8) e MP3/AAC via
-       Radio Browser API, com estações locais e comunitárias em tempo real.
-     • V. FERIADOS:
-       Calendário cívico híbrido (BrasilAPI + feriados estaduais e municipais),
-       com contagem regressiva postal ("FALTAM X DIAS", "É HOJE!") e filtros.
-     • VI. MÚSICA & SPOTIFY:
-       Top 10 com o cancioneiro regional característico do estado, enriquecido
-       ao vivo com metadados e capas de álbuns obtidos da Spotify Web API.
+Pré-requisito: Ter o Node.js (v18 ou superior) instalado.
 
---------------------------------------------------------------------------------
-3. WEB SERVICES E APIS INTEGRADAS
---------------------------------------------------------------------------------
-O sistema atua como cliente integrador distribuído, orquestrando 6 serviços web:
-
-1. Wikipedia REST API:
-   - Endpoint: https://pt.wikipedia.org/api/rest_v1/page/summary/{titulo}
-   - Função: Resumo enciclopédico e imagens do estado.
-
-2. IBGE Serviços de Dados & SIDRA:
-   - Endpoints: https://servicodados.ibge.gov.br/api/v1/ e /api/v3/
-   - Função: Limites territoriais, censo demográfico, IDH, PIB per capita e agregados étnico-sociais.
-
-3. Open-Meteo Forecast & Geocoding API:
-   - Endpoints: https://api.open-meteo.com/v1/forecast e geocoding-api.open-meteo.com
-   - Função: Coordenadas geográficas, tempo presente e previsão meteorológica horária e diária.
-
-4. BrasilAPI:
-   - Endpoint: https://brasilapi.com.br/api/feriados/v1/{ano}
-   - Função: Feriados nacionais móveis e fixos regidos por lei federal.
-
-5. Radio Browser API:
-   - Endpoints: https://de1.api.radio-browser.info/json/ (com fallback para nl1 e at1)
-   - Função: Diretório comunitário de emissoras de rádio online com suporte a streams HLS.
-
-6. Spotify Web API:
-   - Endpoints: https://accounts.spotify.com/api/token e https://api.spotify.com/v1/search
-   - Função: Metadados, links e capas de álbuns musicais para o ranking regional.
-
---------------------------------------------------------------------------------
-4. RESILIÊNCIA E TRATAMENTO DE FALHAS
---------------------------------------------------------------------------------
-- Cache multinível (Memória + LocalStorage):
-  Reduz latência e requisições repetidas, respeitando quotas das APIs (TTLs de 30min a 7 dias).
-- Promise.allSettled():
-  Garante que falhas parciais em agregações do SIDRA/IBGE não quebrem a interface,
-  preenchendo lacunas com base pré-consolidada.
-- Fallback em servidores espelho (Radio Browser):
-  Chaveamento automático entre nós da Alemanha (de1), Holanda (nl1) e Áustria (at1).
-- Degradação suave de catálogo (Spotify):
-  Caso a busca do Spotify atinja limite de quota (HTTP 429), as músicas continuam
-  acessíveis através dos dados do ranking curado local, omitindo apenas as capas.
-
---------------------------------------------------------------------------------
-5. INSTRUÇÕES PARA EXECUÇÃO LOCAL (OPCIONAL)
---------------------------------------------------------------------------------
-Caso o professor ou avaliador deseje rodar a aplicação em seu ambiente local:
-
-Pré-requisitos:
-- Node.js versão 18 ou superior instalado.
-- Gerenciador npm.
-
-Passos:
-1. Extraia o pacote ZIP do projeto ou clone o repositório:
-   git clone https://github.com/50-tons-de-info/Brasil_overview.git
-2. Entre na pasta do projeto:
+Passo a passo no terminal:
+1. Abra a pasta do projeto:
    cd Brasil_overview
-3. Instale as dependências:
-   npm install
-4. (Opcional) Crie o arquivo .env na raiz com as credenciais do Spotify:
-   VITE_SPOTIFY_CLIENT_ID=seu_client_id
-   VITE_SPOTIFY_CLIENT_SECRET=seu_client_secret
-   (Nota: mesmo sem as credenciais, o sistema funciona via fallback elegante).
-5. Inicie o servidor de desenvolvimento:
-   npm run dev
-6. Abra no navegador o endereço indicado no terminal (ex: http://localhost:5173).
 
-================================================================================
+2. Instale as dependências:
+   npm install
+
+3. Inicie o servidor local:
+   npm run dev
+
+4. Abra no navegador o endereço informado (geralmente):
+   http://localhost:5173
+
+------------------------------------------------------------
+Repositório do projeto:
+https://github.com/50-tons-de-info/Brasil_overview
+============================================================
