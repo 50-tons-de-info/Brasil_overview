@@ -194,7 +194,6 @@ export default function StateRadioPlayer({ stateCode, stateName }) {
     return null;
   }
 
-  const mainTag = selectedRadio?.tags?.[0] || "Geral";
 
   return (
     <section className="radio-player-minimal">

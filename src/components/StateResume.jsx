@@ -2,7 +2,7 @@ import { useWikipedia } from "../hooks/useWiki";
 
 export default function StateResume({ title, wikiTitle, fallbackResume }) {
   const queryTitle = wikiTitle || title;
-  const { dados, carregando, erro } = useWikipedia(queryTitle);
+  const { dados, carregando } = useWikipedia(queryTitle);
 
   const defaultFallback =
     fallbackResume ||

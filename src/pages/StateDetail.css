@@ -1,18 +1,19 @@
 .state-page-shell {
-  width: 100%;
-  min-height: 100vh;
+  width: 100vw;
+  height: 100vh;
   padding: 10px 6px;
   background: transparent;
   display: flex;
   justify-content: center;
   align-items: center;
   box-sizing: border-box;
-  overflow-x: hidden;
+  overflow: hidden;
 }
 
 .sheet {
   width: min(99.5vw, 1660px);
-  height: min(99vh, 1000px);
+  height: min(99.5vh, 1000px);
+  aspect-ratio: 3440 / 1920;
   position: relative;
   background-color: transparent;
   background-image: url("../assets/textures/paper.png");
@@ -126,13 +127,10 @@
 .cartouche {
   padding: 0 14px 2px 0;
   position: relative;
-  overflow-y: auto;
-  overflow-x: hidden;
+  overflow: hidden;
   max-height: 100%;
   display: flex;
   flex-direction: column;
-  scrollbar-width: thin;
-  scrollbar-color: rgba(156, 43, 31, 0.35) transparent;
 }
 
 .compass-wrap {
@@ -322,35 +320,9 @@
   position: relative;
   height: 100%;
   max-height: 100%;
-  overflow-y: auto;
-  overflow-x: hidden;
+  overflow: hidden;
   display: flex;
   flex-direction: column;
-  scrollbar-width: thin;
-  scrollbar-color: var(--state-primary, #9C2B1F) rgba(91, 70, 48, 0.08);
-}
-
-.chart-panel::-webkit-scrollbar,
-.cartouche::-webkit-scrollbar {
-  width: 6px;
-  height: 6px;
-}
-
-.chart-panel::-webkit-scrollbar-track,
-.cartouche::-webkit-scrollbar-track {
-  background: rgba(91, 70, 48, 0.06);
-  border-radius: 4px;
-}
-
-.chart-panel::-webkit-scrollbar-thumb,
-.cartouche::-webkit-scrollbar-thumb {
-  background: rgba(156, 43, 31, 0.35);
-  border-radius: 4px;
-}
-
-.chart-panel::-webkit-scrollbar-thumb:hover,
-.cartouche::-webkit-scrollbar-thumb:hover {
-  background: var(--state-primary, #9C2B1F);
 }
 
 .tab {
@@ -524,10 +496,6 @@
     left: 260px;
   }
 
-  .cartouche {
-    padding: 0 10px 2px 0;
-  }
-
   .compass-wrap {
     margin: 0 0 2px;
   }
@@ -618,8 +586,43 @@
     font-size: 12.5px;
   }
 
+  .cartouche {
+    padding: 0 10px 2px 0;
+    overflow-y: auto;
+    overflow-x: hidden;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(156, 43, 31, 0.35) transparent;
+  }
+
   .chart-panel {
     padding: 0 8px 8px 18px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    scrollbar-width: thin;
+    scrollbar-color: var(--state-primary, #9C2B1F) rgba(91, 70, 48, 0.08);
+  }
+
+  .chart-panel::-webkit-scrollbar,
+  .cartouche::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+
+  .chart-panel::-webkit-scrollbar-track,
+  .cartouche::-webkit-scrollbar-track {
+    background: rgba(91, 70, 48, 0.06);
+    border-radius: 4px;
+  }
+
+  .chart-panel::-webkit-scrollbar-thumb,
+  .cartouche::-webkit-scrollbar-thumb {
+    background: rgba(156, 43, 31, 0.35);
+    border-radius: 4px;
+  }
+
+  .chart-panel::-webkit-scrollbar-thumb:hover,
+  .cartouche::-webkit-scrollbar-thumb:hover {
+    background: var(--state-primary, #9C2B1F);
   }
 
   .geral-top {
